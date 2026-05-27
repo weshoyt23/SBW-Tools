@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBW Co. · 30-Day Brand Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0806; --card: #111008; --border: #2a2418;
+    --amber: #e8a435; --amber-light: #fef3c7; --amber-dim: #7a5520;
+    --green: #22c55e; --green-dark: #15803d; --green-bg: #052e16;
+    --blue: #60a5fa; --blue-bg: #0c1a2e;
+    --purple: #c084fc; --purple-bg: #1a0a2e;
+    --pink: #f472b6; --pink-bg: #2d0a1e;
+    --muted: #6b5f4e; --text: #f0e8dc; --soft: #1a1410;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 20px 16px; max-width: 720px; margin: 0 auto; }
+
+  .nav { position: sticky; top: 0; background: var(--bg); z-index: 20; padding: 10px 0 12px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .nav-inner { display: flex; gap: 6px; flex-wrap: wrap; }
+  .nav-tab { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; padding: 7px 13px; border-radius: 5px; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: all 0.15s; -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+  .nav-tab.active { border-color: var(--amber); background: var(--amber); color: #1a1612; font-weight: 600; }
+
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; color: var(--text); line-height: 1.05; margin-bottom: 8px; }
+  h1 span { color: var(--amber); font-style: italic; }
+  .subtitle { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; }
+  .leg { display: flex; align-items: center; gap: 6px; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .leg-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .stat-val { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  .strategy-box { background: var(--soft); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; margin-bottom: 24px; }
+  .strategy-box .label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .strategy-box p { font-size: 13px; color: var(--muted); line-height: 1.9; }
+  .strategy-box strong { color: var(--amber); }
+
+  .week-section { display: none; }
+  .week-section.active { display: block; }
+  .week-header { margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .week-badge { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--text); }
+  .week-theme { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+  .week-goal { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; transition: border-color 0.2s; }
+  .day-card.open { border-color: var(--amber); }
+  .day-card-header { padding: 13px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
+  .day-num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--amber); min-width: 34px; }
+  .day-info { flex: 1; }
+  .day-name { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .day-title { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 2px; line-height: 1.3; }
+  .type-pill { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; }
+  .expand-icon { color: var(--muted); font-size: 12px; flex-shrink: 0; transition: transform 0.2s; }
+  .day-card.open .expand-icon { transform: rotate(180deg); }
+
+  .day-body { display: none; padding: 14px 16px 16px; border-top: 1px solid var(--border); }
+  .day-card.open .day-body { display: block; }
+
+  .detail-row { margin-top: 12px; }
+  .detail-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 5px; }
+  .detail-text { font-size: 13px; color: var(--text); line-height: 1.7; }
+  .detail-text.muted { color: var(--muted); }
+  .hook-box { background: var(--soft); border-left: 3px solid var(--amber); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 5px; font-size: 13px; color: var(--text); line-height: 1.6; font-style: italic; }
+  .hashtags { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--blue); line-height: 1.9; }
+  .copy-btn { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.2s; margin-top: 6px; display: inline-block; }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); }
+  .tip-box { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.25); border-radius: 7px; padding: 9px 12px; margin-top: 10px; display: flex; gap: 8px; align-items: flex-start; }
+  .tip-box p { font-size: 12px; color: var(--green); line-height: 1.5; }
+
+  .rest-card { background: var(--soft); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .rest-num { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--muted); min-width: 34px; }
+  .rest-info .day-name { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 3px; }
+  .rest-info p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .month2-box { background: var(--soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 16px; }
+  .month2-box .label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+  .month2-box p { font-size: 13px; color: var(--muted); line-height: 1.9; }
+
+  .footer { text-align: center; padding: 24px 0 8px; border-top: 1px solid var(--border); margin-top: 20px; }
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--border); font-style: italic; }
+  .footer-sub { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--border); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <div class="nav-tab active" onclick="showWeek('overview')">Overview</div>
+    <div class="nav-tab" onclick="showWeek('w1')">Week 1</div>
+    <div class="nav-tab" onclick="showWeek('w2')">Week 2</div>
+    <div class="nav-tab" onclick="showWeek('w3')">Week 3</div>
+    <div class="nav-tab" onclick="showWeek('w4')">Week 4</div>
+    <div class="nav-tab" onclick="showWeek('w5')">Days 29–30</div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="week-section active" id="sec-overview">
+  <div class="eyebrow">SBW Co. · Brand Instagram</div>
+  <h1>30-Day<br><span>Brand Calendar</span></h1>
+  <p class="subtitle">A focused, strategic 30 days of SBW content — building brand identity, growing an audience, and laying the foundation for Drop 1. No distractions. Pure brand.</p>
+
+  <div class="stats-grid">
+    <div class="stat-card" style="border-left:3px solid var(--amber);">
+      <div class="stat-val">22</div><div class="stat-label">Post Days</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid var(--green);">
+      <div class="stat-val">8</div><div class="stat-label">Rest Days</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid var(--blue);">
+      <div class="stat-val">6</div><div class="stat-label">Reels</div>
+    </div>
+    <div class="stat-card" style="border-left:3px solid var(--purple);">
+      <div class="stat-val">5</div><div class="stat-label">Content Pillars</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--amber);"></div><span class="leg-label">Brand Identity</span></div>
+    <div class="leg"><div class="leg-dot" style="background:var(--purple);"></div><span class="leg-label">Founder Story</span></div>
+    <div class="leg"><div class="leg-dot" style="background:var(--blue);"></div><span class="leg-label">Design Process</span></div>
+    <div class="leg"><div class="leg-dot" style="background:var(--pink);"></div><span class="leg-label">Product / Drop</span></div>
+    <div class="leg"><div class="leg-dot" style="background:var(--green);"></div><span class="leg-label">Engagement / CTA</span></div>
+    <div class="leg"><div class="leg-dot" style="background:var(--muted);"></div><span class="leg-label">Rest Day</span></div>
+  </div>
+
+  <div class="strategy-box">
+    <div class="label">Monthly Arc</div>
+    <p>
+      <strong>Week 1 — Establish the Brand.</strong> Who is SBW Co.? What does it stand for? What's the aesthetic? Plant the flag hard.<br>
+      <strong>Week 2 — Show the Work.</strong> Design process, inspiration, the craft behind the brand. Build credibility and curiosity.<br>
+      <strong>Week 3 — Build Anticipation.</strong> Tease Drop 1 relentlessly. Reveal details slowly. Make people feel like insiders.<br>
+      <strong>Week 4 — Drive to Launch.</strong> Countdown, strongest visuals, clear CTAs. Month ends with everyone waiting for Drop 1.<br>
+      <strong>Days 29–30 — Close and Ignite Month 2.</strong> Reflect, thank the early community, announce what's coming.
+    </p>
+  </div>
+</div>
+
+<!-- WEEK 1 -->
+<div class="week-section" id="sec-w1">
+  <div class="week-header">
+    <div class="week-badge">Week 1</div>
+    <div class="week-theme">Establish the Brand</div>
+    <div class="week-goal">Goal: Define SBW Co.'s identity loudly and clearly. Make the aesthetic undeniable from day one.</div>
+  </div>
+
+  <!-- D1 -->
+  <div class="day-card" id="d1">
+    <div class="day-card-header" onclick="toggleDay('d1')">
+      <div class="day-num">1</div>
+      <div class="day-info"><div class="day-name">Monday</div><div class="day-title">The Brand Introduction</div></div>
+      <div class="type-pill" style="background:rgba(232,164,53,0.15);color:var(--amber);">Brand</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">SBW Co. announces itself. Not a soft launch — a statement. Who you are, what this brand is, what it stands for. Bold, confident, no apologies.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"SBW Co. is here. 🖤 Premium graphic apparel built in Austin. Five designs. Zero compromises. Drop 1 is coming — stay close."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Your strongest brand visual — logo on a clean dark background, a dramatic flatlay of your design tools, or a teaser crop of your best design. Make it stop the scroll.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #graphicapparel #streetwear #austinfashion #austincreative #newbrand #premiumapparel #graphicdesign #austintx #brandlaunch</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #graphicapparel #streetwear #austinfashion #austincreative #newbrand #premiumapparel #graphicdesign #austintx #brandlaunch')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D2 -->
+  <div class="day-card" id="d2">
+    <div class="day-card-header" onclick="toggleDay('d2')">
+      <div class="day-num">2</div>
+      <div class="day-info"><div class="day-name">Tuesday</div><div class="day-title">The Aesthetic Post</div></div>
+      <div class="type-pill" style="background:rgba(232,164,53,0.15);color:var(--amber);">Brand</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Show the world SBW lives in. The colors, the mood, the vibe. What does SBW feel like? Warm but bold. Fun but premium. Give people a visual language to attach to the brand.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"This is the world SBW Co. lives in. 🎨 Bold colors. Real craftsmanship. Designs that say something."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Mood board style flatlay — color swatches, sketch pages, fabric textures, design printouts. Warm, editorial, intentional. Think magazine spread.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #moodboard #graphicdesign #brandaesthetic #streetwear #premiumapparel #austincreative #colorpalette #designinspiration #apparel</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #moodboard #graphicdesign #brandaesthetic #streetwear #premiumapparel #austincreative #colorpalette #designinspiration #apparel')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D3 -->
+  <div class="day-card" id="d3">
+    <div class="day-card-header" onclick="toggleDay('d3')">
+      <div class="day-num">3</div>
+      <div class="day-info"><div class="day-name">Wednesday</div><div class="day-title">The Founder Story</div></div>
+      <div class="type-pill" style="background:rgba(192,132,252,0.15);color:var(--purple);">Founder</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Who is behind SBW Co.? You — a trained graphic designer building a premium apparel brand from scratch in Austin. The personal story is what separates SBW from faceless brands. Lead with honesty.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"I'm Wesley. I designed every piece in SBW Co. myself — and I'm just getting started. Here's why this brand exists. 👇"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">What to Include</div>
+        <div class="detail-text muted">Your design background · What SBW means to you · Why Austin · What you want people to feel wearing SBW · The vision for the brand long-term</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Warm portrait of you — creative environment, natural light. You don't need to be dressed up. Authentic beats polished every time for founder posts.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #founderstory #graphicdesigner #austincreative #streetwear #premiumapparel #buildingabrand #smallbusiness #apparel #designerlife</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #founderstory #graphicdesigner #austincreative #streetwear #premiumapparel #buildingabrand #smallbusiness #apparel #designerlife')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">4</div>
+    <div class="rest-info"><div class="day-name">Thursday</div><p>Story only — poll: "Bold graphics or clean minimalism?" Easy engagement, zero effort. Starts teaching you what your audience responds to.</p></div>
+  </div>
+
+  <!-- D5 -->
+  <div class="day-card" id="d5">
+    <div class="day-card-header" onclick="toggleDay('d5')">
+      <div class="day-num">5</div>
+      <div class="day-info"><div class="day-name">Friday</div><div class="day-title">The Craftsmanship Post</div></div>
+      <div class="type-pill" style="background:rgba(96,165,250,0.15);color:var(--blue);">Process</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Talk about quality. What makes SBW different from a fast fashion brand? The materials, the craft, the intentionality behind every design. Premium means something here.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"SBW Co. isn't fast fashion. Every design is original. Every piece is chosen for quality. Here's what that actually means. 👇"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Key Points</div>
+        <div class="detail-text muted">Original graphics only · Premium blank selection (Bella+Canvas) · Designed to last · Small batch drops, not mass production · You'd wear this yourself</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #premiumapparel #qualityfirst #graphicapparel #streetwear #austinfashion #originaldesign #slowfashion #craftmanship #austincreative</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #premiumapparel #qualityfirst #graphicapparel #streetwear #austinfashion #originaldesign #slowfashion #craftmanship #austincreative')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D6 -->
+  <div class="day-card" id="d6">
+    <div class="day-card-header" onclick="toggleDay('d6')">
+      <div class="day-num">6</div>
+      <div class="day-info"><div class="day-name">Saturday</div><div class="day-title">Brand Reel — The Visual Statement</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Reel</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Your first Reel — and your highest reach post of Week 1. A cinematic brand intro. Fast cuts, strong visuals, minimal text. Let the aesthetic speak. No talking required.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"SBW Co. 🖤 Premium graphic apparel. Austin, TX. Drop 1 coming soon."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Reel Structure</div>
+        <div class="detail-text muted">Clip 1: Logo reveal on dark bg · Clip 2: Sketchbook open, pen moving · Clip 3: Color swatches / design detail · Clip 4: Fabric texture close-up · Clip 5: "Drop 1 — Coming Soon" text card. 15–20 seconds total. Use a bold trending audio track.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #brandlaunch #graphicapparel #streetwear #austinfashion #reels #comingsoon #premiumapparel #austintx #newbrand</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #brandlaunch #graphicapparel #streetwear #austinfashion #reels #comingsoon #premiumapparel #austintx #newbrand')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">7</div>
+    <div class="rest-info"><div class="day-name">Sunday</div><p>Rest. Story only — a single behind-the-scenes image or a "what's your favorite colorway?" question sticker.</p></div>
+  </div>
+</div>
+
+<!-- WEEK 2 -->
+<div class="week-section" id="sec-w2">
+  <div class="week-header">
+    <div class="week-badge">Week 2</div>
+    <div class="week-theme">Show the Work</div>
+    <div class="week-goal">Goal: Build credibility. Show the design process. Make people feel the craft.</div>
+  </div>
+
+  <!-- D8 -->
+  <div class="day-card" id="d8">
+    <div class="day-card-header" onclick="toggleDay('d8')">
+      <div class="day-num">8</div>
+      <div class="day-info"><div class="day-name">Monday</div><div class="day-title">Sketch to Screen — Process Post</div></div>
+      <div class="type-pill" style="background:rgba(96,165,250,0.15);color:var(--blue);">Process</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Show one design going from pencil sketch to digital. People are fascinated by process — this builds deep trust in the craft and in you as the designer behind SBW.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Every SBW design starts here. 📝 Pencil, paper, then pixels. This is how Drop 1 was made."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Side-by-side or carousel: rough sketch on left, cleaned-up digital version on right. Partially obscure the final design to keep the mystery alive.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#designprocess #sketchtoscreen #graphicdesign #sbwco #streetwear #illustrator #designerlife #apparel #austincreative #workinprogress</div>
+        <button class="copy-btn" onclick="copyText(this,'#designprocess #sketchtoscreen #graphicdesign #sbwco #streetwear #illustrator #designerlife #apparel #austincreative #workinprogress')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D9 -->
+  <div class="day-card" id="d9">
+    <div class="day-card-header" onclick="toggleDay('d9')">
+      <div class="day-num">9</div>
+      <div class="day-info"><div class="day-name">Tuesday</div><div class="day-title">Inspiration Board Post</div></div>
+      <div class="type-pill" style="background:rgba(192,132,252,0.15);color:var(--purple);">Founder</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">What inspires SBW Co.? Art movements, street culture, Austin's creative scene, textures, photography. Let people inside your creative mind. This post builds cultural identity for the brand.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Where does SBW come from? Let me show you what goes into a design before a single line is drawn. 🎨"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>A curated flatlay of inspiration — printed photos, magazine pages, swatches, sketches. Your personal creative world made visible. Raw and real works better than styled here.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #designinspiration #creativeprocess #moodboard #streetwear #graphicdesign #austincreative #artistlife #apparel #brandbuilding</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #designinspiration #creativeprocess #moodboard #streetwear #graphicdesign #austincreative #artistlife #apparel #brandbuilding')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">10</div>
+    <div class="rest-info"><div class="day-name">Wednesday</div><p>Story only — question sticker: "What style of graphic do you want to see from SBW?" Let your audience shape the brand direction.</p></div>
+  </div>
+
+  <!-- D11 -->
+  <div class="day-card" id="d11">
+    <div class="day-card-header" onclick="toggleDay('d11')">
+      <div class="day-num">11</div>
+      <div class="day-info"><div class="day-name">Thursday</div><div class="day-title">Typography & Design Language</div></div>
+      <div class="type-pill" style="background:rgba(96,165,250,0.15);color:var(--blue);">Process</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Talk about the visual language of SBW — type choices, color philosophy, what the brand looks like and why. This makes followers feel like they understand the brand on a deeper level.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Every font, every color in SBW Co. is chosen on purpose. Let me tell you why. 🖋️"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #typography #graphicdesign #brandidentity #designthinking #streetwear #visualidentity #austincreative #apparel #colortheory</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #typography #graphicdesign #brandidentity #designthinking #streetwear #visualidentity #austincreative #apparel #colortheory')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D12 -->
+  <div class="day-card" id="d12">
+    <div class="day-card-header" onclick="toggleDay('d12')">
+      <div class="day-num">12</div>
+      <div class="day-info"><div class="day-name">Friday</div><div class="day-title">Product Quality Deep-Dive</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Product</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Talk about the blanks — why Bella+Canvas, what weight, what feel. Most apparel brands never explain this. The detail signals that SBW takes quality seriously and justifies premium pricing.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"The graphic is only half the product. Here's what SBW Co. is actually printed on — and why it matters. 👕"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Close-up of fabric texture — the weave, the weight, the feel communicated visually. Clean background, macro-style shot. Make it look luxurious.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #premiumapparel #qualitymatters #bellacancas #graphicapparel #streetwear #tshirtdesign #austinfashion #apparel #knowyourbrand</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #premiumapparel #qualitymatters #bellacancas #graphicapparel #streetwear #tshirtdesign #austinfashion #apparel #knowyourbrand')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D13 -->
+  <div class="day-card" id="d13">
+    <div class="day-card-header" onclick="toggleDay('d13')">
+      <div class="day-num">13</div>
+      <div class="day-info"><div class="day-name">Saturday</div><div class="day-title">Process Reel — Design in Motion</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Reel</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Screen record your design process in Adobe — sketching, adjusting, coloring. Speed it up. Add music. People are endlessly fascinated watching a design come to life. This Reel will perform.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Watch SBW Drop 1 come to life. 🎨 From blank canvas to finished graphic. This is what goes into every piece."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Reel Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Screen record your Adobe session — 2x or 4x speed. Blur or cut before the final design is fully revealed. Keep the mystery. 20–30 seconds. Strong beat-matched music.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #designprocess #graphicdesign #adobeillustrator #streetwear #reels #designerlife #apparel #austincreative #timelapse</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #designprocess #graphicdesign #adobeillustrator #streetwear #reels #designerlife #apparel #austincreative #timelapse')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">14</div>
+    <div class="rest-info"><div class="day-name">Sunday</div><p>Rest. Story only — countdown sticker to Drop 1 if you have a date in mind. Build the anticipation passively.</p></div>
+  </div>
+</div>
+
+<!-- WEEK 3 -->
+<div class="week-section" id="sec-w3">
+  <div class="week-header">
+    <div class="week-badge">Week 3</div>
+    <div class="week-theme">Build Anticipation</div>
+    <div class="week-goal">Goal: Tease Drop 1. Reveal details slowly. Make followers feel like insiders.</div>
+  </div>
+
+  <!-- D15 -->
+  <div class="day-card" id="d15">
+    <div class="day-card-header" onclick="toggleDay('d15')">
+      <div class="day-num">15</div>
+      <div class="day-info"><div class="day-name">Monday</div><div class="day-title">Design Detail Tease #1</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Product</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">First real product tease. Extreme close-up of one design element — a line, a color, a shape. Not the full graphic. Make people lean in and guess. The comments will do the work for you.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Drop 1 is closer than you think. 👀 Can you tell what this is? First person to guess right gets early access."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Macro crop of your strongest design — just a detail. High contrast. Dark background. The cropping itself should feel intentional and editorial.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #drop1 #comingsoon #graphicapparel #streetwear #tease #austinfashion #newdrop #premiumapparel #designpreview</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #drop1 #comingsoon #graphicapparel #streetwear #tease #austinfashion #newdrop #premiumapparel #designpreview')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D16 -->
+  <div class="day-card" id="d16">
+    <div class="day-card-header" onclick="toggleDay('d16')">
+      <div class="day-num">16</div>
+      <div class="day-info"><div class="day-name">Tuesday</div><div class="day-title">The "Why This Design" Post</div></div>
+      <div class="type-pill" style="background:rgba(192,132,252,0.15);color:var(--purple);">Founder</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Tell the story behind one specific design without fully revealing it. What inspired it? What does it mean? What feeling were you going for? Story-driven content converts followers into buyers.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"This design started with a feeling I couldn't shake. Here's what went into it — and why it might be my favorite piece in Drop 1. 🖤"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #designstory #graphicdesign #streetwear #austincreative #founderstory #apparel #drop1 #premiumapparel #behindthedesign</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #designstory #graphicdesign #streetwear #austincreative #founderstory #apparel #drop1 #premiumapparel #behindthedesign')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D17 -->
+  <div class="day-card" id="d17">
+    <div class="day-card-header" onclick="toggleDay('d17')">
+      <div class="day-num">17</div>
+      <div class="day-info"><div class="day-name">Wednesday</div><div class="day-title">Colorway Poll Post</div></div>
+      <div class="type-pill" style="background:rgba(34,197,94,0.15);color:var(--green);">Engagement</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Ask your audience to vote on a colorway for one of the Drop 1 designs. This is not just engagement — this is market research. And it makes followers feel like co-creators of the brand.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"You're helping me decide. Drop 1 Design #2 — black base or white base? Comment below. 🎨 The winning colorway goes into production."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Show the same design mocked up in two colorways side by side. Even a quick digital mockup works. Make the choice feel real and exciting.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #youvote #colorway #graphicapparel #drop1 #streetwear #communitydriven #austinfashion #newdrop #designpoll</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #youvote #colorway #graphicapparel #drop1 #streetwear #communitydriven #austinfashion #newdrop #designpoll')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D18 -->
+  <div class="day-card" id="d18">
+    <div class="day-card-header" onclick="toggleDay('d18')">
+      <div class="day-num">18</div>
+      <div class="day-info"><div class="day-name">Thursday</div><div class="day-title">Sample Arrives — Unboxing Moment</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Product</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Your POD sample has arrived. This is a real moment — the first time the design exists in physical form. Share the genuine reaction. Real emotion sells better than any marketing copy.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"It's real. 🖤 Just held an SBW Co. piece for the first time. I can't stop looking at it. Drop 1 is actually happening."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Hold the shirt up in good light. Show the graphic clearly. A genuine expression matters more than a perfect pose. If the quality is great, let people see it close up.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #samplearrived #drop1 #graphicapparel #streetwear #itsreal #austinfashion #premiumapparel #tshirt #newbrand</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #samplearrived #drop1 #graphicapparel #streetwear #itsreal #austinfashion #premiumapparel #tshirt #newbrand')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D19 -->
+  <div class="day-card" id="d19">
+    <div class="day-card-header" onclick="toggleDay('d19')">
+      <div class="day-num">19</div>
+      <div class="day-info"><div class="day-name">Friday</div><div class="day-title">Design Detail Tease #2</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Product</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Second tease — slightly more revealing than the first. A different design this time. Keep rotating through the Drop 1 pieces. The drip of reveals builds sustained excitement.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Design #2. Still not showing you everything. 😏 Drop 1 date dropping soon — make sure you're following."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #tease #drop1 #comingsoon #graphicapparel #streetwear #austinfashion #newdrop #sneakpeek #premiumapparel</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #tease #drop1 #comingsoon #graphicapparel #streetwear #austinfashion #newdrop #sneakpeek #premiumapparel')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D20 -->
+  <div class="day-card" id="d20">
+    <div class="day-card-header" onclick="toggleDay('d20')">
+      <div class="day-num">20</div>
+      <div class="day-info"><div class="day-name">Saturday</div><div class="day-title">Full Lookbook Reel</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Reel</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Your most polished content piece yet. A mini lookbook Reel — you wearing the sample, shot in great light around Austin. This is the post that turns browsers into buyers.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"First look. 👀 SBW Co. Drop 1. Austin, TX. Link in bio when it drops."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Reel Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Wear your sample and shoot 5–6 clips in different Austin locations — good architecture, interesting light, clean backgrounds. Editorial over casual. This is your hero content for the month.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #lookbook #drop1 #graphicapparel #streetwear #austinfashion #reels #ootd #premiumapparel #austintx</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #lookbook #drop1 #graphicapparel #streetwear #austinfashion #reels #ootd #premiumapparel #austintx')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">21</div>
+    <div class="rest-info"><div class="day-name">Sunday</div><p>Rest. Story only — share the colorway poll results from Day 17 and announce the winning colorway going into production.</p></div>
+  </div>
+</div>
+
+<!-- WEEK 4 -->
+<div class="week-section" id="sec-w4">
+  <div class="week-header">
+    <div class="week-badge">Week 4</div>
+    <div class="week-theme">Drive to Launch</div>
+    <div class="week-goal">Goal: Countdown. Strongest visuals. Clear CTAs. Month ends with everyone ready to buy.</div>
+  </div>
+
+  <!-- D22 -->
+  <div class="day-card" id="d22">
+    <div class="day-card-header" onclick="toggleDay('d22')">
+      <div class="day-num">22</div>
+      <div class="day-info"><div class="day-name">Monday</div><div class="day-title">Drop 1 Date Announcement</div></div>
+      <div class="type-pill" style="background:rgba(34,197,94,0.15);color:var(--green);">CTA</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Make it official. Drop 1 has a date. This is a major post — treat it like an event announcement. Get people to save the date, turn on post notifications, tell a friend.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Drop 1 drops [DATE]. 🖤 Mark it. Set a reminder. Tell someone who needs this. SBW Co. is officially launching."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Clean, bold graphic — the SBW logo with the drop date in strong typography. Dark background, amber or white text. Simple and striking. This should feel like a concert announcement.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #drop1 #launchdate #graphicapparel #streetwear #austinfashion #newdrop #comingsoon #premiumapparel #markthedate</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #drop1 #launchdate #graphicapparel #streetwear #austinfashion #newdrop #comingsoon #premiumapparel #markthedate')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D23 -->
+  <div class="day-card" id="d23">
+    <div class="day-card-header" onclick="toggleDay('d23')">
+      <div class="day-num">23</div>
+      <div class="day-info"><div class="day-name">Tuesday</div><div class="day-title">Full Design Reveal #1</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Product</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">The first full design reveal. No more teasing — show it completely, beautifully shot. The weeks of mystery make this land harder. Let the design breathe. Minimal caption, maximum visual.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Design 01. 🖤 SBW Co. Drop 1. This one's been months in the making. It's finally time."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Clean product mockup on a model or flat surface. Professional quality — use your best mockup template. The design should be the entire focus of the image.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #designreveal #drop1 #graphicapparel #streetwear #austinfashion #newdrop #tshirt #premiumapparel #design01</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #designreveal #drop1 #graphicapparel #streetwear #austinfashion #newdrop #tshirt #premiumapparel #design01')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D24 -->
+  <div class="day-card" id="d24">
+    <div class="day-card-header" onclick="toggleDay('d24')">
+      <div class="day-num">24</div>
+      <div class="day-info"><div class="day-name">Wednesday</div><div class="day-title">Full Design Reveal #2</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Product</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Second design reveal — different product type (if D23 was a tee, make this a crewneck or hoodie). Show the range. Keep the energy high and the drop date front of mind.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Design 02. 🖤 The crewneck/hoodie you didn't know you needed. Drop 1 — [DATE]. Link in bio when it's live."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #designreveal #drop1 #crewneck #hoodie #streetwear #austinfashion #graphicapparel #newdrop #premiumapparel</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #designreveal #drop1 #crewneck #hoodie #streetwear #austinfashion #graphicapparel #newdrop #premiumapparel')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D25 -->
+  <div class="day-card" id="d25">
+    <div class="day-card-header" onclick="toggleDay('d25')">
+      <div class="day-num">25</div>
+      <div class="day-info"><div class="day-name">Thursday</div><div class="day-title">The "Why SBW" Brand Manifesto</div></div>
+      <div class="type-pill" style="background:rgba(192,132,252,0.15);color:var(--purple);">Founder</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Before the launch, one more deeply personal post. What does SBW stand for? What's the mission? This is the post people screenshot and share. Make it count.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"SBW Co. isn't just apparel. Here's what it actually is — and why I'm building it. 🖤 (Read this before Drop 1)"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">What to Cover</div>
+        <div class="detail-text muted">What SBW stands for and means to you · Who it's made for · What you want people to feel wearing it · Why Austin · Why now · Your commitment to the people who support it</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #brandmanifesto #whyibuild #graphicapparel #streetwear #austincreative #founderstory #premiumapparel #apparel #mission</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #brandmanifesto #whyibuild #graphicapparel #streetwear #austincreative #founderstory #premiumapparel #apparel #mission')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D26 -->
+  <div class="day-card" id="d26">
+    <div class="day-card-header" onclick="toggleDay('d26')">
+      <div class="day-num">26</div>
+      <div class="day-info"><div class="day-name">Friday</div><div class="day-title">Launch Countdown Reel</div></div>
+      <div class="type-pill" style="background:rgba(244,114,182,0.15);color:var(--pink);">Reel</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">The pre-launch hype reel. Fast-paced, energetic, exciting. Flash through design details, the sample, the studio, the brand. This is the movie trailer for Drop 1. Highest energy post of the month.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"Drop 1. [DATE]. 🖤 SBW Co. is launching. Are you ready?"</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Reel Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Fast cuts — design teases, sample shots, logo, date card at the end. 15 seconds max. High energy music. This should feel like a hype trailer. Every frame counts.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #drop1 #launchweek #graphicapparel #streetwear #austinfashion #reels #comingsoon #premiumapparel #hype</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #drop1 #launchweek #graphicapparel #streetwear #austinfashion #reels #comingsoon #premiumapparel #hype')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">27</div>
+    <div class="rest-info"><div class="day-name">Saturday</div><p>Story only — countdown timer sticker to Drop 1. Pin it as a highlight. Let the community feel the energy building without a feed post.</p></div>
+  </div>
+
+  <div class="rest-card">
+    <div class="rest-num">28</div>
+    <div class="rest-info"><div class="day-name">Sunday</div><p>Rest. Prep for the final push. The biggest two posts of the month are coming.</p></div>
+  </div>
+</div>
+
+<!-- DAYS 29-30 -->
+<div class="week-section" id="sec-w5">
+  <div class="week-header">
+    <div class="week-badge">Days 29–30</div>
+    <div class="week-theme">Launch & Ignite</div>
+    <div class="week-goal">Goal: Drop 1 goes live. The community you built this month becomes your first customers.</div>
+  </div>
+
+  <!-- D29 -->
+  <div class="day-card" id="d29">
+    <div class="day-card-header" onclick="toggleDay('d29')">
+      <div class="day-num">29</div>
+      <div class="day-info"><div class="day-name">Monday</div><div class="day-title">Drop 1 Is Live — Launch Post</div></div>
+      <div class="type-pill" style="background:rgba(34,197,94,0.15);color:var(--green);">Launch</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Today is the day. The most important post of the month. Clean, confident, clear. SBW Co. Drop 1 is available now. Direct link. Simple CTA. Let the designs and the month of buildup do the selling.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"It's here. 🖤 SBW Co. Drop 1 is live. Limited pieces. Link in bio. Thank you for waiting — this one's for you."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Photo Tip</div>
+        <div class="tip-box"><span>🎨</span><p>Your single best product shot — a hero image that represents the whole drop. Clean. Confident. This image will be shared. Make it perfect.</p></div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #drop1 #nowlive #graphicapparel #streetwear #austinfashion #shopnow #premiumapparel #limiteddrop #austintx</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #drop1 #nowlive #graphicapparel #streetwear #austinfashion #shopnow #premiumapparel #limiteddrop #austintx')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D30 -->
+  <div class="day-card" id="d30">
+    <div class="day-card-header" onclick="toggleDay('d30')">
+      <div class="day-num">30</div>
+      <div class="day-info"><div class="day-name">Tuesday</div><div class="day-title">Thank You + Month 2 Tease</div></div>
+      <div class="type-pill" style="background:rgba(192,132,252,0.15);color:var(--purple);">Founder</div>
+      <div class="expand-icon">▼</div>
+    </div>
+    <div class="day-body">
+      <div class="detail-row"><div class="detail-label">Caption Angle</div>
+        <div class="detail-text">Thank the people who followed the journey, bought a piece, shared the brand. Then tease Month 2. Keep the momentum alive. The community you built this month is your most valuable asset.</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Caption Hook</div>
+        <div class="hook-box">"30 days ago this was just an idea. Today SBW Co. is real — because of you. 🖤 And we're just getting started. Month 2 is going to be something else."</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">What to Cover</div>
+        <div class="detail-text muted">Genuine gratitude for early followers · First sale moment (if it happened) · A hint of what's coming in Drop 2 · An invitation to stay for the journey</div>
+      </div>
+      <div class="detail-row"><div class="detail-label">Hashtags</div>
+        <div class="hashtags">#sbwco #thankyou #month1 #drop1 #graphicapparel #streetwear #austincreative #community #drop2coming #buildingabrand</div>
+        <button class="copy-btn" onclick="copyText(this,'#sbwco #thankyou #month1 #drop1 #graphicapparel #streetwear #austincreative #community #drop2coming #buildingabrand')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="month2-box">
+    <div class="label">Coming in Month 2</div>
+    <p>
+      🛍️ First customer photo reposts — real people in SBW gear<br>
+      📦 Behind the scenes of packing and shipping orders<br>
+      🎨 Drop 2 design process begins publicly<br>
+      📸 Collab outreach to Austin photographers and creators<br>
+      🌟 First press and feature outreach to Austin media<br>
+      👕 Full product lineup shots — all 5 designs together<br>
+      🔁 Restocks and colorway expansions based on feedback
+    </p>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">SBW Co.</div>
+  <div class="footer-sub">30-Day Brand Calendar · Austin, TX · Drop 1</div>
+</div>
+
+<script>
+function showWeek(id) {
+  document.querySelectorAll('.week-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function toggleDay(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

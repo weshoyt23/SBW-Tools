@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBW Co. · Marketing Funnel Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0806; --card: #111008; --border: #2a2418;
+    --amber: #e8a435; --amber-light: #fef3c7; --amber-dim: #7a5520;
+    --green: #22c55e; --green-bg: #052e16;
+    --blue: #60a5fa; --blue-bg: #0c1a2e;
+    --purple: #c084fc; --purple-bg: #1a0a2e;
+    --pink: #f472b6; --pink-bg: #2d0a1e;
+    --red: #f87171; --red-bg: #2d0a0a;
+    --orange: #fb923c; --orange-bg: #2d1500;
+    --muted: #6b5f4e; --text: #f0e8dc; --soft: #1a1410;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; padding: 20px 16px; max-width: 720px; margin: 0 auto; }
+
+  /* NAV */
+  .nav { position: sticky; top: 0; background: var(--bg); z-index: 20; padding: 10px 0 12px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .nav-inner { display: flex; gap: 6px; flex-wrap: wrap; }
+  .nav-tab { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; padding: 7px 12px; border-radius: 5px; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: all 0.15s; -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+  .nav-tab.active { border-color: var(--amber); background: var(--amber); color: #1a1612; font-weight: 600; }
+
+  /* HEADER */
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--text); line-height: 1.05; margin-bottom: 8px; }
+  h1 span { color: var(--amber); font-style: italic; }
+  .subtitle { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+  /* SECTIONS */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* FUNNEL VISUAL */
+  .funnel-wrap { margin-bottom: 28px; }
+  .funnel-stage { border-radius: 8px; padding: 14px 18px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .funnel-stage:hover { filter: brightness(1.1); }
+  .funnel-label { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; }
+  .funnel-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; opacity: 0.8; }
+  .funnel-pct { font-family: 'DM Mono', monospace; font-size: 11px; opacity: 0.7; flex-shrink: 0; }
+  .funnel-arrow { text-align: center; color: var(--muted); font-size: 12px; margin: 2px 0; }
+
+  /* STAGE DETAIL CARDS */
+  .stage-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+  .stage-card-header { padding: 16px 18px; }
+  .stage-card-body { padding: 0 18px 18px; }
+  .stage-num { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
+  .stage-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; }
+  .stage-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-top: 8px; }
+
+  .detail-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; margin-top: 16px; }
+  .detail-text { font-size: 13px; color: var(--text); line-height: 1.7; }
+  .detail-text.muted { color: var(--muted); }
+
+  .action-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; background: var(--soft); border: 1px solid var(--border); border-radius: 7px; margin-bottom: 7px; }
+  .action-icon { font-size: 16px; flex-shrink: 0; }
+  .action-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .action-text strong { color: var(--amber); }
+
+  .metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+  .metric-box { background: var(--soft); border: 1px solid var(--border); border-radius: 7px; padding: 10px 12px; }
+  .metric-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+  .metric-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  .leak-box { background: var(--red-bg); border: 1px solid rgba(248,113,113,0.25); border-radius: 8px; padding: 12px 14px; margin-top: 4px; }
+  .leak-title { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--red); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+  .leak-text { font-size: 12px; color: #f87171; line-height: 1.6; }
+
+  .fix-box { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.25); border-radius: 8px; padding: 12px 14px; margin-top: 8px; }
+  .fix-title { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+  .fix-text { font-size: 12px; color: var(--green); line-height: 1.6; }
+
+  /* TOOLS PAGE */
+  .tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; }
+  .tool-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .tool-icon { font-size: 22px; flex-shrink: 0; }
+  .tool-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--text); }
+  .tool-stage { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .tool-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .tool-free { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 3px; background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.3); margin-left: auto; flex-shrink: 0; }
+  .tool-paid { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 3px; background: var(--amber-dim); color: var(--amber-light); border: 1px solid rgba(232,164,53,0.3); margin-left: auto; flex-shrink: 0; }
+
+  /* EMAIL PAGE */
+  .email-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .email-header { padding: 12px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .email-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--amber); min-width: 28px; }
+  .email-subject { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+  .email-trigger { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); flex-shrink: 0; }
+  .email-expand { color: var(--muted); font-size: 11px; transition: transform 0.2s; }
+  .email-card.open .email-expand { transform: rotate(180deg); }
+  .email-body { display: none; padding: 0 16px 14px; border-top: 1px solid var(--border); }
+  .email-card.open .email-body { display: block; }
+  .email-copy { font-family: 'DM Mono', monospace; font-size: 9px; padding: 3px 10px; border-radius: 4px; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all 0.2s; margin-top: 8px; display: inline-block; }
+  .email-copy.copied { border-color: var(--green); color: var(--green); }
+
+  /* CHECKLIST */
+  .check-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 8px; cursor: pointer; background: var(--soft); border: 1px solid var(--border); margin-bottom: 7px; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
+  .check-item.checked { background: var(--green-bg); border-color: rgba(34,197,94,0.3); opacity: 0.7; }
+  .check-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); }
+  .check-icon { color: white; font-size: 11px; display: none; }
+  .check-item.checked .check-icon { display: block; }
+  .check-text { font-size: 13px; color: var(--text); line-height: 1.4; }
+  .check-item.checked .check-text { text-decoration: line-through; color: var(--muted); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 24px 0 8px; border-top: 1px solid var(--border); margin-top: 20px; }
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--border); font-style: italic; }
+  .footer-sub { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--border); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <div class="nav-tab active" onclick="showPage('funnel')">🔽 The Funnel</div>
+    <div class="nav-tab" onclick="showPage('stages')">📊 All Stages</div>
+    <div class="nav-tab" onclick="showPage('emails')">📧 Email Flows</div>
+    <div class="nav-tab" onclick="showPage('tools')">🛠 Tools</div>
+    <div class="nav-tab" onclick="showPage('checklist')">✅ Setup List</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ FUNNEL OVERVIEW ═══════════════════ -->
+<div class="page active" id="page-funnel">
+  <div class="eyebrow">SBW Co. · Marketing Strategy</div>
+  <h1>The SBW<br><span>Marketing Funnel</span></h1>
+  <p class="subtitle">Every person who buys an SBW piece travels through six stages. Your job is to move them forward at each one — and patch the leaks where they drop off.</p>
+
+  <div class="funnel-wrap">
+    <!-- Stage bars get narrower = funnel shape using padding -->
+    <div class="funnel-stage" style="background:rgba(232,164,53,0.18);border:1px solid rgba(232,164,53,0.3);" onclick="showPage('stages');scrollToStage('s1')">
+      <div><div class="funnel-label" style="color:var(--amber);">① Awareness</div><div class="funnel-sub" style="color:var(--amber);">They discover SBW Co.</div></div>
+      <div class="funnel-pct" style="color:var(--amber);">100%</div>
+    </div>
+    <div class="funnel-arrow">▼</div>
+    <div class="funnel-stage" style="background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3);margin:0 4%;" onclick="showPage('stages');scrollToStage('s2')">
+      <div><div class="funnel-label" style="color:var(--blue);">② Interest</div><div class="funnel-sub" style="color:var(--blue);">They follow & engage</div></div>
+      <div class="funnel-pct" style="color:var(--blue);">~40%</div>
+    </div>
+    <div class="funnel-arrow">▼</div>
+    <div class="funnel-stage" style="background:rgba(192,132,252,0.15);border:1px solid rgba(192,132,252,0.3);margin:0 8%;" onclick="showPage('stages');scrollToStage('s3')">
+      <div><div class="funnel-label" style="color:var(--purple);">③ Consideration</div><div class="funnel-sub" style="color:var(--purple);">They visit the store</div></div>
+      <div class="funnel-pct" style="color:var(--purple);">~15%</div>
+    </div>
+    <div class="funnel-arrow">▼</div>
+    <div class="funnel-stage" style="background:rgba(244,114,182,0.15);border:1px solid rgba(244,114,182,0.3);margin:0 12%;" onclick="showPage('stages');scrollToStage('s4')">
+      <div><div class="funnel-label" style="color:var(--pink);">④ Intent</div><div class="funnel-sub" style="color:var(--pink);">They add to cart</div></div>
+      <div class="funnel-pct" style="color:var(--pink);">~5%</div>
+    </div>
+    <div class="funnel-arrow">▼</div>
+    <div class="funnel-stage" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);margin:0 16%;" onclick="showPage('stages');scrollToStage('s5')">
+      <div><div class="funnel-label" style="color:var(--green);">⑤ Purchase</div><div class="funnel-sub" style="color:var(--green);">They buy</div></div>
+      <div class="funnel-pct" style="color:var(--green);">~2%</div>
+    </div>
+    <div class="funnel-arrow">▼</div>
+    <div class="funnel-stage" style="background:rgba(251,146,60,0.15);border:1px solid rgba(251,146,60,0.3);margin:0 12%;" onclick="showPage('stages');scrollToStage('s6')">
+      <div><div class="funnel-label" style="color:var(--orange);">⑥ Loyalty</div><div class="funnel-sub" style="color:var(--orange);">They return & refer</div></div>
+      <div class="funnel-pct" style="color:var(--orange);">∞</div>
+    </div>
+  </div>
+
+  <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:20px;">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;">What the Numbers Mean</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+      If <strong style="color:var(--text);">1,000 people</strong> see an SBW post this month →<br>
+      <strong style="color:var(--blue);">~400</strong> follow or save it →<br>
+      <strong style="color:var(--purple);">~150</strong> visit the Shopify store →<br>
+      <strong style="color:var(--pink);">~50</strong> add something to cart →<br>
+      <strong style="color:var(--green);">~20</strong> complete a purchase →<br>
+      <strong style="color:var(--orange);">~5–8</strong> become repeat buyers who refer others.<br><br>
+      This is why <strong style="color:var(--text);">reach matters at the top</strong> and <strong style="color:var(--text);">conversion matters at the bottom.</strong> Growing your audience and patching the leaks both move the needle.
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════ ALL STAGES ═══════════════════ -->
+<div class="page" id="page-stages">
+  <div class="eyebrow">Stage by Stage Breakdown</div>
+  <h1>Every<br><span>Stage Detailed</span></h1>
+  <p class="subtitle">Tap any stage to see exactly what SBW needs to do there, where people drop off, and how to fix the leaks.</p>
+
+  <!-- S1 AWARENESS -->
+  <div class="stage-card" id="s1">
+    <div class="stage-card-header" style="border-left:4px solid var(--amber);">
+      <div class="stage-num" style="color:var(--amber);">Stage 01 · Top of Funnel</div>
+      <div class="stage-title" style="color:var(--amber);">Awareness</div>
+      <div class="stage-desc">Someone discovers SBW Co. for the first time. They weren't looking for you — you appeared in their world. This is the widest part of the funnel. Your only job here is to make a strong enough impression that they want to see more.</div>
+    </div>
+    <div class="stage-card-body">
+      <div class="detail-label">How People Discover SBW</div>
+      <div class="action-item"><div class="action-icon">📱</div><div class="action-text"><strong>Instagram Reels</strong> — the single highest-reach format. A well-made Reel can reach 10x your follower count through the Explore page.</div></div>
+      <div class="action-item"><div class="action-icon">#️⃣</div><div class="action-text"><strong>Hashtags</strong> — #austinfashion, #sbwco, #graphicapparel pull in people already interested in what you sell.</div></div>
+      <div class="action-item"><div class="action-icon">🔁</div><div class="action-text"><strong>Shares & Tags</strong> — when someone reposts your content or tags a friend, their entire network sees SBW for the first time.</div></div>
+      <div class="action-item"><div class="action-icon">🤝</div><div class="action-text"><strong>Collaborations</strong> — appearing on another Austin creator's page puts SBW in front of a warm, pre-qualified audience instantly.</div></div>
+      <div class="action-item"><div class="action-icon">📍</div><div class="action-text"><strong>Location Tags</strong> — tagging Austin locations on posts gets you discovered by people searching those places.</div></div>
+
+      <div class="detail-label">Your Awareness Metrics to Watch</div>
+      <div class="metric-row">
+        <div class="metric-box"><div class="metric-val" style="color:var(--amber);">Reach</div><div class="metric-label">Unique accounts who saw a post</div></div>
+        <div class="metric-box"><div class="metric-val" style="color:var(--amber);">Impressions</div><div class="metric-label">Total times content was shown</div></div>
+      </div>
+
+      <div class="detail-label">What Works at This Stage</div>
+      <div class="detail-text muted">Reels over static posts · Strong visual hooks in first 2 seconds · Austin location tags · Consistent posting schedule · Trending audio on Reels · Bold, scroll-stopping imagery</div>
+
+      <div class="leak-box">
+        <div class="leak-title">⚠️ Common Leak</div>
+        <div class="leak-text">Posting inconsistently kills awareness. The algorithm stops showing your content to new people if you go quiet. Even one post per day keeps the pipeline full.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2 INTEREST -->
+  <div class="stage-card" id="s2">
+    <div class="stage-card-header" style="border-left:4px solid var(--blue);">
+      <div class="stage-num" style="color:var(--blue);">Stage 02 · Upper-Mid Funnel</div>
+      <div class="stage-title" style="color:var(--blue);">Interest</div>
+      <div class="stage-desc">They followed you, saved a post, or watched your Reel twice. They're curious but not committed. They're asking "is this brand for me?" Your content, your voice, and your story are what keep them here.</div>
+    </div>
+    <div class="stage-card-body">
+      <div class="detail-label">What Builds Interest for SBW</div>
+      <div class="action-item"><div class="action-icon">🎨</div><div class="action-text"><strong>Design process content</strong> — showing the work builds credibility and curiosity simultaneously. Nobody else is showing this.</div></div>
+      <div class="action-item"><div class="action-icon">🖤</div><div class="action-text"><strong>Founder story posts</strong> — people follow people, not logos. Wesley building SBW from scratch in Austin is a compelling story. Tell it repeatedly in different ways.</div></div>
+      <div class="action-item"><div class="action-icon">💬</div><div class="action-text"><strong>Engaging captions</strong> — long, honest captions that make people feel something keep followers from unfollowing. Your kit already has these.</div></div>
+      <div class="action-item"><div class="action-icon">📊</div><div class="action-text"><strong>Stories daily</strong> — story viewers are your warmest audience. They're choosing to tap through your content. These are your most interested followers.</div></div>
+      <div class="action-item"><div class="action-icon">🗳️</div><div class="action-text"><strong>Polls and questions</strong> — colorway votes, design feedback, brand decisions made publicly. Participation creates investment in the brand's success.</div></div>
+
+      <div class="detail-label">Metrics to Watch</div>
+      <div class="metric-row">
+        <div class="metric-box"><div class="metric-val" style="color:var(--blue);">Saves</div><div class="metric-label">Strongest interest signal on IG</div></div>
+        <div class="metric-box"><div class="metric-val" style="color:var(--blue);">Story Views</div><div class="metric-label">Your warmest audience size</div></div>
+      </div>
+
+      <div class="leak-box">
+        <div class="leak-title">⚠️ Common Leak</div>
+        <div class="leak-text">Posting only product content without personality. People need to know who Wesley is before they trust SBW enough to visit the store. Balance brand posts with founder posts.</div>
+      </div>
+      <div class="fix-box">
+        <div class="fix-title">✓ The Fix</div>
+        <div class="fix-text">For every 2 product/brand posts, post 1 personal founder post. This ratio keeps the brand human and builds the emotional connection that converts followers into buyers.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3 CONSIDERATION -->
+  <div class="stage-card" id="s3">
+    <div class="stage-card-header" style="border-left:4px solid var(--purple);">
+      <div class="stage-num" style="color:var(--purple);">Stage 03 · Mid Funnel</div>
+      <div class="stage-title" style="color:var(--purple);">Consideration</div>
+      <div class="stage-desc">They tapped your link in bio and landed on the Shopify store. They're looking at product photos, reading descriptions, checking prices. They're seriously thinking about buying. This is where most small brands lose people — not because the product is bad but because the store doesn't convert.</div>
+    </div>
+    <div class="stage-card-body">
+      <div class="detail-label">What Your Shopify Store Must Have</div>
+      <div class="action-item"><div class="action-icon">📸</div><div class="action-text"><strong>Multiple product photos</strong> — front, back, close-up of graphic, lifestyle shot on a person, and a flat lay. People need to see the product from every angle before spending $65+.</div></div>
+      <div class="action-item"><div class="action-icon">✍️</div><div class="action-text"><strong>Compelling descriptions</strong> — not just size and material. Tell the story of the design. What inspired it. What it feels like. Why it was made. Emotion sells.</div></div>
+      <div class="action-item"><div class="action-icon">⭐</div><div class="action-text"><strong>Reviews visible</strong> — even 3–5 reviews dramatically increase conversion. This is why getting your first buyers to review is critical. Install a free Shopify review app.</div></div>
+      <div class="action-item"><div class="action-icon">📦</div><div class="action-text"><strong>Clear shipping info</strong> — how long, how much, what's the return policy. Uncertainty at this stage kills purchases. Answer every question before they have to ask.</div></div>
+      <div class="action-item"><div class="action-icon">🔒</div><div class="action-text"><strong>Trust signals</strong> — secure checkout badge, clear contact info, a real About page with Wesley's face and story. Trust is everything at $65–$110 price points.</div></div>
+      <div class="action-item"><div class="action-icon">📱</div><div class="action-text"><strong>Mobile-optimized</strong> — almost every SBW customer will shop on their phone. Test every page on mobile before launch. Buttons must be easy to tap, text must be readable.</div></div>
+
+      <div class="leak-box">
+        <div class="leak-title">⚠️ The Biggest Leak in Most Small Brands</div>
+        <div class="leak-text">A beautiful Instagram driving traffic to a generic, unfinished Shopify store. The store must match the brand's quality. If the Instagram feels premium but the store feels unfinished, people leave.</div>
+      </div>
+      <div class="fix-box">
+        <div class="fix-title">✓ The Fix</div>
+        <div class="fix-text">Spend as much time on your Shopify store as you do on your Instagram. Every product page is a landing page. Treat it like one.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4 INTENT -->
+  <div class="stage-card" id="s4">
+    <div class="stage-card-header" style="border-left:4px solid var(--pink);">
+      <div class="stage-num" style="color:var(--pink);">Stage 04 · Lower-Mid Funnel</div>
+      <div class="stage-title" style="color:var(--pink);">Intent</div>
+      <div class="stage-desc">They added to cart. This is a very strong signal — they want it. But cart abandonment rates average 70% across e-commerce. Most people add to cart and never come back. Your job here is to close the gap between wanting and buying.</div>
+    </div>
+    <div class="stage-card-body">
+      <div class="detail-label">What Converts Intent to Purchase</div>
+      <div class="action-item"><div class="action-icon">⚡</div><div class="action-text"><strong>Frictionless checkout</strong> — every extra step loses customers. Enable Shop Pay and Apple Pay on Shopify. One-tap checkout converts dramatically better than multi-step forms.</div></div>
+      <div class="action-item"><div class="action-icon">📧</div><div class="action-text"><strong>Abandoned cart email</strong> — Shopify sends this automatically if you collect emails. A simple "you left something behind" email with a photo of the product recovers 5–15% of abandoned carts.</div></div>
+      <div class="action-item"><div class="action-icon">⏰</div><div class="action-text"><strong>Urgency — honestly used</strong> — "Only 8 left in this size" or "Drop 1 closes [date]" creates real urgency when true. Never fake scarcity — it destroys trust permanently.</div></div>
+      <div class="action-item"><div class="action-icon">🎁</div><div class="action-text"><strong>Free shipping threshold</strong> — "Free shipping on orders over $80" nudges people to add a second item rather than abandon. Increases average order value and reduces cart abandonment.</div></div>
+
+      <div class="detail-label">Metrics to Watch</div>
+      <div class="metric-row">
+        <div class="metric-box"><div class="metric-val" style="color:var(--pink);">Cart Rate</div><div class="metric-label">% of store visitors who add to cart</div></div>
+        <div class="metric-box"><div class="metric-val" style="color:var(--pink);">Abandonment</div><div class="metric-label">% who add to cart but don't buy</div></div>
+      </div>
+
+      <div class="leak-box">
+        <div class="leak-title">⚠️ Common Leak</div>
+        <div class="leak-text">No email collection means abandoned carts are gone forever. Set up Klaviyo or Shopify Email from day one to capture emails and send the abandoned cart sequence automatically.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5 PURCHASE -->
+  <div class="stage-card" id="s5">
+    <div class="stage-card-header" style="border-left:4px solid var(--green);">
+      <div class="stage-num" style="color:var(--green);">Stage 05 · Conversion</div>
+      <div class="stage-title" style="color:var(--green);">Purchase</div>
+      <div class="stage-desc">They bought. The funnel worked. But what happens in the 30 minutes, 24 hours, and 7 days after the purchase determines whether they ever buy again — and whether they tell anyone about it.</div>
+    </div>
+    <div class="stage-card-body">
+      <div class="detail-label">The Post-Purchase Experience</div>
+      <div class="action-item"><div class="action-icon">📧</div><div class="action-text"><strong>Order confirmation email</strong> — Shopify sends this automatically. Customize it with your brand voice. Add a personal note from Wesley. Make them feel like they made a great decision.</div></div>
+      <div class="action-item"><div class="action-icon">📦</div><div class="action-text"><strong>Shipping confirmation</strong> — personalize this too. "Your SBW piece is on its way 🖤" feels very different from a generic tracking email. Both land in the same inbox — one builds a brand.</div></div>
+      <div class="action-item"><div class="action-icon">🎁</div><div class="action-text"><strong>Packaging as branding</strong> — a tissue paper wrap, a sticker, a handwritten thank-you card costs almost nothing but creates a moment. That moment gets photographed and posted. Free marketing.</div></div>
+      <div class="action-item"><div class="action-icon">⭐</div><div class="action-text"><strong>Review request email</strong> — send 7 days after delivery. Keep it personal: "Hey — I'm Wesley, I made this myself. An honest review means everything to a one-person brand." Real ask, real results.</div></div>
+      <div class="action-item"><div class="action-icon">📱</div><div class="action-text"><strong>Tag request</strong> — include a card in the package: "Tag @sbwco when you wear it — I repost every single one." Turns customers into content creators for free.</div></div>
+
+      <div class="detail-label">Metrics to Watch</div>
+      <div class="metric-row">
+        <div class="metric-box"><div class="metric-val" style="color:var(--green);">Conv. Rate</div><div class="metric-label">% of store visitors who buy</div></div>
+        <div class="metric-box"><div class="metric-val" style="color:var(--green);">AOV</div><div class="metric-label">Average order value</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6 LOYALTY -->
+  <div class="stage-card" id="s6">
+    <div class="stage-card-header" style="border-left:4px solid var(--orange);">
+      <div class="stage-num" style="color:var(--orange);">Stage 06 · Bottom & Beyond</div>
+      <div class="stage-title" style="color:var(--orange);">Loyalty & Advocacy</div>
+      <div class="stage-desc">This is the most valuable and most neglected stage in small brand marketing. A loyal customer costs nothing to acquire — you already have them. An advocate is even more valuable — they send you new customers for free. The bottom of the funnel feeds the top.</div>
+    </div>
+    <div class="stage-card-body">
+      <div class="detail-label">Building Loyalty for SBW</div>
+      <div class="action-item"><div class="action-icon">🔁</div><div class="action-text"><strong>Early access to Drop 2</strong> — email past buyers first before the public announcement. "You were part of Drop 1 — you get first look at Drop 2." Exclusivity rewards loyalty.</div></div>
+      <div class="action-item"><div class="action-icon">📸</div><div class="action-text"><strong>Repost customer photos</strong> — every time a customer tags SBW, repost it immediately. This validates the buyer, encourages others to do the same, and creates authentic brand content.</div></div>
+      <div class="action-item"><div class="action-icon">💌</div><div class="action-text"><strong>Personal DMs</strong> — message new customers directly. "Just saw your order come through — thank you genuinely. Let me know how it fits." Nobody does this. It's unforgettable.</div></div>
+      <div class="action-item"><div class="action-icon">🎁</div><div class="action-text"><strong>Surprise upgrades</strong> — occasionally include an extra sticker, a thank you card, or a small freebie in repeat orders. Costs almost nothing. Creates lifelong brand loyalty.</div></div>
+      <div class="action-item"><div class="action-icon">🌐</div><div class="action-text"><strong>Community building</strong> — over time, SBW buyers become a community. A Discord, a close friends list on Instagram, a VIP email segment. The brand becomes a belonging, not just a purchase.</div></div>
+
+      <div class="detail-label">Metrics to Watch</div>
+      <div class="metric-row">
+        <div class="metric-box"><div class="metric-val" style="color:var(--orange);">Repeat %</div><div class="metric-label">% of customers who buy again</div></div>
+        <div class="metric-box"><div class="metric-val" style="color:var(--orange);">LTV</div><div class="metric-label">Lifetime value per customer</div></div>
+      </div>
+
+      <div class="fix-box">
+        <div class="fix-title">✓ The Compounding Effect</div>
+        <div class="fix-text">A customer who buys twice is worth 3x a one-time buyer. A customer who refers one friend doubles their value again. The math of loyalty compounds faster than any ad spend. Invest here first.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ EMAIL FLOWS ═══════════════════ -->
+<div class="page" id="page-emails">
+  <div class="eyebrow">Automated Email Strategy</div>
+  <h1>Email<br><span>Flows & Copy</span></h1>
+  <p class="subtitle">Set these up once in Shopify Email or Klaviyo and they work for you automatically forever. Each one is a funnel patch that recovers lost revenue on autopilot.</p>
+
+  <!-- WELCOME -->
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;margin-top:4px;">Flow 1 · Welcome Series (New Subscribers)</div>
+
+  <div class="email-card" id="e1">
+    <div class="email-header" onclick="toggleEmail('e1')">
+      <div class="email-num">E1</div>
+      <div class="email-subject">Welcome to SBW Co. 🖤</div>
+      <div class="email-trigger">Instant</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">SUBJECT LINE</div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:12px;">You found SBW Co. early. Here's what that means. 🖤</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">BODY</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;background:var(--soft);padding:12px;border-radius:6px;">
+        Hey — I'm Wesley. I designed every piece in SBW Co. myself and I'm building this brand from scratch in Austin, TX.<br><br>
+        You found us early — which means you're going to see Drop 1 before most people do. That's not an accident. I want the people who believed in SBW first to get the best access.<br><br>
+        Drop 1 is coming. I'll tell you the date before I announce it anywhere else.<br><br>
+        Until then — follow along on Instagram @sbwco for behind the scenes of how this all gets made.<br><br>
+        Thank you for being here.<br>
+        — Wesley, SBW Co.
+      </div>
+      <button class="email-copy" onclick="copyEmail(this, 'You found SBW Co. early. Here\'s what that means. 🖤')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <div class="email-card" id="e2">
+    <div class="email-header" onclick="toggleEmail('e2')">
+      <div class="email-num">E2</div>
+      <div class="email-subject">The story behind SBW Co.</div>
+      <div class="email-trigger">Day 3</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">SUBJECT LINE</div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:12px;">Why I started SBW Co. (the real version)</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">PURPOSE</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">Tell your full founder story. The honest version — what you're building, why it matters, what SBW means. This email turns subscribers into believers. Believers become buyers.</div>
+      <button class="email-copy" onclick="copyEmail(this, 'Why I started SBW Co. (the real version)')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <div class="email-card" id="e3">
+    <div class="email-header" onclick="toggleEmail('e3')">
+      <div class="email-num">E3</div>
+      <div class="email-subject">Drop 1 preview — for subscribers only 👀</div>
+      <div class="email-trigger">Day 7</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">PURPOSE</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">First look at Drop 1 designs — exclusive to email subscribers before it goes on Instagram. Show one design fully. Include the drop date. Add a "notify me" or early access link. This email converts warm subscribers into buyers before launch day.</div>
+      <button class="email-copy" onclick="copyEmail(this, 'Drop 1 preview — for subscribers only 👀')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <!-- ABANDONED CART -->
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;margin-top:20px;">Flow 2 · Abandoned Cart (Auto-triggered)</div>
+
+  <div class="email-card" id="e4">
+    <div class="email-header" onclick="toggleEmail('e4')">
+      <div class="email-num">E4</div>
+      <div class="email-subject">You left something behind 🖤</div>
+      <div class="email-trigger">1hr after abandon</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">SUBJECT LINE</div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:12px;">Still thinking about it? Your cart is saved. 🖤</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">BODY</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;background:var(--soft);padding:12px;border-radius:6px;">
+        Hey — you left something in your SBW cart.<br><br>
+        [Product image + name + price auto-inserted by Shopify]<br><br>
+        I made this one myself — designed it, chose the blank, obsessed over the print quality. If you're on the fence, I get it. Premium price for premium product. But I genuinely think you'll love it.<br><br>
+        Your cart's saved if you want to come back.<br><br>
+        — Wesley<br>
+        [Return to cart button]
+      </div>
+      <button class="email-copy" onclick="copyEmail(this, 'Still thinking about it? Your cart is saved. 🖤')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <div class="email-card" id="e5">
+    <div class="email-header" onclick="toggleEmail('e5')">
+      <div class="email-num">E5</div>
+      <div class="email-subject">Last chance — Drop 1 is limited</div>
+      <div class="email-trigger">24hrs after abandon</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">PURPOSE</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">Second cart recovery email with honest urgency. If inventory is genuinely limited, say so. Include the product photo, a one-line reminder of why SBW is worth it, and a direct link back to checkout. Keep it short — 4 sentences max.</div>
+      <button class="email-copy" onclick="copyEmail(this, 'Last chance — Drop 1 is limited')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <!-- POST PURCHASE -->
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;margin-top:20px;">Flow 3 · Post-Purchase (Build Loyalty)</div>
+
+  <div class="email-card" id="e6">
+    <div class="email-header" onclick="toggleEmail('e6')">
+      <div class="email-num">E6</div>
+      <div class="email-subject">Your SBW order is confirmed 🖤</div>
+      <div class="email-trigger">Instant on purchase</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">PURPOSE</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">Standard order confirmation but with SBW personality injected. Add a personal note from Wesley above the order details. Something like: "You're officially part of Drop 1. Thank you — genuinely. This means everything to a one-person brand." Make them feel like they made the right call.</div>
+      <button class="email-copy" onclick="copyEmail(this, 'Your SBW order is confirmed 🖤')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <div class="email-card" id="e7">
+    <div class="email-header" onclick="toggleEmail('e7')">
+      <div class="email-num">E7</div>
+      <div class="email-subject">Honest question about your SBW piece ⭐</div>
+      <div class="email-trigger">7 days post-delivery</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">SUBJECT LINE</div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:12px;">How does it fit? An honest ask from Wesley 🖤</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">BODY</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;background:var(--soft);padding:12px;border-radius:6px;">
+        Hey — it's Wesley. I made your SBW piece myself and I genuinely want to know how it landed.<br><br>
+        How does it fit? How's the quality? Is the graphic everything you hoped?<br><br>
+        If you have 30 seconds, leaving a review on the store helps more than I can say. I'm one person building this from scratch — reviews are how new people find SBW and decide to trust us.<br><br>
+        And if anything isn't right — just reply to this email. I'll fix it.<br><br>
+        — Wesley<br>
+        [Leave a review button]
+      </div>
+      <button class="email-copy" onclick="copyEmail(this, 'How does it fit? An honest ask from Wesley 🖤')">Copy Subject Line</button>
+    </div>
+  </div>
+
+  <div class="email-card" id="e8">
+    <div class="email-header" onclick="toggleEmail('e8')">
+      <div class="email-num">E8</div>
+      <div class="email-subject">You get early access to Drop 2 🖤</div>
+      <div class="email-trigger">Before Drop 2 launch</div>
+      <div class="email-expand">▼</div>
+    </div>
+    <div class="email-body">
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">PURPOSE</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">Reward past buyers with 24-hour early access to Drop 2 before public announcement. This is the single most powerful loyalty tool available. It costs nothing, makes customers feel valued, and dramatically increases repeat purchase rate. This email alone can make Drop 2 sell faster than Drop 1.</div>
+      <button class="email-copy" onclick="copyEmail(this, 'You get early access to Drop 2 🖤')">Copy Subject Line</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ TOOLS ═══════════════════ -->
+<div class="page" id="page-tools">
+  <div class="eyebrow">Funnel Tech Stack</div>
+  <h1>Tools for<br><span>Every Stage</span></h1>
+  <p class="subtitle">What SBW actually needs — no bloat, no expensive subscriptions. Start free and upgrade only when the revenue justifies it.</p>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;">Awareness & Interest</div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">📱</div><div><div class="tool-name">Instagram</div><div class="tool-stage">Awareness · Interest · Advocacy</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">Your primary funnel entry point. Reels for reach, feed posts for depth, stories for warmth. Everything starts here.</div>
+  </div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">🎬</div><div><div class="tool-name">CapCut</div><div class="tool-stage">Awareness — Reel Editing</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">Best free Reel editor on mobile. Templates, transitions, beat-matched cuts. Everything you need to make professional-looking Reels from your phone.</div>
+  </div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">📊</div><div><div class="tool-name">Instagram Insights</div><div class="tool-stage">Awareness · Interest Tracking</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">Built into your professional account. Track reach, saves, story views, and profile visits weekly. These numbers tell you what's working before you waste time on what isn't.</div>
+  </div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:20px;">Consideration & Store</div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">🛍️</div><div><div class="tool-name">Shopify Basic</div><div class="tool-stage">Consideration · Purchase</div></div><div class="tool-paid">$39/mo</div></div>
+    <div class="tool-desc">Your store, your checkout, your brand home online. Already in your financial model. The most important tool in the stack — invest in making it perfect.</div>
+  </div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">🖨️</div><div><div class="tool-name">Printify</div><div class="tool-stage">Consideration · Purchase</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">POD integration with Shopify. Handles production and fulfillment for print-on-demand orders. Free plan works fine at launch — upgrade to Premium ($29/mo) when volume justifies it.</div>
+  </div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">⭐</div><div><div class="tool-name">Judge.me Reviews</div><div class="tool-stage">Consideration · Trust</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">Best free Shopify review app. Automatically emails customers asking for reviews, displays them beautifully on product pages. Install this before launch — reviews are your most powerful conversion tool.</div>
+  </div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:20px;">Intent & Email</div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">📧</div><div><div class="tool-name">Klaviyo</div><div class="tool-stage">Intent · Purchase · Loyalty</div></div><div class="tool-free">Free to 250</div></div>
+    <div class="tool-desc">Best email platform for Shopify brands. Free up to 250 subscribers. Handles abandoned cart, welcome series, post-purchase, and review request flows automatically once set up. Set it and forget it.</div>
+  </div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">💳</div><div><div class="tool-name">Shop Pay / Apple Pay</div><div class="tool-stage">Intent · Purchase</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">Enable both in Shopify payments settings. One-tap checkout on mobile. Reduces cart abandonment dramatically at the moment of purchase. This is one of the highest-leverage changes you can make.</div>
+  </div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:20px;">Analytics & Growth</div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">📈</div><div><div class="tool-name">Shopify Analytics</div><div class="tool-stage">All Stages — Tracking</div></div><div class="tool-free">Included</div></div>
+    <div class="tool-desc">Built into Shopify. Shows conversion rate, average order value, traffic sources, and top products. Check this every Monday morning. Your funnel health in one dashboard.</div>
+  </div>
+  <div class="tool-card">
+    <div class="tool-header"><div class="tool-icon">🔗</div><div><div class="tool-name">Linktree or Shopify Link</div><div class="tool-stage">Awareness to Consideration Bridge</div></div><div class="tool-free">Free</div></div>
+    <div class="tool-desc">Your Instagram bio link. Point it directly to your Shopify store — not a Linktree with multiple options. One destination. One action. Fewer choices = higher conversion.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHECKLIST ═══════════════════ -->
+<div class="page" id="page-checklist">
+  <div class="eyebrow">Funnel Setup Checklist</div>
+  <h1>Build the<br><span>Funnel Right</span></h1>
+  <p class="subtitle">Every item here is a funnel patch. Check them off as you go. The more complete this list is at launch, the more money you keep.</p>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;">Awareness</div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Instagram professional account set up with SBW bio and Shopify link</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">First Reel posted — cinematic brand intro or design process</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Austin location tags added to every post</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Hashtag sets saved and rotating across posts</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">30-day content calendar live and in use</span></div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Interest</div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Founder story post published with personal photo</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Design process content showing sketch to final product</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Daily stories posting — polls, questions, behind the scenes</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Colorway poll or audience vote run at least once</span></div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Consideration — Store</div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shopify store fully built — all product pages complete</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Multiple product photos per item (front, back, detail, lifestyle)</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Story-driven product descriptions written for every item</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Judge.me reviews app installed and configured</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">About page written with Wesley's story and photo</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shipping policy and returns policy clearly visible</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Store tested on mobile — every page, every button</span></div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Intent — Cart Recovery</div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Klaviyo connected to Shopify and collecting emails</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Abandoned cart email flow built and tested (E4 + E5)</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shop Pay and Apple Pay enabled in Shopify settings</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Free shipping threshold set (e.g. free over $85)</span></div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Purchase & Post-Purchase</div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Order confirmation email customized with SBW voice and Wesley's note</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shipping confirmation email personalized</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Review request email set up (7 days post-delivery)</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Packaging planned — tissue paper, sticker, thank-you card</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Tag request card included in every order</span></div>
+
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Loyalty & Advocacy</div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Customer photo repost process in place — repost every tag</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Personal DM sent to every first-time buyer</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Drop 2 early access email planned for past buyers</span></div>
+  <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shopify Analytics reviewed every Monday</span></div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">SBW Co.</div>
+  <div class="footer-sub">Marketing Funnel Strategy · Austin, TX · Drop 1</div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function scrollToStage(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+function toggleEmail(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function copyEmail(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Subject Line'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  const states = {};
+  document.querySelectorAll('.check-item').forEach((t, i) => {
+    states['funnel_' + i] = t.classList.contains('checked');
+  });
+  localStorage.setItem('sbw_funnel', JSON.stringify(states));
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('sbw_funnel');
+  if (saved) {
+    const states = JSON.parse(saved);
+    document.querySelectorAll('.check-item').forEach((t, i) => {
+      if (states['funnel_' + i]) t.classList.add('checked');
+    });
+  }
+});
+</script>
+</body>
+</html>

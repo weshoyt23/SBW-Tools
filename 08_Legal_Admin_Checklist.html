@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBW Co. · Legal & Admin Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #faf7f2; --paper: #ffffff; --dark: #1a1612;
+    --amber: #d97706; --amber-light: #fef3c7; --amber-dim: #92400e;
+    --green: #16a34a; --green-light: #dcfce7;
+    --red: #dc2626; --red-light: #fee2e2;
+    --blue: #2563eb; --blue-light: #dbeafe;
+    --purple: #9333ea; --purple-light: #f3e8ff;
+    --border: #e8e0d0; --muted: #9c8f7e; --warm: #f5ede0; --soft: #fdf6ec;
+  }
+  body { background: var(--bg); color: var(--dark); font-family: 'DM Sans', sans-serif; padding: 20px 16px; max-width: 720px; margin: 0 auto; }
+
+  .nav { position: sticky; top: 0; background: var(--bg); z-index: 20; padding: 10px 0 12px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .nav-inner { display: flex; gap: 6px; flex-wrap: wrap; }
+  .nav-tab { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em; padding: 7px 12px; border-radius: 5px; cursor: pointer; border: 1px solid var(--border); background: var(--paper); color: var(--muted); transition: all 0.15s; -webkit-tap-highlight-color: transparent; white-space: nowrap; }
+  .nav-tab.active { border-color: var(--dark); background: var(--dark); color: var(--amber-light); font-weight: 600; }
+
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; color: var(--dark); line-height: 1.05; margin-bottom: 8px; }
+  h1 span { color: var(--amber); font-style: italic; }
+  .subtitle { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* PROGRESS */
+  .progress-card { background: var(--paper); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 20px; }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .progress-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--dark); }
+  .progress-pill { font-family: 'DM Mono', monospace; font-size: 11px; padding: 4px 12px; border-radius: 20px; }
+  .progress-bar-wrap { background: var(--border); border-radius: 4px; height: 8px; margin-bottom: 6px; }
+  .progress-bar { background: var(--amber); border-radius: 4px; height: 8px; transition: width 0.4s; }
+  .progress-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  /* PRIORITY BANNER */
+  .priority-banner { background: var(--dark); border-radius: 10px; padding: 16px 18px; margin-bottom: 20px; }
+  .priority-banner .label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .priority-items { display: flex; flex-direction: column; gap: 8px; }
+  .priority-item { display: flex; gap: 10px; align-items: flex-start; }
+  .priority-num { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: var(--amber); min-width: 24px; }
+  .priority-text { font-size: 13px; color: #c4b9a8; line-height: 1.5; padding-top: 2px; }
+  .priority-text strong { color: var(--amber-light); }
+
+  /* SECTION */
+  .section-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; margin-top: 4px; }
+
+  /* CHECK ITEMS */
+  .check-group { background: var(--paper); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+  .check-group-header { background: var(--dark); padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .check-group-icon { font-size: 18px; }
+  .check-group-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--amber-light); flex: 1; }
+  .check-group-count { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+  .check-group-body { padding: 12px 16px; }
+
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--border); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: all 0.15s; }
+  .check-item:last-child { border-bottom: none; }
+  .check-item.checked { opacity: 0.6; }
+  .check-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; margin-top: 1px; }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); }
+  .check-icon { color: white; font-size: 11px; display: none; }
+  .check-item.checked .check-icon { display: block; }
+  .check-content { flex: 1; }
+  .check-text { font-size: 13px; color: var(--dark); line-height: 1.4; font-weight: 500; }
+  .check-item.checked .check-text { text-decoration: line-through; color: var(--muted); }
+  .check-detail { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+  .check-item.checked .check-detail { text-decoration: line-through; }
+  .check-meta { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+  .check-tag { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.06em; }
+  .tag-urgent { background: var(--red-light); color: var(--red); }
+  .tag-free { background: var(--green-light); color: var(--green); }
+  .tag-paid { background: var(--amber-light); color: var(--amber-dim); }
+  .tag-online { background: var(--blue-light); color: var(--blue); }
+  .tag-optional { background: var(--purple-light); color: var(--purple); }
+
+  /* INFO CARDS */
+  .info-card { background: var(--soft); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+  .info-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .info-body { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .info-body strong { color: var(--dark); }
+  .info-link { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--blue); margin-top: 6px; display: block; }
+
+  /* TAX CARD */
+  .tax-quarters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+  .tax-quarter { background: var(--paper); border: 1px solid var(--border); border-radius: 7px; padding: 10px 12px; }
+  .tax-q-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--amber); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+  .tax-q-date { font-size: 13px; color: var(--dark); font-weight: 600; }
+  .tax-q-covers { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* RESOURCES */
+  .resource-card { background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .resource-icon { font-size: 22px; flex-shrink: 0; }
+  .resource-title { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+  .resource-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .resource-tag { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--green); background: var(--green-light); padding: 2px 7px; border-radius: 3px; display: inline-block; margin-top: 5px; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 24px 0 8px; border-top: 1px solid var(--border); margin-top: 20px; }
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--border); font-style: italic; }
+  .footer-sub { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--border); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-inner">
+    <div class="nav-tab active" onclick="showPage('checklist')">✅ Checklist</div>
+    <div class="nav-tab" onclick="showPage('taxes')">💰 Taxes</div>
+    <div class="nav-tab" onclick="showPage('legal')">⚖️ Legal</div>
+    <div class="nav-tab" onclick="showPage('banking')">🏦 Banking</div>
+    <div class="nav-tab" onclick="showPage('resources')">📚 Resources</div>
+  </div>
+</div>
+
+<!-- ══════════════ CHECKLIST ══════════════ -->
+<div class="page active" id="page-checklist">
+  <div class="eyebrow">SBW Co. · Business Setup</div>
+  <h1>Legal &<br><span>Admin Checklist</span></h1>
+  <p class="subtitle">Everything you need to set up the business properly — legal, financial, tax, and operational. Tap each item to check it off. Everything saves to your device.</p>
+
+  <!-- PROGRESS -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-title">Overall Setup Progress</div>
+      <div class="progress-pill" id="progressPill" style="background:var(--amber-light);color:var(--amber);">0% complete</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">0 of 0 items completed</div>
+  </div>
+
+  <!-- PRIORITY 30 DAYS -->
+  <div class="priority-banner">
+    <div class="label">🔥 Do These First — Next 30 Days</div>
+    <div class="priority-items">
+      <div class="priority-item"><div class="priority-num">1</div><div class="priority-text"><strong>Form your LLC</strong> — Texas Secretary of State, $300, protects personal assets immediately</div></div>
+      <div class="priority-item"><div class="priority-num">2</div><div class="priority-text"><strong>Get your EIN</strong> — Free from IRS.gov, takes 10 minutes, needed for everything else</div></div>
+      <div class="priority-item"><div class="priority-num">3</div><div class="priority-text"><strong>Open a business bank account</strong> — Mercury (free, online) is perfect for startups</div></div>
+      <div class="priority-item"><div class="priority-num">4</div><div class="priority-text"><strong>Register for Texas Sales Tax Permit</strong> — Free, required before first sale of physical goods</div></div>
+      <div class="priority-item"><div class="priority-num">5</div><div class="priority-text"><strong>Start collecting emails</strong> — Klaviyo popup on Shopify before Drop 1 launches</div></div>
+    </div>
+  </div>
+
+  <!-- GROUP 1: LEGAL FORMATION -->
+  <div class="section-label">Legal Formation</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">🏢</div>
+      <div class="check-group-title">Business Formation</div>
+      <div class="check-group-count" id="count-formation"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'legal')" data-id="llc">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Form SBW Co. LLC in Texas</div>
+          <div class="check-detail">File Certificate of Formation at sos.state.tx.us. Costs $300. Takes 3–5 business days online. Creates legal separation between you and the business.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Do First</span><span class="check-tag tag-paid">$300</span><span class="check-tag tag-online">Online</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'legal')" data-id="ein">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Get an EIN from the IRS</div>
+          <div class="check-detail">Employer Identification Number — your business's tax ID. Free at irs.gov/businesses/small-businesses. Takes 10 minutes. Required for bank account, taxes, and investor agreements.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Do First</span><span class="check-tag tag-free">Free</span><span class="check-tag tag-online">Online</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'legal')" data-id="registered-agent">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Designate a Registered Agent</div>
+          <div class="check-detail">Required for Texas LLC. Can be yourself (if you have a Texas address) or a registered agent service (~$50–$100/year). Receives legal documents on behalf of the business.</div>
+          <div class="check-meta"><span class="check-tag tag-paid">$0–$100/yr</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'legal')" data-id="operating-agreement">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Create an LLC Operating Agreement</div>
+          <div class="check-detail">Not required in Texas but strongly recommended. Defines how the business operates. As a solo LLC it's simple — free templates available at Northwest Registered Agent or Rocket Lawyer.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Free template</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'legal')" data-id="dba">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">File a DBA if needed ("SBW Co.")</div>
+          <div class="check-detail">If your LLC is filed as "Wesley McDaniel LLC" but you operate as "SBW Co.", you need a DBA (Doing Business As) filed with Travis County. Cost: ~$20. Required to open a bank account under the brand name.</div>
+          <div class="check-meta"><span class="check-tag tag-paid">~$20</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 2: TAX -->
+  <div class="section-label">Tax Setup</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">💰</div>
+      <div class="check-group-title">Tax Registration & Compliance</div>
+      <div class="check-group-count" id="count-tax"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'tax')" data-id="sales-tax">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Register for Texas Sales Tax Permit</div>
+          <div class="check-detail">Required before selling physical goods to Texas customers. Free at comptroller.texas.gov. Texas rate is 6.25% state + up to 2% local = 8.25% in Austin. Shopify collects it automatically once configured.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before First Sale</span><span class="check-tag tag-free">Free</span><span class="check-tag tag-online">Online</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'tax')" data-id="shopify-tax">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Configure sales tax collection in Shopify</div>
+          <div class="check-detail">In Shopify: Settings → Taxes and Duties → Add Texas with your permit number. Shopify will automatically collect the correct rate from Texas customers at checkout.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before First Sale</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'tax')" data-id="tax-savings">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Set up a tax savings system</div>
+          <div class="check-detail">Open a separate savings account labeled "Tax Fund." Every week transfer 25–30% of all income (Rover, Uber Eats, freelance, SBW) into it. Never touch it. This is for quarterly estimated taxes. Do this from Week 1.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Week 1</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'tax')" data-id="quarterly-taxes">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Schedule quarterly estimated tax payments</div>
+          <div class="check-detail">As self-employed you pay taxes quarterly. Q1 due April 15 · Q2 due June 16 · Q3 due Sept 15 · Q4 due Jan 15. Pay at irs.gov/payments using Direct Pay. Missing payments = penalties.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Quarterly</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'tax')" data-id="cpa">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Find a CPA who works with small creative businesses</div>
+          <div class="check-detail">Even one setup session is worth it. They'll identify deductions you're missing (home office, phone, Adobe CC, equipment, mileage for deliveries) and make sure your quarterly payments are correct. Look for CPAs who specialize in freelancers or small product businesses.</div>
+          <div class="check-meta"><span class="check-tag tag-paid">$150–$300/session</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'tax')" data-id="mileage">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Track mileage and business expenses from Day 1</div>
+          <div class="check-detail">Every Uber Eats scooter trip, every supply run, every business-related purchase is potentially deductible. Use MileIQ (free tier) for mileage tracking. Keep receipts for everything. The IRS standard mileage rate is 67 cents/mile in 2025.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Free app</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 3: BANKING -->
+  <div class="section-label">Banking & Bookkeeping</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">🏦</div>
+      <div class="check-group-title">Financial Infrastructure</div>
+      <div class="check-group-count" id="count-banking"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'banking')" data-id="business-bank">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Open a business checking account (Mercury recommended)</div>
+          <div class="check-detail">Mercury is free, online, no minimum balance, built for startups. Requires EIN and LLC formation documents. All SBW revenue in, all business expenses out. Never mix personal and business money.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Do First</span><span class="check-tag tag-free">Free</span><span class="check-tag tag-online">mercury.com</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'banking')" data-id="tax-account">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Open a separate tax savings account</div>
+          <div class="check-detail">A simple high-yield savings account (Marcus, Ally, or Mercury savings) labeled "Tax Fund." Transfer 25–30% of every dollar earned weekly. This is non-negotiable as a self-employed person with multiple income streams.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Week 1</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'banking')" data-id="bookkeeping">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Set up bookkeeping software</div>
+          <div class="check-detail">Wave Accounting is completely free and handles income, expenses, and invoicing. QuickBooks Simple Start is $30/month but more powerful. Either works — the key is starting from Day 1, not trying to reconstruct 6 months later.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Wave: Free</span><span class="check-tag tag-paid">QuickBooks: $30/mo</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'banking')" data-id="shopify-payments">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Set up Shopify Payments and connect to business account</div>
+          <div class="check-detail">Enable Shopify Payments (2.9% + $0.30/transaction) and link your business bank account for payouts. Also enable Shop Pay and Apple Pay for one-tap mobile checkout — dramatically reduces cart abandonment.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Launch</span><span class="check-tag tag-free">Free to set up</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'banking')" data-id="business-card">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Get a business credit or debit card</div>
+          <div class="check-detail">Use exclusively for business purchases. Makes expense tracking automatic. Mercury debit card comes with your business account. A business credit card (even a secured one) starts building business credit history.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Mercury card: Free</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 4: INTELLECTUAL PROPERTY -->
+  <div class="section-label">Intellectual Property</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">™️</div>
+      <div class="check-group-title">Protecting Your Designs & Brand</div>
+      <div class="check-group-count" id="count-ip"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'ip')" data-id="trademark-search">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Search for existing trademarks on "SBW Co."</div>
+          <div class="check-detail">Before filing, check the USPTO TESS database (tmsearch.uspto.gov) to make sure no one else has trademarked the name. Also Google search and check social media handles. Takes 20 minutes and saves a $350 filing fee on a rejected application.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Filing</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'ip')" data-id="trademark-file">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">File trademark application for SBW Co. name and logo</div>
+          <div class="check-detail">File at USPTO.gov under Class 25 (clothing). Cost: $250–$350 per class. Takes 8–12 months to process but filing date is your legal protection date. File as soon as you're sure about the name and have a finalized logo.</div>
+          <div class="check-meta"><span class="check-tag tag-paid">$250–$350</span><span class="check-tag tag-online">USPTO.gov</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'ip')" data-id="copyright">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Understand your automatic copyright protection</div>
+          <div class="check-detail">Your designs are automatically copyrighted the moment you create them. Formal registration ($65/design at copyright.gov) gives you stronger legal standing if someone copies you — you can sue for statutory damages instead of just actual damages. Register your best designs.</div>
+          <div class="check-meta"><span class="check-tag tag-paid">$65/design</span><span class="check-tag tag-optional">Recommended</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'ip')" data-id="watermark">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Watermark all design previews posted online</div>
+          <div class="check-detail">Any design image you post publicly before production should have a subtle watermark or be shown at lower resolution. Prevents theft of unreleased designs. Easy to do in Adobe.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 5: INSURANCE -->
+  <div class="section-label">Insurance</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">🛡️</div>
+      <div class="check-group-title">Coverage & Protection</div>
+      <div class="check-group-count" id="count-insurance"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'insurance')" data-id="renters">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Check if renters insurance covers dog-related incidents</div>
+          <div class="check-detail">If you have renters insurance, call your provider and ask if dog boarding in your home is covered. Many policies exclude business activities. If not covered, Rover's guarantee covers some incidents but has gaps — know exactly what's covered before your first boarding client.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before First Boarding</span><span class="check-tag tag-free">Free check</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'insurance')" data-id="general-liability">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Consider general liability insurance for SBW Co.</div>
+          <div class="check-detail">Protects if a customer has an issue with a product — allergic reaction, injury, etc. For a small apparel brand the risk is low but the cost is also low (~$30–$50/month through Next Insurance or Hiscox). Not urgent but worth having before significant sales volume.</div>
+          <div class="check-meta"><span class="check-tag tag-optional">Month 3+</span><span class="check-tag tag-paid">$30–$50/mo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 6: CONTRACTS & POLICIES -->
+  <div class="section-label">Contracts & Store Policies</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">📄</div>
+      <div class="check-group-title">Legal Documents & Policies</div>
+      <div class="check-group-count" id="count-contracts"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'contracts')" data-id="return-policy">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Write and publish a returns & refund policy on Shopify</div>
+          <div class="check-detail">Required by Shopify before launch. Key decisions to make: POD items are typically final sale (suppliers won't accept returns). Damaged/defective items should always be replaced. Size issues — decide your policy before it comes up. Be clear and fair.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Launch</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'contracts')" data-id="shipping-policy">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Write and publish a shipping policy on Shopify</div>
+          <div class="check-detail">State processing time (2–5 days for POD), estimated delivery (7–14 days), shipping costs, and what happens if a package is lost. Shopify has a free policy generator under Settings → Policies.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Launch</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'contracts')" data-id="privacy-policy">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Add Privacy Policy and Terms of Service to Shopify store</div>
+          <div class="check-detail">Required legally and by Shopify. Use the free Shopify policy generator (Settings → Policies → Create from template). Covers how you handle customer data, email marketing consent, and general terms of purchase.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Launch</span><span class="check-tag tag-free">Free template</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'contracts')" data-id="freelance-contract">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Create a one-page freelance design contract</div>
+          <div class="check-detail">For every freelance design client — covers scope of work, payment terms, revision limits, and who owns the final work. AND.CO (now Fiverr Workspace) offers free contract templates. Never start work without a signed agreement.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before First Client</span><span class="check-tag tag-free">Free template</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'contracts')" data-id="investor-agreement">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Draft an investor agreement before taking any money</div>
+          <div class="check-detail">Even from a friend or family member. A simple revenue share agreement or convertible note. Clerky.com has startup-grade legal docs. Never take investment money on a handshake — it protects both of you and keeps relationships intact.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Investor Meeting</span><span class="check-tag tag-paid">$100–$300</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 7: MARKETING INFRASTRUCTURE -->
+  <div class="section-label">Marketing Infrastructure</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">📧</div>
+      <div class="check-group-title">Owned Audience Building</div>
+      <div class="check-group-count" id="count-marketing"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'marketing')" data-id="email-list">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Set up Klaviyo email collection before Drop 1</div>
+          <div class="check-detail">Install Klaviyo on Shopify (free to 250 subscribers). Add a popup: "Join the Drop 1 early access list." Your email list is the only marketing asset you truly own — social platforms can change algorithms or disappear. Start building it now.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">Before Launch</span><span class="check-tag tag-free">Free to 250 subs</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'marketing')" data-id="business-email">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Set up a professional business email address</div>
+          <div class="check-detail">hello@sbwco.com or wesley@sbwco.com — never use a Gmail for business communications. Google Workspace is $6/month. Shopify includes email forwarding free. A professional email builds credibility with suppliers, investors, and wholesale buyers.</div>
+          <div class="check-meta"><span class="check-tag tag-paid">$6/mo Google Workspace</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'marketing')" data-id="social-handles">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Secure @sbwco handles on all major platforms</div>
+          <div class="check-detail">Even if you don't plan to use them — claim @sbwco on Instagram, TikTok, Twitter/X, Pinterest, and YouTube now before someone else does. Takes 20 minutes. Use Namecheckr.com to check availability across all platforms at once.</div>
+          <div class="check-meta"><span class="check-tag tag-urgent">This Week</span><span class="check-tag tag-free">Free</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 8: MENTOR & SUPPORT -->
+  <div class="section-label">Mentorship & Support</div>
+  <div class="check-group">
+    <div class="check-group-header">
+      <div class="check-group-icon">🤝</div>
+      <div class="check-group-title">Austin Business Resources</div>
+      <div class="check-group-count" id="count-mentor"></div>
+    </div>
+    <div class="check-group-body">
+      <div class="check-item" onclick="toggleCheck(this,'mentor')" data-id="score">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Book a free SCORE Austin mentoring session</div>
+          <div class="check-detail">SCORE pairs you with retired business executives for free one-on-one mentoring. Austin chapter is active and excellent. Go to score.org and search Austin. Bring your financial model and business plan. One session can save you months of mistakes.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Completely Free</span><span class="check-tag tag-online">score.org</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'mentor')" data-id="austin-sbp">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Register with Austin Small Business Program</div>
+          <div class="check-detail">Free consulting, workshops, and resources for Austin founders. austintexas.gov/smallbusiness. Particularly useful for understanding local regulations, permits, and connecting with other Austin entrepreneurs.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Free</span><span class="check-tag tag-online">austintexas.gov</span></div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'mentor')" data-id="sba">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div class="check-content">
+          <div class="check-text">Explore SBA resources and potential microloans</div>
+          <div class="check-detail">The Small Business Administration offers free business counseling through their Austin office and microloan programs ($500–$50,000) for startups that don't yet qualify for bank loans. sba.gov/local-assistance/find. Worth exploring before approaching private investors.</div>
+          <div class="check-meta"><span class="check-tag tag-free">Free counseling</span><span class="check-tag tag-online">sba.gov</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ TAXES PAGE ══════════════ -->
+<div class="page" id="page-taxes">
+  <div class="eyebrow">SBW Co. · Tax Guide</div>
+  <h1>Tax<br><span>Basics for Wesley</span></h1>
+  <p class="subtitle">As a self-employed person with multiple income streams, you're responsible for your own taxes. Here's everything you need to know to stay legal and avoid penalties.</p>
+
+  <div class="info-card">
+    <div class="info-title">The Most Important Rule</div>
+    <div class="info-body">Set aside <strong>25–30% of every dollar you earn</strong> into a separate savings account labeled "Tax Fund." Do this weekly, automatically, without exception. This covers federal income tax, state income tax (Texas has none — a real advantage), and self-employment tax of 15.3%.</div>
+  </div>
+
+  <div class="section-label">2026 Quarterly Tax Due Dates</div>
+  <div class="tax-quarters">
+    <div class="tax-quarter">
+      <div class="tax-q-label">Q1 Payment</div>
+      <div class="tax-q-date">April 15, 2026</div>
+      <div class="tax-q-covers">Covers Jan–Mar income</div>
+    </div>
+    <div class="tax-quarter">
+      <div class="tax-q-label">Q2 Payment</div>
+      <div class="tax-q-date">June 16, 2026</div>
+      <div class="tax-q-covers">Covers Apr–May income</div>
+    </div>
+    <div class="tax-quarter">
+      <div class="tax-q-label">Q3 Payment</div>
+      <div class="tax-q-date">Sept 15, 2026</div>
+      <div class="tax-q-covers">Covers Jun–Aug income</div>
+    </div>
+    <div class="tax-quarter">
+      <div class="tax-q-label">Q4 Payment</div>
+      <div class="tax-q-date">Jan 15, 2027</div>
+      <div class="tax-q-covers">Covers Sep–Dec income</div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:20px;">Key Deductions to Track</div>
+  <div class="info-card">
+    <div class="info-title">Business Deductions — Keep Every Receipt</div>
+    <div class="info-body">
+      <strong>Home Office:</strong> If you use part of your apartment exclusively for business, you can deduct a percentage of rent and utilities. Calculate the square footage of your workspace divided by total apartment square footage.<br><br>
+      <strong>Phone & Internet:</strong> The business-use percentage of your phone and internet bill is deductible. If you use your phone 70% for business, deduct 70%.<br><br>
+      <strong>Adobe Creative Cloud:</strong> 100% deductible as a business software expense.<br><br>
+      <strong>MacBook Pro:</strong> 100% deductible as business equipment (Section 179 allows full deduction in year of purchase).<br><br>
+      <strong>Heat Press:</strong> 100% deductible as business equipment.<br><br>
+      <strong>Lime Scooter Subscription:</strong> Deductible as a business transportation expense for Uber Eats delivery.<br><br>
+      <strong>Packaging & Supplies:</strong> 100% deductible as cost of goods sold.<br><br>
+      <strong>Shopify & App Subscriptions:</strong> 100% deductible as business software.<br><br>
+      <strong>Instagram Ads:</strong> 100% deductible as marketing expense.<br><br>
+      <strong>Mileage:</strong> Every business-related trip at 67 cents/mile (2025 IRS rate). Track with MileIQ.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-title">Texas Sales Tax — What You Owe</div>
+    <div class="info-body">
+      Texas sales tax rate in Austin: <strong>8.25%</strong> (6.25% state + 2% local).<br><br>
+      You collect it from customers at checkout (Shopify does this automatically once configured) and remit it to the Texas Comptroller quarterly or annually depending on your sales volume.<br><br>
+      Register free at <strong>comptroller.texas.gov</strong> before your first sale. No registration = personal liability for unpaid sales tax.
+    </div>
+    <span class="info-link">comptroller.texas.gov → Sales and Use Tax → Apply for Permit</span>
+  </div>
+
+  <div class="info-card">
+    <div class="info-title">1099 Forms — What to Expect</div>
+    <div class="info-body">
+      Rover, Uber Eats, and any freelance client paying you more than $600/year must send you a 1099-NEC form by January 31. These report your income to the IRS — which means the IRS already knows about this income before you file. Report everything accurately. Keep records of all income even if you don't receive a 1099.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LEGAL PAGE ══════════════ -->
+<div class="page" id="page-legal">
+  <div class="eyebrow">SBW Co. · Legal Guide</div>
+  <h1>Legal<br><span>Foundations</span></h1>
+  <p class="subtitle">The legal setup that protects you, your designs, and your business relationships from day one.</p>
+
+  <div class="info-card">
+    <div class="info-title">Why the LLC Matters</div>
+    <div class="info-body">Without an LLC, you and SBW Co. are legally the same entity. If a customer sues over a product issue, they're suing you personally — which means your personal savings, car, and assets are at risk. The LLC creates a legal wall between Wesley and SBW Co. That wall costs $300 to build and is one of the best investments you'll make.</div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-title">Trademark vs Copyright — Know the Difference</div>
+    <div class="info-body">
+      <strong>Trademark</strong> protects your brand name and logo — "SBW Co." and the SBW logo. Filed with the USPTO. Prevents others from selling apparel under your brand name. File under Class 25 (clothing). Cost: $250–$350 per class.<br><br>
+      <strong>Copyright</strong> protects your individual graphic designs — the actual artwork on the shirts. Automatically yours when you create it. Formal registration ($65/design at copyright.gov) lets you sue for much larger damages if copied.<br><br>
+      You need both. Trademark protects the brand. Copyright protects the art.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-title">Investor Agreement — Non-Negotiable</div>
+    <div class="info-body">
+      Before accepting any money from any person — friend, family, or stranger — get a written agreement signed by both parties. It should specify:<br><br>
+      • The exact amount being invested<br>
+      • What they receive in return (equity %, revenue share %, or convertible note)<br>
+      • Timeline for returns<br>
+      • What happens if the business fails<br><br>
+      Clerky.com has startup-grade legal templates. A simple revenue share agreement can be drafted for under $200 with a lawyer or free with a solid template. The conversation that feels awkward now saves a friendship or family relationship later.
+    </div>
+    <span class="info-link">clerky.com · Stripe Atlas · Rocket Lawyer</span>
+  </div>
+
+  <div class="info-card">
+    <div class="info-title">Store Policies — Required Before First Sale</div>
+    <div class="info-body">
+      Shopify requires three policy pages before you can fully activate your store:<br><br>
+      <strong>Privacy Policy:</strong> How you collect and use customer data. Shopify generates this free.<br>
+      <strong>Terms of Service:</strong> Rules of using your store. Shopify generates this free.<br>
+      <strong>Refund Policy:</strong> What customers can expect if something goes wrong. Write this yourself — be clear and fair.<br><br>
+      In Shopify: Settings → Policies → Create from template. Takes 15 minutes.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ BANKING PAGE ══════════════ -->
+<div class="page" id="page-banking">
+  <div class="eyebrow">SBW Co. · Financial Setup</div>
+  <h1>Banking &<br><span>Bookkeeping</span></h1>
+  <p class="subtitle">The financial infrastructure that makes tax time simple and your business look legitimate to investors and suppliers.</p>
+
+  <div class="info-card">
+    <div class="info-title">The Golden Rule — Never Mix Money</div>
+    <div class="info-body">Personal money and business money in the same account is the #1 bookkeeping mistake new founders make. It makes taxes a nightmare, makes your financials unreadable to investors, and in some cases can "pierce the corporate veil" — meaning a court could decide your LLC doesn't actually protect you personally. Separate accounts from Day 1. No exceptions.</div>
+  </div>
+
+  <div class="section-label">Recommended Account Structure</div>
+  <div class="info-card">
+    <div class="info-title">Account 1 — Business Checking (Mercury)</div>
+    <div class="info-body">All revenue flows in. All business expenses come out. Mercury is free, has no minimums, and is built for startups. mercuryhq.com. Requires LLC formation documents and EIN.</div>
+    <span class="info-link">mercuryhq.com — Free, no minimum balance</span>
+  </div>
+  <div class="info-card">
+    <div class="info-title">Account 2 — Tax Fund (High-Yield Savings)</div>
+    <div class="info-body">Transfer 25–30% of every dollar earned weekly. Never touch it except to pay quarterly taxes. Marcus by Goldman Sachs, Ally Bank, or Marcus offer 4–5% APY — your tax money earns interest while it waits. Label it clearly so you're never tempted.</div>
+  </div>
+  <div class="info-card">
+    <div class="info-title">Account 3 — Personal Checking (Existing)</div>
+    <div class="info-body">Pay yourself a regular "salary" transfer from the business account monthly — only what the business can afford. This is called an owner's draw for an LLC. Tracking it clearly shows investors that the founder is financially disciplined.</div>
+  </div>
+
+  <div class="section-label">Bookkeeping — Keep It Simple</div>
+  <div class="info-card">
+    <div class="info-title">Wave Accounting (Free)</div>
+    <div class="info-body">Connect your Mercury business account and it automatically imports and categorizes transactions. Generates profit & loss statements, tracks expenses by category, and produces reports that a CPA or investor can read. Free forever for the core features. waveapps.com</div>
+    <span class="info-link">waveapps.com — Free forever</span>
+  </div>
+
+  <div class="section-label">Monthly Bookkeeping Routine (20 Minutes)</div>
+  <div class="info-card">
+    <div class="info-body">
+      <strong>Week 1 of every month:</strong><br>
+      1. Categorize all transactions from last month in Wave<br>
+      2. Run a Profit & Loss report — compare to your financial model<br>
+      3. Transfer this month's tax set-aside to Tax Fund<br>
+      4. Pay yourself an owner's draw if the business earned it<br>
+      5. Note any large or unusual expenses for your CPA<br><br>
+      That's it. 20 minutes a month keeps your books clean all year.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ RESOURCES PAGE ══════════════ -->
+<div class="page" id="page-resources">
+  <div class="eyebrow">SBW Co. · Resource Directory</div>
+  <h1>Austin<br><span>Resources & Links</span></h1>
+  <p class="subtitle">Every service, website, and organization you need to set up and run SBW Co. properly — all in one place.</p>
+
+  <div class="section-label">Legal Formation</div>
+  <div class="resource-card">
+    <div class="resource-icon">🏢</div>
+    <div>
+      <div class="resource-title">Texas Secretary of State — LLC Formation</div>
+      <div class="resource-desc">File your Certificate of Formation online. $300 filing fee. Takes 3–5 business days. This is your first step.</div>
+      <span class="resource-tag">sos.state.tx.us → Business Filings</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">🔢</div>
+    <div>
+      <div class="resource-title">IRS EIN Application</div>
+      <div class="resource-desc">Free Employer Identification Number. Apply online, get it instantly. Required for bank account and taxes.</div>
+      <span class="resource-tag">irs.gov → Apply for EIN Online</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">™️</div>
+    <div>
+      <div class="resource-title">USPTO Trademark Filing</div>
+      <div class="resource-desc">File trademark for SBW Co. name and logo. Class 25 (clothing). $250–$350 per class. Search existing trademarks first.</div>
+      <span class="resource-tag">tmsearch.uspto.gov (search) · uspto.gov (file)</span>
+    </div>
+  </div>
+
+  <div class="section-label">Banking & Finance</div>
+  <div class="resource-card">
+    <div class="resource-icon">🏦</div>
+    <div>
+      <div class="resource-title">Mercury Bank — Business Checking</div>
+      <div class="resource-desc">Free business checking built for startups. No minimums, no fees, FDIC insured. Best option for SBW Co.</div>
+      <span class="resource-tag">mercuryhq.com — Free</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">📊</div>
+    <div>
+      <div class="resource-title">Wave Accounting — Free Bookkeeping</div>
+      <div class="resource-desc">Connect your bank account, categorize transactions, generate P&L reports. Free forever for core features.</div>
+      <span class="resource-tag">waveapps.com — Free</span>
+    </div>
+  </div>
+
+  <div class="section-label">Tax</div>
+  <div class="resource-card">
+    <div class="resource-icon">💰</div>
+    <div>
+      <div class="resource-title">IRS Direct Pay — Quarterly Tax Payments</div>
+      <div class="resource-desc">Pay quarterly estimated taxes directly from your bank account. Free, instant confirmation. Bookmark this.</div>
+      <span class="resource-tag">irs.gov/payments → Direct Pay</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">🤠</div>
+    <div>
+      <div class="resource-title">Texas Comptroller — Sales Tax Permit</div>
+      <div class="resource-desc">Register for your Texas Sales Tax Permit before your first sale. Free. Required to sell physical goods in Texas.</div>
+      <span class="resource-tag">comptroller.texas.gov → Sales Tax Permit</span>
+    </div>
+  </div>
+
+  <div class="section-label">Contracts & Legal Docs</div>
+  <div class="resource-card">
+    <div class="resource-icon">📄</div>
+    <div>
+      <div class="resource-title">Clerky — Startup Legal Documents</div>
+      <div class="resource-desc">Investor agreements, SAFEs, convertible notes, and founder agreements. Used by thousands of startups.</div>
+      <span class="resource-tag">clerky.com</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">🤝</div>
+    <div>
+      <div class="resource-title">AND.CO (Fiverr Workspace) — Freelance Contracts</div>
+      <div class="resource-desc">Free freelance contract templates, invoicing, and client management. Use for all freelance design clients.</div>
+      <span class="resource-tag">and.co — Free tier available</span>
+    </div>
+  </div>
+
+  <div class="section-label">Mentorship & Support</div>
+  <div class="resource-card">
+    <div class="resource-icon">👴</div>
+    <div>
+      <div class="resource-title">SCORE Austin — Free Business Mentoring</div>
+      <div class="resource-desc">Free one-on-one mentoring from retired executives. Completely free, no catch. Bring your financial model and business plan.</div>
+      <span class="resource-tag">score.org → Find a Mentor → Austin TX — Free</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">🌆</div>
+    <div>
+      <div class="resource-title">Austin Small Business Program</div>
+      <div class="resource-desc">Free consulting, workshops, and resources for Austin founders. Local regulations, permits, and networking.</div>
+      <span class="resource-tag">austintexas.gov/smallbusiness — Free</span>
+    </div>
+  </div>
+  <div class="resource-card">
+    <div class="resource-icon">🏛️</div>
+    <div>
+      <div class="resource-title">SBA Austin — Microloans & Counseling</div>
+      <div class="resource-desc">Free business counseling and microloan programs ($500–$50,000) for startups. Worth exploring before private investors.</div>
+      <span class="resource-tag">sba.gov/local-assistance/find → Austin TX</span>
+    </div>
+  </div>
+
+  <div class="section-label">Shopify Store Policies</div>
+  <div class="resource-card">
+    <div class="resource-icon">🛍️</div>
+    <div>
+      <div class="resource-title">Shopify Policy Generator</div>
+      <div class="resource-desc">Free templates for Privacy Policy, Terms of Service, and Refund Policy. Required before your store can go live.</div>
+      <span class="resource-tag">Shopify Admin → Settings → Policies → Create from template</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">SBW Co.</div>
+  <div class="footer-sub">Legal & Admin Checklist · Wesley · Austin, TX · 2026</div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleCheck(el, group) {
+  el.classList.toggle('checked');
+  saveAll();
+  updateProgress();
+  updateGroupCount(group);
+}
+
+function saveAll() {
+  const states = {};
+  document.querySelectorAll('.check-item[data-id]').forEach(el => {
+    states[el.dataset.id] = el.classList.contains('checked');
+  });
+  localStorage.setItem('sbw_legal', JSON.stringify(states));
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('.check-item[data-id]');
+  const done = document.querySelectorAll('.check-item[data-id].checked');
+  const pct = all.length ? Math.round((done.length / all.length) * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done.length} of ${all.length} items completed`;
+  const pill = document.getElementById('progressPill');
+  pill.textContent = pct + '% complete';
+  if (pct >= 80) { pill.style.background = 'var(--green-light)'; pill.style.color = 'var(--green)'; }
+  else if (pct >= 40) { pill.style.background = 'var(--amber-light)'; pill.style.color = 'var(--amber)'; }
+  else { pill.style.background = 'var(--amber-light)'; pill.style.color = 'var(--amber)'; }
+}
+
+const groupMap = {
+  legal: 'count-formation', tax: 'count-tax', banking: 'count-banking',
+  ip: 'count-ip', insurance: 'count-insurance', contracts: 'count-contracts',
+  marketing: 'count-marketing', mentor: 'count-mentor'
+};
+
+function updateGroupCount(group) {
+  const countId = groupMap[group];
+  if (!countId) return;
+  const items = document.querySelectorAll(`.check-item[onclick*="'${group}'"]`);
+  const done = document.querySelectorAll(`.check-item[onclick*="'${group}'"].checked`);
+  const el = document.getElementById(countId);
+  if (el) el.textContent = `${done.length}/${items.length}`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('sbw_legal');
+  if (saved) {
+    const states = JSON.parse(saved);
+    document.querySelectorAll('.check-item[data-id]').forEach(el => {
+      if (states[el.dataset.id]) el.classList.add('checked');
+    });
+  }
+  updateProgress();
+  Object.keys(groupMap).forEach(g => updateGroupCount(g));
+});
+</script>
+</body>
+</html>
