@@ -542,6 +542,7 @@ body {
     <div class="nav-tab active" onclick="showPage('schedule')">⏰ Schedule</div>
     <div class="nav-tab" onclick="showPage('tasks')">✅ Tasks</div>
     <div class="nav-tab" onclick="showPage('income')">💰 Income</div>
+    <div class="nav-tab" onclick="showPage('bills')">🏠 Bills</div>
     <div class="nav-tab" onclick="showPage('notes')">📝 Notes</div>
   </div>
 </div>
@@ -1014,6 +1015,123 @@ body {
   </div>
 </div>
 
+<!-- ══════════ BILLS PAGE ══════════ -->
+<div class="page" id="page-bills">
+  <div style="margin-top:4px;"></div>
+  <div class="sec-label">Monthly Bills Tracker</div>
+
+  <!-- TOTAL NEEDED CARD -->
+  <div style="background:var(--dark);border-radius:14px;padding:20px 20px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(201,116,10,0.2) 0%,transparent 70%);pointer-events:none;"></div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:#6b5f4e;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">This Month's Target</div>
+    <div style="font-family:'Fraunces',serif;font-size:42px;font-weight:900;color:var(--amber-light);line-height:1;margin-bottom:4px;">$2,000</div>
+    <div style="font-size:12px;color:#6b5f4e;line-height:1.5;">Rent $1,850 + Phone $150 — due every month no matter what. Everything else is a bonus on top of this number.</div>
+  </div>
+
+  <!-- RENT TRACKER -->
+  <div style="background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="font-size:22px;">🏠</div>
+      <div style="flex:1;">
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);">Rent</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px;">Due monthly · $1,850</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);" id="rentSaved">$0</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">of $1,850</div>
+      </div>
+    </div>
+    <!-- Progress bar -->
+    <div style="background:var(--border);border-radius:6px;height:12px;margin-bottom:8px;overflow:hidden;">
+      <div id="rentBar" style="background:linear-gradient(90deg,#c9740a,#f59e0b);height:12px;border-radius:6px;width:0%;transition:width 0.5s ease;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--amber);" id="rentPct">0% saved</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);" id="rentLeft">$1,850 to go</div>
+    </div>
+    <!-- Input -->
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div style="font-size:12px;color:var(--muted);flex:1;">Add amount saved today:</div>
+      <input type="number" id="rentInput" placeholder="$0" style="background:var(--warm);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:13px;color:var(--dark);width:90px;text-align:right;" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border)'">
+      <button onclick="addToRent()" style="background:var(--amber);color:white;border:none;border-radius:6px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;">+ Add</button>
+    </div>
+    <div id="rentDone" style="display:none;margin-top:10px;background:var(--green-light);border:1px solid rgba(45,106,79,0.3);border-radius:7px;padding:10px 12px;font-family:'DM Mono',monospace;font-size:11px;color:var(--green);text-align:center;font-weight:600;">🎉 RENT COVERED! Amazing work Wesley.</div>
+  </div>
+
+  <!-- PHONE TRACKER -->
+  <div style="background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="font-size:22px;">📱</div>
+      <div style="flex:1;">
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--dark);">Phone Bill</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px;">Due monthly · $150</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--dark);" id="phoneSaved">$0</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">of $150</div>
+      </div>
+    </div>
+    <div style="background:var(--border);border-radius:6px;height:12px;margin-bottom:8px;overflow:hidden;">
+      <div id="phoneBar" style="background:linear-gradient(90deg,#1e40af,#60a5fa);height:12px;border-radius:6px;width:0%;transition:width 0.5s ease;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--blue);" id="phonePct">0% saved</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);" id="phoneLeft">$150 to go</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div style="font-size:12px;color:var(--muted);flex:1;">Add amount saved today:</div>
+      <input type="number" id="phoneInput" placeholder="$0" style="background:var(--warm);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:13px;color:var(--dark);width:90px;text-align:right;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+      <button onclick="addToPhone()" style="background:var(--blue);color:white;border:none;border-radius:6px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;">+ Add</button>
+    </div>
+    <div id="phoneDone" style="display:none;margin-top:10px;background:var(--green-light);border:1px solid rgba(45,106,79,0.3);border-radius:7px;padding:10px 12px;font-family:'DM Mono',monospace;font-size:11px;color:var(--green);text-align:center;font-weight:600;">🎉 PHONE BILL COVERED!</div>
+  </div>
+
+  <!-- COMBINED PROGRESS -->
+  <div style="background:var(--warm);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;">Total Bills Progress</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;">
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--dark);" id="totalSaved">$0</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">saved so far</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--muted);" id="totalRemaining">$2,000</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);">remaining</div>
+      </div>
+    </div>
+    <div style="background:var(--border);border-radius:6px;height:16px;overflow:hidden;">
+      <div id="totalBar" style="background:linear-gradient(90deg,var(--green),#4ade80);height:16px;border-radius:6px;width:0%;transition:width 0.5s ease;"></div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-top:6px;text-align:center;" id="totalPct">0% of monthly bills covered</div>
+  </div>
+
+  <!-- DAILY TARGET REMINDER -->
+  <div style="background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">Daily Targets to Cover Bills</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:13px;color:var(--dark);">🛵 Uber Eats per day needed</div>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);font-weight:600;">~$67/day</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:13px;color:var(--dark);">🐾 Rover walks needed/day</div>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);font-weight:600;">~4 walks</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
+        <div style="font-size:13px;color:var(--dark);">📅 Days in month to hit goal</div>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--blue);font-weight:600;">30 days</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetBills()">↺ Reset bills tracker for new month</button>
+
+  <div class="footer">
+    <div class="footer-brand">Wesley · Austin TX</div>
+    <div class="footer-sub">Bills Tracker · $2,000/month · SBW Co.</div>
+  </div>
+</div>
+
 <!-- ══════════ NOTES PAGE ══════════ -->
 <div class="page" id="page-notes">
   <div style="margin-top:4px;"></div>
@@ -1257,12 +1375,84 @@ function loadNotes() {
   if (saved) document.getElementById('dailyNotes').value = saved;
 }
 
-// ── INIT ──
+// ── BILLS TRACKER ──
+const RENT_GOAL = 1850;
+const PHONE_GOAL = 150;
+
+function getBills() {
+  const month = new Date().toISOString().slice(0,7);
+  return JSON.parse(localStorage.getItem('bills_' + month) || '{"rent":0,"phone":0}');
+}
+function saveBills(data) {
+  const month = new Date().toISOString().slice(0,7);
+  localStorage.setItem('bills_' + month, JSON.stringify(data));
+}
+
+function updateBillsUI() {
+  const bills = getBills();
+  const rent = Math.min(bills.rent, RENT_GOAL);
+  const phone = Math.min(bills.phone, PHONE_GOAL);
+  const total = rent + phone;
+  const totalGoal = RENT_GOAL + PHONE_GOAL;
+
+  // Rent
+  const rentPct = Math.min(100, (rent / RENT_GOAL * 100));
+  document.getElementById('rentSaved').textContent = '$' + bills.rent.toFixed(0);
+  document.getElementById('rentBar').style.width = rentPct + '%';
+  document.getElementById('rentPct').textContent = rentPct.toFixed(0) + '% saved';
+  document.getElementById('rentLeft').textContent = rent >= RENT_GOAL ? '✓ Covered!' : '$' + (RENT_GOAL - bills.rent).toFixed(0) + ' to go';
+  document.getElementById('rentDone').style.display = bills.rent >= RENT_GOAL ? 'block' : 'none';
+
+  // Phone
+  const phonePct = Math.min(100, (phone / PHONE_GOAL * 100));
+  document.getElementById('phoneSaved').textContent = '$' + bills.phone.toFixed(0);
+  document.getElementById('phoneBar').style.width = phonePct + '%';
+  document.getElementById('phonePct').textContent = phonePct.toFixed(0) + '% saved';
+  document.getElementById('phoneLeft').textContent = phone >= PHONE_GOAL ? '✓ Covered!' : '$' + (PHONE_GOAL - bills.phone).toFixed(0) + ' to go';
+  document.getElementById('phoneDone').style.display = bills.phone >= PHONE_GOAL ? 'block' : 'none';
+
+  // Total
+  const totalPct = Math.min(100, (total / totalGoal * 100));
+  document.getElementById('totalSaved').textContent = '$' + total.toFixed(0);
+  document.getElementById('totalRemaining').textContent = total >= totalGoal ? '$0' : '$' + (totalGoal - total).toFixed(0);
+  document.getElementById('totalBar').style.width = totalPct + '%';
+  document.getElementById('totalPct').textContent = totalPct.toFixed(0) + '% of monthly bills covered' + (totalPct >= 100 ? ' 🎉' : '');
+}
+
+function addToRent() {
+  const val = parseFloat(document.getElementById('rentInput').value) || 0;
+  if (val <= 0) return;
+  const bills = getBills();
+  bills.rent = (bills.rent || 0) + val;
+  saveBills(bills);
+  document.getElementById('rentInput').value = '';
+  updateBillsUI();
+}
+
+function addToPhone() {
+  const val = parseFloat(document.getElementById('phoneInput').value) || 0;
+  if (val <= 0) return;
+  const bills = getBills();
+  bills.phone = (bills.phone || 0) + val;
+  saveBills(bills);
+  document.getElementById('phoneInput').value = '';
+  updateBillsUI();
+}
+
+function resetBills() {
+  if (!confirm('Reset bills tracker for a new month?')) return;
+  const month = new Date().toISOString().slice(0,7);
+  localStorage.removeItem('bills_' + month);
+  updateBillsUI();
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
   loadTasks();
   loadNotes();
   updateAllCounts();
   updateDayStats();
+  updateBillsUI();
   const weekly = JSON.parse(localStorage.getItem('weekly_income') || '[]');
   if (weekly.length) buildWeeklyTable(weekly);
 });
