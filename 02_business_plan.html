@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Plan · SBW Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf7f2;--paper:#ffffff;--dark:#1a1612;--border:#e8ddd0;
+  --amber:#c9740a;--al:#fef3c7;--ad:#7a4508;
+  --green:#1a6b47;--gl:#d1fae5;
+  --blue:#1d4ed8;--bl:#dbeafe;
+  --red:#b91c1c;--rl:#fee2e2;
+  --muted:#9c8874;--warm:#f5ede0;--soft:#fdf8f2;
+}
+body{background:var(--bg);color:var(--dark);font-family:'DM Sans',sans-serif;padding:0 0 40px}
+.hdr{background:var(--dark);padding:16px 18px 0;position:sticky;top:0;z-index:30}
+.hdr-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.back{font-family:'DM Mono',monospace;font-size:10px;color:#6b5c46;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.hdr-title{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--al);flex:1}
+.hdr-title em{color:var(--amber);font-style:italic}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:0}
+.nav::-webkit-scrollbar{display:none}
+.nt{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;padding:7px 12px;border-radius:4px 4px 0 0;cursor:pointer;border:1px solid transparent;background:transparent;color:#6b5c46;white-space:nowrap;-webkit-tap-highlight-color:transparent;flex-shrink:0;transition:all .15s;border-bottom:none}
+.nt.on{background:var(--bg);color:var(--dark);border-color:var(--border);border-bottom-color:var(--bg);font-weight:600}
+.pg{display:none;padding:18px 16px}
+.pg.on{display:block}
+.sec{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;margin-top:4px}
+.card{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
+.card-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--dark);margin-bottom:6px}
+.card-body{font-size:13px;color:var(--muted);line-height:1.7}
+.card-body strong{color:var(--dark)}
+.dark-card{background:var(--dark);border-radius:10px;padding:16px;margin-bottom:10px}
+.dark-card .sec{color:var(--amber)}
+.dark-card p{font-size:13px;color:#c4b9a8;line-height:1.8}
+.dark-card strong{color:var(--al)}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:12px}
+.stat-v{font-family:'Fraunces',serif;font-size:24px;font-weight:700;line-height:1}
+.stat-l{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:8px 10px;text-align:left;background:var(--soft);border-bottom:1px solid var(--border)}
+td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--dark);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even){background:var(--soft)}
+.tbl-wrap{background:var(--paper);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;letter-spacing:.05em}
+.b-g{background:var(--gl);color:var(--green)}
+.b-a{background:var(--al);color:var(--ad)}
+.b-r{background:var(--rl);color:var(--red)}
+.b-b{background:var(--bl);color:var(--blue)}
+.pos-map{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;position:relative}
+.pos-axis-v{position:absolute;left:16px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.pos-axis-h{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.pos-grid{margin-left:24px;border:1px solid var(--border);border-radius:6px;position:relative;height:200px;background:linear-gradient(var(--border) 1px,transparent 1px) 0 0/100% 50%,linear-gradient(90deg,var(--border) 1px,transparent 1px) 0 0/50% 100%,var(--soft)}
+.pos-dot{position:absolute;transform:translate(-50%,-50%);text-align:center}
+.pos-dot-circle{width:10px;height:10px;border-radius:50%;margin:0 auto 3px}
+.pos-dot-label{font-family:'DM Mono',monospace;font-size:8px;white-space:nowrap}
+.risk-item{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--soft);border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+.risk-icon{font-size:20px;flex-shrink:0}
+.risk-title{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:3px}
+.risk-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.risk-fix{font-size:12px;color:var(--green);line-height:1.5;margin-top:5px;padding:6px 10px;background:var(--gl);border-radius:5px}
+.risk-level{font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-left:auto}
+.footer{text-align:center;padding:20px 0 0;border-top:1px solid var(--border);margin-top:16px}
+.footer-b{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--border);font-style:italic}
+.footer-s{font-family:'DM Mono',monospace;font-size:8px;color:var(--border);margin-top:3px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-row"><a href="index.html" class="back">← Home</a><div class="hdr-title"><em>Business</em> Plan</div></div>
+  <div class="nav">
+    <div class="nt on" onclick="sp('overview')">Overview</div>
+    <div class="nt" onclick="sp('financials')">Financials</div>
+    <div class="nt" onclick="sp('market')">Market</div>
+    <div class="nt" onclick="sp('risks')">Risks</div>
+    <div class="nt" onclick="sp('income')">Income Stack</div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="pg on" id="pg-overview">
+  <div class="dark-card">
+    <div class="sec">One-Paragraph Pitch</div>
+    <p>SBW Co. is a <strong>premium graphic apparel brand</strong> launching in Austin, TX with t-shirts ($65), crewnecks ($95), and hoodies ($110) across 5 original designs. The founder is a trained graphic designer — eliminating the largest recurring cost in apparel. A hybrid print-on-demand/bulk production model keeps inventory risk low while margins improve at scale. SBW sells direct-to-consumer via Shopify and Instagram, targeting the gap between fast fashion and luxury streetwear. Launch investment: <strong>$4,735–$7,251</strong>. Break-even: Month 8–12. Year 2 net profit: <strong>$8,000–$12,000</strong>.</p>
+  </div>
+  <div class="stat-grid">
+    <div class="stat" style="border-left:3px solid var(--amber)"><div class="stat-v" style="color:var(--amber)">$65–$110</div><div class="stat-l">Price Range</div></div>
+    <div class="stat" style="border-left:3px solid var(--green)"><div class="stat-v" style="color:var(--green)">64–66%</div><div class="stat-l">Gross Margin</div></div>
+    <div class="stat" style="border-left:3px solid var(--blue)"><div class="stat-v" style="color:var(--blue)">$413</div><div class="stat-l">Monthly Overhead</div></div>
+    <div class="stat" style="border-left:3px solid var(--red)"><div class="stat-v" style="color:var(--red)">$5,993</div><div class="stat-l">Mid Startup Cost</div></div>
+  </div>
+  <div class="sec">Products — Drop 1</div>
+  <div class="tbl-wrap"><table><tr><th>Product</th><th>Price</th><th>COGS</th><th>Margin</th></tr><tr><td>Graphic T-Shirt</td><td>$65</td><td>~$22</td><td><span class="badge b-g">~66%</span></td></tr><tr><td>Crewneck</td><td>$95</td><td>~$34</td><td><span class="badge b-g">~64%</span></td></tr><tr><td>Hoodie</td><td>$110</td><td>~$40</td><td><span class="badge b-g">~64%</span></td></tr></table></div>
+  <div class="sec">5 Structural Advantages</div>
+  <div class="card"><div class="card-body"><strong>1. Founder is the designer</strong> — $0 external design cost. Most brands pay $300–$800 per design drop.<br><br><strong>2. Heat press in-house</strong> — enables custom finishing and bulk finishing at lower per-unit cost over time.<br><br><strong>3. Hybrid POD/bulk model</strong> — POD protects against inventory risk on unproven designs. Bulk only on proven sellers.<br><br><strong>4. Austin roots</strong> — built-in local creative community, strong independent culture, and a growing premium consumer base.<br><br><strong>5. Diversified founder income</strong> — Rover + Uber Eats + freelance funds the runway. No desperate decisions under financial pressure.</div></div>
+  <div class="sec">Startup Cost Breakdown</div>
+  <div class="tbl-wrap"><table><tr><th>Category</th><th>Low</th><th>High</th></tr><tr><td>MacBook Pro M5</td><td>$1,699</td><td>$1,899</td></tr><tr><td>Heat Press</td><td>$399</td><td>$600</td></tr><tr><td>Adobe CC (annual)</td><td>$600</td><td>$600</td></tr><tr><td>Shopify + Apps (3 mo)</td><td>$117</td><td>$350</td></tr><tr><td>Launch Inventory</td><td>$1,495</td><td>$1,495</td></tr><tr><td>Photography + Ads</td><td>$300</td><td>$700</td></tr><tr><td>Packaging</td><td>$150</td><td>$300</td></tr><tr><td>LLC + Legal</td><td>$50</td><td>$300</td></tr><tr><td><strong>Total</strong></td><td><strong>$4,735</strong></td><td><strong>$7,251</strong></td></tr></table></div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Business Plan · Wesley · Austin TX</div></div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="pg" id="pg-financials">
+  <div class="sec">Monthly Overhead — $413 Fixed</div>
+  <div class="tbl-wrap"><table><tr><th>Expense</th><th>Monthly</th></tr><tr><td>Shopify Basic</td><td>$39</td></tr><tr><td>POD Platform (Printify+)</td><td>$29</td></tr><tr><td>Instagram Ads</td><td>$200</td></tr><tr><td>Packaging Supplies</td><td>$80</td></tr><tr><td>Domain + Email</td><td>$15</td></tr><tr><td>Misc / Returns Buffer</td><td>$50</td></tr><tr><td><strong>Total Fixed</strong></td><td><strong>$413</strong></td></tr></table></div>
+  <div class="sec">Revenue Scenarios (Monthly)</div>
+  <div class="tbl-wrap"><table><tr><th>Scenario</th><th>Units</th><th>Revenue</th><th>Net</th></tr><tr><td>Conservative</td><td>10</td><td>$840</td><td>$150</td></tr><tr><td>Base Case</td><td>24</td><td>$2,000</td><td>$700</td></tr><tr><td>Optimistic</td><td>44</td><td>$3,700</td><td>$1,800</td></tr></table></div>
+  <div class="sec">12-Month Projection (Base Case)</div>
+  <div class="tbl-wrap"><table><tr><th>Month</th><th>Revenue</th><th>Net P&L</th></tr><tr><td>M1–M2</td><td>$600</td><td>-$123</td></tr><tr><td>M3–M4</td><td>$950</td><td>+$47</td></tr><tr><td>M5–M6</td><td>$1,300</td><td>+$217</td></tr><tr><td>M7–M9</td><td>$1,640</td><td>+$382</td></tr><tr><td>M10–M12</td><td>$1,980</td><td>+$547</td></tr><tr><td><strong>Year 1 Total</strong></td><td><strong>~$16,600</strong></td><td><strong>~$3,071</strong></td></tr></table></div>
+  <div class="dark-card">
+    <div class="sec">Year 2 Outlook</div>
+    <p>With startup costs eliminated and proven designs in bulk production, Year 2 projects <strong>$27,000–$32,000</strong> in revenue at <strong>62–68% gross margins</strong>. Net profit: <strong>$8,000–$12,000</strong>. Key drivers: higher volume, better supplier terms, growing email list reducing CAC, and brand recognition driving repeat purchases.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Break-Even Analysis</div>
+    <div class="card-body">Monthly break-even: <strong>8–10 units (~$600–$700 revenue)</strong>. Startup cost recovery: <strong>Month 10–14</strong> at base case. The business requires patience in Year 1 and rewards consistency in Year 2.</div>
+  </div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Financials · Wesley · Austin TX</div></div>
+</div>
+
+<!-- MARKET -->
+<div class="pg" id="pg-market">
+  <div class="sec">Market Positioning</div>
+  <div class="pos-map">
+    <div class="pos-axis-v">Price</div>
+    <div class="pos-grid">
+      <div class="pos-dot" style="left:75%;top:20%"><div class="pos-dot-circle" style="background:#7c3aed"></div><div class="pos-dot-label" style="color:#7c3aed;font-size:7px">Fear of God<br>Rhude</div></div>
+      <div class="pos-dot" style="left:65%;top:42%"><div class="pos-dot-circle" style="background:var(--amber);width:13px;height:13px"></div><div class="pos-dot-label" style="color:var(--amber);font-weight:700">SBW Co. ✦</div></div>
+      <div class="pos-dot" style="left:55%;top:62%"><div class="pos-dot-circle" style="background:var(--blue)"></div><div class="pos-dot-label" style="color:var(--blue);font-size:7px">Uniqlo<br>Everlane</div></div>
+      <div class="pos-dot" style="left:18%;top:78%"><div class="pos-dot-circle" style="background:var(--muted)"></div><div class="pos-dot-label" style="color:var(--muted);font-size:7px">H&M<br>Shein</div></div>
+    </div>
+    <div class="pos-axis-h">Brand Identity →</div>
+  </div>
+  <div class="card"><div class="card-body">SBW Co. sits in the <strong>deliberate gap</strong> between mid-market basics and luxury streetwear — premium enough to signal quality ($65–$110), accessible enough to build a real community. Most brands at this tier either cut corners on materials or price themselves out of reach. SBW refuses both compromises.</div></div>
+  <div class="sec">Target Customer</div>
+  <div class="tbl-wrap"><table><tr><th>Attribute</th><th>Profile</th></tr><tr><td>Age</td><td>18–34</td></tr><tr><td>Location</td><td>Austin TX (primary), online (secondary)</td></tr><tr><td>Values</td><td>Originality, authenticity, story behind the brand</td></tr><tr><td>Buys from</td><td>Independent brands, not department stores</td></tr><tr><td>Follows</td><td>Creators, artists, small brand founders</td></tr><tr><td>Avg spend</td><td>$50–$150 on apparel they believe in</td></tr></table></div>
+  <div class="sec">Austin Market Context</div>
+  <div class="card"><div class="card-body">Austin has <strong>978,000+ residents</strong>, a booming creative class, and a cultural identity built around independent thinking. The city's music, art, and tech scenes create a natural audience for premium design-led apparel. Local presence + Shopify enables both community building and national reach simultaneously.</div></div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Market · Wesley · Austin TX</div></div>
+</div>
+
+<!-- RISKS -->
+<div class="pg" id="pg-risks">
+  <div class="sec">Know These Before You're In Them</div>
+  <div class="risk-item"><div class="risk-icon">😶</div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="risk-title">Running Out of Patience Before Money</div><span class="badge b-r" style="font-size:8px">HIGH</span></div><div class="risk-desc">Months 2–4 are the danger zone. Launch energy is gone, sales are slow, content feels pointless. The brand goes quiet — not dramatically, just slowly.</div><div class="risk-fix">✓ Fix: Pre-commit to Month 3 before you feel like quitting in Month 2. Systems beat motivation. The roadmap exists for this reason.</div></div></div>
+  <div class="risk-item"><div class="risk-icon">💸</div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="risk-title">The Discount Death Spiral</div><span class="badge b-r" style="font-size:8px">HIGH</span></div><div class="risk-desc">Discounting to chase early sales trains your audience to wait for deals. Margins collapse. Once started, very hard to stop.</div><div class="risk-fix">✓ Fix: Never discount out of anxiety. Use value-adds instead (free sticker, early drop access). Hold your prices.</div></div></div>
+  <div class="risk-item"><div class="risk-icon">🎯</div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="risk-title">Marketing a Product Nobody Wants</div><span class="badge b-a" style="font-size:8px">MEDIUM</span></div><div class="risk-desc">More posts won't fix a product problem. If designs aren't getting saves and DMs, no amount of marketing will convert.</div><div class="risk-fix">✓ Fix: At Month 3, show your 5 designs to 10 people whose taste you respect. Ask which they'd pay $65 for. Their answer matters more than any metric.</div></div></div>
+  <div class="risk-item"><div class="risk-icon">📦</div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="risk-title">The Inventory Cash Trap</div><span class="badge b-a" style="font-size:8px">MEDIUM</span></div><div class="risk-desc">Moving to bulk too early ties up cash in stock that doesn't move. Can't afford the next drop. Momentum stalls.</div><div class="risk-fix">✓ Fix: Never order bulk on a design with fewer than 10 POD sales. POD is your safety net — use it longer than feels comfortable.</div></div></div>
+  <div class="risk-item"><div class="risk-icon">👻</div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="risk-title">Brand Drift — Losing Your Voice</div><span class="badge b-a" style="font-size:8px">MEDIUM</span></div><div class="risk-desc">Content gets polished and generic. The emotional connection erodes. Followers stop caring without an obvious reason.</div><div class="risk-fix">✓ Fix: SBW wins by being more SBW, not less. Once a month — write a post that makes you slightly uncomfortable to publish.</div></div></div>
+  <div class="risk-item"><div class="risk-icon">⭐</div><div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><div class="risk-title">Quality Problem Left Unaddressed</div><span class="badge b-g" style="font-size:8px">LOW</span></div><div class="risk-desc">One bad batch at premium prices generates reviews that take months to undo.</div><div class="risk-fix">✓ Fix: Approve every product in your hands before it goes live. Replace every complaint, no questions.</div></div></div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Risk Register · Wesley · Austin TX</div></div>
+</div>
+
+<!-- INCOME STACK -->
+<div class="pg" id="pg-income">
+  <div class="dark-card">
+    <div class="sec">The Runway Strategy</div>
+    <p>While SBW scales, <strong>four income streams</strong> fund the brand and cover personal expenses. This diversified approach eliminates the desperate decisions that kill early-stage brands.</p>
+  </div>
+  <div class="sec">Stream Breakdown</div>
+  <div class="tbl-wrap"><table><tr><th>Stream</th><th>Month 1</th><th>Month 3</th><th>Month 6</th></tr><tr><td>🐾 Rover</td><td>$300–$500</td><td>$700–$900</td><td>$900–$1,200</td></tr><tr><td>🛵 Uber Eats</td><td>$600–$900</td><td>$900–$1,200</td><td>$1,000–$1,400</td></tr><tr><td>💼 Freelance</td><td>$200–$400</td><td>$400–$700</td><td>$600–$900</td></tr><tr><td>🛍️ SBW</td><td>$0</td><td>$200–$500</td><td>$800–$1,500</td></tr><tr><td><strong>Combined</strong></td><td><strong>$1,100–$1,800</strong></td><td><strong>$2,200–$3,300</strong></td><td><strong>$3,300–$5,000</strong></td></tr></table></div>
+  <div class="card"><div class="card-title">Priority Order</div><div class="card-body"><strong>1. Rover first</strong> — fastest to money, zero upfront cost.<br><strong>2. Uber Eats second</strong> — fills gaps between Rover and SBW work perfectly.<br><strong>3. Freelance third</strong> — leverages existing design skill.<br><strong>4. SBW always</strong> — building every morning regardless of income status.</div></div>
+  <div class="card"><div class="card-title">Tax Reality</div><div class="card-body">As self-employed across multiple streams, set aside <strong>25–30% of every dollar earned</strong> into a dedicated Tax Fund account weekly. Quarterly payments due: Apr 15, Jun 16, Sept 15, Jan 15. Missing payments = IRS penalties that compound.</div></div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Income Stack · Wesley · Austin TX</div></div>
+</div>
+<script>
+function sp(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  event.target.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

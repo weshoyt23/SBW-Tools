@@ -3,262 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBW Co. · Business Tools</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Wesley · SBW Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #0a0806; color: #f0e8dc; font-family: 'DM Sans', sans-serif; padding: 32px 20px; max-width: 600px; margin: 0 auto; min-height: 100vh; }
-  h1 { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 900; color: #f0e8dc; line-height: 1.05; margin-bottom: 6px; }
-  h1 span { color: #e8a435; font-style: italic; }
-  .eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; color: #6b5f4e; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
-  .subtitle { font-size: 13px; color: #6b5f4e; line-height: 1.6; margin-bottom: 32px; }
-  .tool-link { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: #111008; border: 1px solid #2a2418; border-radius: 10px; margin-bottom: 10px; text-decoration: none; transition: border-color 0.2s; -webkit-tap-highlight-color: transparent; }
-  .tool-link:hover, .tool-link:active { border-color: #e8a435; }
-  .tool-num { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #e8a435; min-width: 30px; }
-  .tool-info { flex: 1; }
-  .tool-name { font-size: 14px; font-weight: 600; color: #f0e8dc; margin-bottom: 2px; }
-  .tool-desc { font-size: 12px; color: #6b5f4e; line-height: 1.4; }
-  .tool-arrow { color: #e8a435; font-size: 18px; flex-shrink: 0; }
-  .section-head { font-family: 'DM Mono', monospace; font-size: 9px; color: #3a2f20; letter-spacing: 0.2em; text-transform: uppercase; margin: 24px 0 12px; }
-  .divider { height: 1px; background: #2a2418; margin: 20px 0; }
-  .footer { text-align: center; margin-top: 32px; }
-  .footer-brand { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: #2a2418; font-style: italic; }
-  .footer-sub { font-family: 'DM Mono', monospace; font-size: 9px; color: #2a2418; margin-top: 4px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0b08;--surface:#141109;--card:#1a1610;--border:#2e261a;
+  --amber:#d4820c;--amber-l:#fef3c7;--amber-d:#7a4a08;
+  --green:#1a7a4a;--green-l:#d1fae5;
+  --blue:#1d4ed8;--blue-l:#dbeafe;
+  --red:#b91c1c;--red-l:#fee2e2;
+  --text:#f0e6d6;--muted:#6b5c46;--soft:#1f1a12;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:0 0 40px}
 
-  /* ── DAILY PLANNER FEATURED CARD ── */
-  .planner-card {
-    display: block;
-    text-decoration: none;
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 28px;
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.2s;
-  }
-  .planner-card:active { transform: scale(0.98); }
-  .planner-bg {
-    background: linear-gradient(135deg, #1c1814 0%, #2a1f10 55%, #1a1208 100%);
-    border: 1px solid #e8a435;
-    border-radius: 14px;
-    padding: 26px 22px 22px;
-    position: relative;
-    overflow: hidden;
-  }
-  .planner-bg::before {
-    content: '';
-    position: absolute;
-    top: -50px; right: -50px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(232,164,53,0.2) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .planner-bg::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; left: -40px;
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(232,164,53,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .planner-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: #e8a435;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .planner-tag::before {
-    content: '';
-    display: inline-block;
-    width: 24px; height: 1px;
-    background: #e8a435;
-    flex-shrink: 0;
-  }
-  .planner-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    font-weight: 900;
-    color: #fdfbf7;
-    line-height: 1.05;
-    margin-bottom: 8px;
-  }
-  .planner-title em { color: #e8a435; font-style: italic; }
-  .planner-sub {
-    font-size: 12px;
-    color: #7a6a58;
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-  .planner-pills {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  .pp { font-family: 'DM Mono', monospace; font-size: 9px; padding: 3px 9px; border-radius: 3px; letter-spacing: 0.05em; border: 1px solid; }
-  .pp-amber { background: rgba(232,164,53,0.12); color: #e8a435; border-color: rgba(232,164,53,0.3); }
-  .pp-green  { background: rgba(45,106,79,0.2);  color: #4ade80; border-color: rgba(74,222,128,0.25); }
-  .pp-blue   { background: rgba(30,64,175,0.2);  color: #93c5fd; border-color: rgba(147,197,253,0.25); }
-  .pp-red    { background: rgba(153,27,27,0.2);  color: #fca5a5; border-color: rgba(252,165,165,0.25); }
-  .planner-cta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid #2a2418;
-    padding-top: 16px;
-  }
-  .planner-cta-left { display: flex; flex-direction: column; gap: 2px; }
-  .planner-cta-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: #4a3f2e;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-  .planner-cta-text {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: #e8a435;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-  .planner-arrow {
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    background: #e8a435;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1c1814;
-    font-size: 18px;
-    font-weight: 700;
-    flex-shrink: 0;
-    animation: glow 2.5s ease-in-out infinite;
-  }
-  @keyframes glow {
-    0%,100% { box-shadow: 0 0 0 0 rgba(232,164,53,0); }
-    50% { box-shadow: 0 0 12px 4px rgba(232,164,53,0.35); }
-  }
+/* ── HERO ── */
+.hero{padding:32px 20px 24px;background:linear-gradient(180deg,#1a1408 0%,var(--bg) 100%);border-bottom:1px solid var(--border);}
+.hero-eye{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-family:'Fraunces',serif;font-size:38px;font-weight:900;line-height:1;color:var(--text);margin-bottom:4px}
+.hero-title em{color:var(--amber);font-style:italic}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;max-width:340px}
+
+/* DATE / TIME STRIP */
+.strip{display:flex;gap:0;background:var(--soft);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.strip-cell{flex:1;padding:12px 14px;border-right:1px solid var(--border)}
+.strip-cell:last-child{border-right:none}
+.strip-val{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--text);line-height:1}
+.strip-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+
+/* MOTIVATIONAL BAR */
+.motive{background:var(--amber-d);border-radius:8px;padding:12px 16px;margin-bottom:24px;display:flex;gap:10px;align-items:flex-start}
+.motive-q{font-size:18px;flex-shrink:0;margin-top:1px}
+.motive-text{font-family:'Fraunces',serif;font-size:13px;color:var(--amber-l);font-style:italic;line-height:1.6}
+
+/* ── TOOL CARDS ── */
+.tools-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;padding:0 20px;margin-bottom:10px}
+
+/* HERO TOOL — Daily HQ */
+.tool-hero{display:block;text-decoration:none;margin:0 20px 10px;border-radius:14px;overflow:hidden;position:relative;-webkit-tap-highlight-color:transparent;transition:transform .15s}
+.tool-hero:active{transform:scale(.98)}
+.tool-hero-inner{background:linear-gradient(135deg,#1e1508 0%,#2d1f0a 100%);border:1px solid var(--amber);border-radius:14px;padding:22px 20px 20px;position:relative;overflow:hidden}
+.tool-hero-inner::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,130,12,.18) 0%,transparent 65%);pointer-events:none}
+.tool-hero-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.tool-hero-tag::before{content:'';display:inline-block;width:16px;height:1px;background:var(--amber)}
+.tool-hero-name{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--text);line-height:1;margin-bottom:6px}
+.tool-hero-name em{color:var(--amber);font-style:italic}
+.tool-hero-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.tool-hero-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px}
+.pill{font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid}
+.pill-a{background:rgba(212,130,12,.12);color:var(--amber);border-color:rgba(212,130,12,.3)}
+.pill-g{background:rgba(26,122,74,.15);color:#4ade80;border-color:rgba(74,222,128,.25)}
+.pill-b{background:rgba(29,78,216,.15);color:#93c5fd;border-color:rgba(147,197,253,.25)}
+.pill-r{background:rgba(185,28,28,.15);color:#fca5a5;border-color:rgba(252,165,165,.25)}
+.tool-hero-cta{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
+.tool-hero-cta-text{font-family:'DM Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.cta-arrow{width:34px;height:34px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;color:#1a1008;font-size:16px;font-weight:700;animation:pulse-arrow 2.5s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse-arrow{0%,100%{box-shadow:0 0 0 0 rgba(212,130,12,0)}50%{box-shadow:0 0 0 6px rgba(212,130,12,.25)}}
+
+/* REGULAR TOOL CARDS */
+.tools-grid{display:flex;flex-direction:column;gap:8px;padding:0 20px}
+.tool-card{display:flex;align-items:center;gap:14px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;-webkit-tap-highlight-color:transparent;transition:border-color .15s}
+.tool-card:active{border-color:var(--amber)}
+.tool-icon-wrap{width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.tool-card-info{flex:1}
+.tool-card-name{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
+.tool-card-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.tool-card-arrow{color:var(--muted);font-size:14px;flex-shrink:0}
+
+/* QUOTE */
+.quote-block{margin:24px 20px 0;padding:18px 20px;background:var(--soft);border:1px solid var(--border);border-radius:10px;border-left:3px solid var(--amber)}
+.quote-text{font-family:'Fraunces',serif;font-size:14px;color:var(--amber-l);font-style:italic;line-height:1.7;margin-bottom:6px}
+.quote-attr{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em}
+
+/* FOOTER */
+.footer{text-align:center;padding:28px 20px 0}
+.footer-brand{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--border);font-style:italic}
+.footer-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--border);margin-top:3px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeUp .5s ease forwards}
+.fade-1{animation-delay:.05s;opacity:0}
+.fade-2{animation-delay:.1s;opacity:0}
+.fade-3{animation-delay:.15s;opacity:0}
+.fade-4{animation-delay:.2s;opacity:0}
+.fade-5{animation-delay:.25s;opacity:0}
+.fade-6{animation-delay:.3s;opacity:0}
 </style>
 </head>
 <body>
 
-  <div class="eyebrow">SBW Co. · Business Tools</div>
-  <h1>Wesley's<br><span>Playbook</span></h1>
-  <p class="subtitle">All tools in one place. Tap any card to open.</p>
-
-  <!-- ── FEATURED: DAILY PLANNER ── -->
-  <a class="planner-card" href="09_Daily_Planner.html">
-    <div class="planner-bg">
-      <div class="planner-tag">Open Now · Use Every Day</div>
-      <div class="planner-title">Daily<br><em>Planner</em></div>
-      <div class="planner-sub">Time blocks, task lists, income tracking, and Uber Eats peak windows — your complete daily operating system.</div>
-      <div class="planner-pills">
-        <span class="pp pp-amber">⏰ Schedule</span>
-        <span class="pp pp-green">🐾 Rover Windows</span>
-        <span class="pp pp-red">🔥 UE Peak Times</span>
-        <span class="pp pp-amber">🎨 SBW Blocks</span>
-        <span class="pp pp-blue">💰 Income Log</span>
-        <span class="pp pp-green">✅ Task Lists</span>
-      </div>
-      <div class="planner-cta">
-        <div class="planner-cta-left">
-          <div class="planner-cta-label">Today's Tool</div>
-          <div class="planner-cta-text">Open Daily Planner →</div>
-        </div>
-        <div class="planner-arrow">→</div>
-      </div>
-    </div>
-  </a>
-
-  <!-- ── ALL TOOLS ── -->
-  <div class="section-head">All Tools</div>
-
-  <a class="tool-link" href="01_Weekly_Planner.html">
-    <div class="tool-num">01</div>
-    <div class="tool-info">
-      <div class="tool-name">Weekly Game Plan</div>
-      <div class="tool-desc">Day-by-day schedule · Checkable tasks · Income targets</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="02_Master_Roadmap.html">
-    <div class="tool-num">02</div>
-    <div class="tool-info">
-      <div class="tool-name">Master Roadmap</div>
-      <div class="tool-desc">Month 1 detail · 6-month plan · 2-year milestones</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="03_SBW_Brand_Calendar.html">
-    <div class="tool-num">03</div>
-    <div class="tool-info">
-      <div class="tool-name">SBW Brand Calendar</div>
-      <div class="tool-desc">30-day Instagram content plan · Drop 1 launch arc</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="04_Rover_Instagram_Calendar.html">
-    <div class="tool-num">04</div>
-    <div class="tool-info">
-      <div class="tool-name">@wesleyspawsatx Instagram Kit</div>
-      <div class="tool-desc">Rover Instagram setup · Captions · Hashtags · Story ideas</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="05_Rover_30Day_Plan.html">
-    <div class="tool-num">05</div>
-    <div class="tool-info">
-      <div class="tool-name">Rover 30-Day Marketing Plan</div>
-      <div class="tool-desc">Austin market data · Review tracker · Nextdoor posts · Pricing ladder</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="06_Marketing_Funnel.html">
-    <div class="tool-num">06</div>
-    <div class="tool-info">
-      <div class="tool-name">SBW Marketing Funnel</div>
-      <div class="tool-desc">6-stage funnel · Email flows · Tools · Setup checklist</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="07_Monthly_Health_Check.html">
-    <div class="tool-num">07</div>
-    <div class="tool-info">
-      <div class="tool-name">Monthly Business Health Check</div>
-      <div class="tool-desc">Financial signals · Failure mode warnings · Founder journal</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <a class="tool-link" href="08_Legal_Admin_Checklist.html">
-    <div class="tool-num">08</div>
-    <div class="tool-info">
-      <div class="tool-name">Legal & Admin Checklist</div>
-      <div class="tool-desc">LLC · Taxes · Banking · IP · Contracts · Austin resources</div>
-    </div>
-    <div class="tool-arrow">→</div>
-  </a>
-
-  <div class="divider"></div>
-  <div class="footer">
-    <div class="footer-brand">SBW Co.</div>
-    <div class="footer-sub">Wesley · Austin, TX · 2026</div>
+<div class="hero fade">
+  <div class="hero-eye">SBW Co. · Command Center</div>
+  <div class="hero-title">Wesley's<br><em>Playbook</em></div>
+  <div class="hero-sub">Everything you need to build SBW Co. and cover your bills — in one place.</div>
+  <div class="strip">
+    <div class="strip-cell"><div class="strip-val" id="hw-day">—</div><div class="strip-label">Today</div></div>
+    <div class="strip-cell"><div class="strip-val" id="hw-time">—</div><div class="strip-label">Current Time</div></div>
+    <div class="strip-cell"><div class="strip-val" id="hw-month">—</div><div class="strip-label">Month</div></div>
   </div>
+  <div class="motive">
+    <div class="motive-q">✦</div>
+    <div class="motive-text" id="hw-quote">Loading...</div>
+  </div>
+</div>
 
+<div class="tools-label fade fade-1">Open a Tool</div>
+
+<a class="tool-hero fade fade-2" href="01_daily_hq.html">
+  <div class="tool-hero-inner">
+    <div class="tool-hero-tag">Open Every Morning</div>
+    <div class="tool-hero-name">Daily <em>HQ</em></div>
+    <div class="tool-hero-desc">Your daily operating system — time blocks, tasks, income log, and bills tracker. Everything for today in one view.</div>
+    <div class="tool-hero-pills">
+      <span class="pill pill-a">⏰ Schedule</span>
+      <span class="pill pill-g">🐾 Rover</span>
+      <span class="pill pill-r">🔥 UE Peaks</span>
+      <span class="pill pill-a">🎨 SBW</span>
+      <span class="pill pill-b">💰 Income</span>
+      <span class="pill pill-g">🏠 Bills</span>
+    </div>
+    <div class="tool-hero-cta">
+      <div class="tool-hero-cta-text">Start Your Day →</div>
+      <div class="cta-arrow">→</div>
+    </div>
+  </div>
+</a>
+
+<div class="tools-grid">
+  <a class="tool-card fade fade-3" href="02_business_plan.html">
+    <div class="tool-icon-wrap" style="background:rgba(212,130,12,.12);">📊</div>
+    <div class="tool-card-info">
+      <div class="tool-card-name">Business Plan</div>
+      <div class="tool-card-desc">Financials · Unit economics · Market position · Investor pitch</div>
+    </div>
+    <div class="tool-card-arrow">→</div>
+  </a>
+  <a class="tool-card fade fade-4" href="03_roadmap.html">
+    <div class="tool-icon-wrap" style="background:rgba(26,122,74,.12);">🗺</div>
+    <div class="tool-card-info">
+      <div class="tool-card-name">Roadmap & Health</div>
+      <div class="tool-card-desc">2-year milestones · Monthly check-in · Failure mode alerts</div>
+    </div>
+    <div class="tool-card-arrow">→</div>
+  </a>
+  <a class="tool-card fade fade-5" href="04_marketing.html">
+    <div class="tool-icon-wrap" style="background:rgba(29,78,216,.12);">📱</div>
+    <div class="tool-card-info">
+      <div class="tool-card-name">Marketing Hub</div>
+      <div class="tool-card-desc">SBW calendar · Rover strategy · Captions · Funnel · Hashtags</div>
+    </div>
+    <div class="tool-card-arrow">→</div>
+  </a>
+  <a class="tool-card fade fade-6" href="05_operations.html">
+    <div class="tool-icon-wrap" style="background:rgba(185,28,28,.12);">⚙️</div>
+    <div class="tool-card-info">
+      <div class="tool-card-name">Operations Hub</div>
+      <div class="tool-card-desc">Legal checklist · Tax calendar · Banking · Austin resources</div>
+    </div>
+    <div class="tool-card-arrow">→</div>
+  </a>
+</div>
+
+<div class="quote-block fade">
+  <div class="quote-text">"The question isn't whether anyone will buy. Someone will. The question is whether you'll stay consistent long enough to find the people who were always going to love what you make."</div>
+  <div class="quote-attr">— SBW Co. Founding Principle</div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">SBW Co.</div>
+  <div class="footer-sub">Wesley · Austin, TX · 2026</div>
+</div>
+
+<script>
+const QUOTES=[
+  "Progress over perfection — always. One post, one walk, one delivery at a time.",
+  "The brands that make it aren't the most talented — they're the ones who showed up when it felt pointless.",
+  "You don't need to see the whole staircase. Just the next step.",
+  "Rest is not laziness. Burnout costs more than any slow day ever will.",
+  "Every great brand started exactly where you are right now.",
+  "The time you have right now is a gift. Use it.",
+  "Your design skill is worth more than you think. Charge accordingly.",
+  "One Instagram post. One walk. One delivery. The day is built from small things done well."
+];
+function init(){
+  const now=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('hw-day').textContent=days[now.getDay()]+' '+now.getDate();
+  const h=now.getHours(),m=now.getMinutes();
+  document.getElementById('hw-time').textContent=(h%12||12)+':'+(m<10?'0':'')+m+(h>=12?'pm':'am');
+  document.getElementById('hw-month').textContent=months[now.getMonth()]+' '+now.getFullYear();
+  const q=QUOTES[now.getDay()%QUOTES.length];
+  document.getElementById('hw-quote').textContent='"'+q+'"';
+}
+init();
+setInterval(()=>{
+  const now=new Date();
+  const h=now.getHours(),m=now.getMinutes();
+  document.getElementById('hw-time').textContent=(h%12||12)+':'+(m<10?'0':'')+m+(h>=12?'pm':'am');
+},30000);
+</script>
 </body>
 </html>

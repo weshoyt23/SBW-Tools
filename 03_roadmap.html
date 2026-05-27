@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap & Health · SBW Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0b08;--surface:#141109;--card:#1a1610;--border:#2e261a;
+  --amber:#d4820c;--al:#fef3c7;--ad:#7a4a08;
+  --green:#1a7a4a;--gl:#d1fae5;
+  --blue:#1d4ed8;--bl:#dbeafe;
+  --red:#b91c1c;--rl:#fee2e2;
+  --yellow:#ca8a04;--yl:#fef9c3;
+  --text:#f0e6d6;--muted:#6b5c46;--soft:#1f1a12;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;padding:0 0 40px}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 18px 12px;position:sticky;top:0;z-index:30}
+.hdr-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.back{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.hdr-title{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--text);flex:1}
+.hdr-title em{color:var(--amber);font-style:italic}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nt{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;padding:6px 12px;border-radius:4px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);white-space:nowrap;-webkit-tap-highlight-color:transparent;flex-shrink:0;transition:all .15s}
+.nt.on{background:var(--amber);border-color:var(--amber);color:#1a1008;font-weight:600}
+.pg{display:none;padding:16px}
+.pg.on{display:block}
+.sec{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;margin-top:4px}
+
+/* MILESTONE TIMELINE */
+.milestone{display:flex;gap:0;margin-bottom:0;position:relative}
+.milestone::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:1px;background:var(--border);z-index:0}
+.ms-dot{width:44px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding-top:2px;position:relative;z-index:1}
+.ms-circle{width:12px;height:12px;border-radius:50%;border:2px solid;flex-shrink:0}
+.ms-line{width:1px;flex:1;min-height:20px}
+.ms-content{flex:1;padding:0 0 20px 10px}
+.ms-phase{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.ms-title{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px}
+.ms-items{font-size:12px;color:var(--muted);line-height:1.8}
+.ms-items strong{color:var(--text)}
+
+/* HEALTH CHECK */
+.signal-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.signal-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.signal-icon{font-size:18px;flex-shrink:0}
+.signal-title{font-size:13px;font-weight:600;color:var(--text);flex:1}
+.signal-status{font-family:'DM Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;flex-shrink:0}
+.s-na{background:var(--soft);color:var(--muted);border:1px solid var(--border)}
+.s-g{background:rgba(26,122,74,.2);color:#4ade80;border:1px solid rgba(74,222,128,.25)}
+.s-y{background:rgba(202,138,4,.2);color:#fde047;border:1px solid rgba(253,224,71,.25)}
+.s-r{background:rgba(185,28,28,.2);color:#fca5a5;border:1px solid rgba(252,165,165,.25)}
+.signal-chev{font-size:10px;color:var(--muted);flex-shrink:0;transition:transform .2s}
+.signal-card.open .signal-chev{transform:rotate(180deg)}
+.signal-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border)}
+.signal-card.open .signal-body{display:block}
+
+/* TRAFFIC LIGHTS */
+.tl-group{margin-top:12px}
+.tl-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.tl-opts{display:flex;gap:6px}
+.tl-btn{flex:1;padding:9px 4px;border-radius:5px;cursor:pointer;border:1px solid var(--border);background:var(--soft);text-align:center;font-family:'DM Mono',monospace;font-size:9px;transition:all .15s;-webkit-tap-highlight-color:transparent;color:var(--muted)}
+.tl-btn.g.on{border-color:#4ade80;background:rgba(26,122,74,.2);color:#4ade80}
+.tl-btn.y.on{border-color:#fde047;background:rgba(202,138,4,.2);color:#fde047}
+.tl-btn.r.on{border-color:#fca5a5;background:rgba(185,28,28,.2);color:#fca5a5}
+
+/* WARN BOXES */
+.warn{border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12px;line-height:1.6}
+.warn.g{background:rgba(26,122,74,.15);border:1px solid rgba(74,222,128,.2);color:#4ade80}
+.warn.y{background:rgba(202,138,4,.15);border:1px solid rgba(253,224,71,.2);color:#fde047}
+.warn.r{background:rgba(185,28,28,.15);border:1px solid rgba(252,165,165,.2);color:#fca5a5}
+.warn-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;font-weight:600}
+
+/* INPUTS */
+.fi{background:var(--soft);border:1px solid var(--border);border-radius:5px;padding:8px 10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;width:100%;margin-top:4px;resize:none;min-height:50px}
+.fi:focus{outline:none;border-color:var(--amber)}
+.fi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.fi-single{height:36px;min-height:0;resize:none;padding:6px 10px}
+.fi-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;display:block}
+
+/* SCORE */
+.score-display{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center;margin-bottom:14px}
+.score-grade{font-family:'Fraunces',serif;font-size:64px;font-weight:900;line-height:1}
+.score-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-top:6px}
+
+/* HISTORY */
+.hist-row{display:grid;grid-template-columns:80px 1fr 1fr 60px;border-bottom:1px solid var(--border);font-size:12px}
+.hist-row:last-child{border-bottom:none}
+.hist-row.hd{background:var(--soft)}
+.hc{padding:9px 10px;border-right:1px solid var(--border)}
+.hc:last-child{border-right:none}
+.hd .hc{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+.save-btn{width:100%;background:var(--amber);color:#1a1008;border:none;border-radius:7px;padding:12px;font-family:'DM Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;margin-top:12px;letter-spacing:.1em;-webkit-tap-highlight-color:transparent}
+.save-ok{text-align:center;font-family:'DM Mono',monospace;font-size:9px;color:#4ade80;margin-top:5px;display:none}
+
+/* MONTH SELECTOR */
+.month-sel{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.ms-btn{font-family:'DM Mono',monospace;font-size:9px;padding:5px 10px;border-radius:4px;cursor:pointer;border:1px solid var(--border);background:var(--soft);color:var(--muted);-webkit-tap-highlight-color:transparent;transition:all .15s}
+.ms-btn.on{border-color:var(--amber);background:rgba(212,130,12,.15);color:var(--amber)}
+
+.footer{text-align:center;padding:20px 0 0;border-top:1px solid var(--border);margin-top:16px}
+.footer-b{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--border);font-style:italic}
+.footer-s{font-family:'DM Mono',monospace;font-size:8px;color:var(--border);margin-top:3px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-row"><a href="index.html" class="back">← Home</a><div class="hdr-title">Roadmap & <em>Health</em></div></div>
+  <div class="nav">
+    <div class="nt on" onclick="sp('roadmap')">🗺 Roadmap</div>
+    <div class="nt" onclick="sp('health')">📊 Health Check</div>
+    <div class="nt" onclick="sp('history')">📈 History</div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div class="pg on" id="pg-roadmap">
+  <div class="sec">2-Year Milestone Plan</div>
+
+  <div class="milestone">
+    <div class="ms-dot"><div class="ms-circle" style="border-color:var(--amber);background:var(--amber)"></div><div class="ms-line" style="background:var(--border)"></div></div>
+    <div class="ms-content"><div class="ms-phase" style="color:var(--amber)">Now · Month 1–2</div><div class="ms-title">The Foundation</div><div class="ms-items">Rover profile live with first bookings<br>Uber Eats running both peak windows daily<br>SBW Shopify store set up and linked<br>Instagram @sbwco posting daily<br><strong>Target: First dollar from every stream</strong></div></div>
+  </div>
+  <div class="milestone">
+    <div class="ms-dot"><div class="ms-circle" style="border-color:var(--green)"></div><div class="ms-line" style="background:var(--border)"></div></div>
+    <div class="ms-content"><div class="ms-phase" style="color:var(--green)">Month 3–4</div><div class="ms-title">Proof of Concept</div><div class="ms-items">5+ Rover reviews, price raised to market rate<br>$2,000/month in combined income achieved<br>SBW Drop 1 launched and first sales made<br>Best-selling design identified from POD data<br><strong>Target: Bills covered, SBW profitable</strong></div></div>
+  </div>
+  <div class="milestone">
+    <div class="ms-dot"><div class="ms-circle" style="border-color:var(--blue)"></div><div class="ms-line" style="background:var(--border)"></div></div>
+    <div class="ms-content"><div class="ms-phase" style="color:var(--blue)">Month 5–6</div><div class="ms-title">Investor Ready</div><div class="ms-items">6 months of real financial data to present<br>First bulk order on proven design<br>1,000+ Instagram followers organically<br>Freelance generating $600–$900/month<br><strong>Target: Strong enough numbers to raise</strong></div></div>
+  </div>
+  <div class="milestone">
+    <div class="ms-dot"><div class="ms-circle" style="border-color:var(--yellow)"></div><div class="ms-line" style="background:var(--border)"></div></div>
+    <div class="ms-content"><div class="ms-phase" style="color:var(--yellow)">Month 7–9</div><div class="ms-title">SBW Takes Center Stage</div><div class="ms-items">Drop 2 launched with lessons from Drop 1<br>SBW generating $1,500–$2,500/month<br>Rover scaled back to weekends only<br>2,500+ Instagram followers<br><strong>Target: SBW as dominant income stream</strong></div></div>
+  </div>
+  <div class="milestone">
+    <div class="ms-dot"><div class="ms-circle" style="border-color:#9333ea"></div><div class="ms-line" style="background:var(--border)"></div></div>
+    <div class="ms-content"><div class="ms-phase" style="color:#9333ea">Month 10–12</div><div class="ms-title">Scale & Systemize</div><div class="ms-items">Drop 3 — seasonal collection<br>First Austin pop-up or market appearance<br>Email list to 1,000+ subscribers<br>SBW gross margins above 60%<br><strong>Target: Full-time focus on SBW possible</strong></div></div>
+  </div>
+  <div class="milestone">
+    <div class="ms-dot"><div class="ms-circle" style="border-color:#ec4899"></div><div class="ms-line" style="background:transparent"></div></div>
+    <div class="ms-content"><div class="ms-phase" style="color:#ec4899">Month 18–24</div><div class="ms-title">The Vision</div><div class="ms-items">$4,000–$6,000/month SBW revenue<br>5,000+ Instagram followers, loyal community<br>Wholesale inquiries from Austin boutiques<br>Brand collaborations with Austin creatives<br><strong>Target: SBW supports you full-time</strong></div></div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:4px">
+    <div class="sec">Weekly Schedule Framework</div>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><div style="color:var(--muted)">8–11am weekdays</div><div style="color:var(--text)">SBW design + Instagram</div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><div style="color:var(--muted)">11am–2pm weekdays</div><div style="color:var(--amber)">🔥 Uber Eats lunch peak</div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><div style="color:var(--muted)">2–5:30pm weekdays</div><div style="color:var(--text)">SBW/freelance + rest</div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><div style="color:var(--muted)">5:30–7:30pm weekdays</div><div style="color:var(--amber)">🔥 Uber Eats dinner peak</div></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:12px"><div style="color:var(--muted)">Weekends</div><div style="color:#4ade80">🐾 Rover boarding (primary earn)</div></div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Roadmap · Wesley · Austin TX</div></div>
+</div>
+
+<!-- HEALTH CHECK -->
+<div class="pg" id="pg-health">
+  <div class="sec">Select Month to Review</div>
+  <div class="month-sel" id="monthSel">
+    <div class="ms-btn" onclick="setMonth('M1')">M1</div><div class="ms-btn" onclick="setMonth('M2')">M2</div><div class="ms-btn" onclick="setMonth('M3')">M3</div><div class="ms-btn" onclick="setMonth('M4')">M4</div><div class="ms-btn" onclick="setMonth('M5')">M5</div><div class="ms-btn" onclick="setMonth('M6')">M6</div><div class="ms-btn" onclick="setMonth('M7')">M7</div><div class="ms-btn" onclick="setMonth('M8')">M8</div><div class="ms-btn" onclick="setMonth('M9')">M9</div><div class="ms-btn" onclick="setMonth('M10')">M10</div><div class="ms-btn" onclick="setMonth('M11')">M11</div><div class="ms-btn" onclick="setMonth('M12')">M12</div>
+  </div>
+
+  <div class="score-display">
+    <div class="score-label">Health Grade</div>
+    <div class="score-grade" id="scoreGrade" style="color:var(--muted)">—</div>
+    <div class="score-label" id="scoreDesc">Select a month and fill in signals</div>
+  </div>
+
+  <!-- REVENUE -->
+  <div class="signal-card" id="sig-rev">
+    <div class="signal-hdr" onclick="togSig('sig-rev')">
+      <div class="signal-icon">💰</div><div class="signal-title">Revenue vs Target</div>
+      <div class="signal-status s-na" id="ss-rev">Not filled</div><div class="signal-chev">▼</div>
+    </div>
+    <div class="signal-body">
+      <div class="fi-row">
+        <div><span class="fi-label">SBW Revenue ($)</span><textarea class="fi fi-single" id="f-rev" placeholder="0"></textarea></div>
+        <div><span class="fi-label">Target Was ($)</span><textarea class="fi fi-single" id="f-target" placeholder="0"></textarea></div>
+      </div>
+      <div class="tl-group"><div class="tl-label">How did you do vs target?</div><div class="tl-opts"><div class="tl-btn g" onclick="setTL('rev','g',this)">✓ Met it</div><div class="tl-btn y" onclick="setTL('rev','y',this)">~ Within 20%</div><div class="tl-btn r" onclick="setTL('rev','r',this)">✗ Missed badly</div></div></div>
+      <div class="warn r" id="w-rev-r" style="display:none"><div class="warn-title">⚠️ Revenue Warning</div>Missing target by 20%+ two months running signals a gap. Is it product, traffic, or conversion? Identify which before changing anything.</div>
+      <div class="warn g" id="w-rev-g" style="display:none"><div class="warn-title">✓ On Track</div>Document what drove it so you can repeat it next month.</div>
+    </div>
+  </div>
+
+  <!-- BILLS -->
+  <div class="signal-card" id="sig-bills">
+    <div class="signal-hdr" onclick="togSig('sig-bills')">
+      <div class="signal-icon">🏠</div><div class="signal-title">Bills & Runway</div>
+      <div class="signal-status s-na" id="ss-bills">Not filled</div><div class="signal-chev">▼</div>
+    </div>
+    <div class="signal-body">
+      <div class="fi-row">
+        <div><span class="fi-label">Cash Available ($)</span><textarea class="fi fi-single" id="f-cash" placeholder="0"></textarea></div>
+        <div><span class="fi-label">Monthly Burn ($)</span><textarea class="fi fi-single" id="f-burn" placeholder="0"></textarea></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:8px" id="runwayCalc">Runway: enter values above</div>
+      <div class="tl-group"><div class="tl-label">Are bills covered this month?</div><div class="tl-opts"><div class="tl-btn g" onclick="setTL('bills','g',this)">✓ Covered</div><div class="tl-btn y" onclick="setTL('bills','y',this)">~ Partially</div><div class="tl-btn r" onclick="setTL('bills','r',this)">✗ Shortfall</div></div></div>
+      <div class="warn r" id="w-bills-r" style="display:none"><div class="warn-title">🚨 Runway Risk</div>If bills aren't covered, double down on Rover and Uber Eats this week. Don't make SBW investments until basics are secured.</div>
+    </div>
+  </div>
+
+  <!-- BRAND -->
+  <div class="signal-card" id="sig-brand">
+    <div class="signal-hdr" onclick="togSig('sig-brand')">
+      <div class="signal-icon">🎨</div><div class="signal-title">Design Engagement</div>
+      <div class="signal-status s-na" id="ss-brand">Not filled</div><div class="signal-chev">▼</div>
+    </div>
+    <div class="signal-body">
+      <span class="fi-label">Which designs got saves, DMs, or comments asking when it drops?</span>
+      <textarea class="fi" id="f-brand" placeholder="Be specific — which designs, what people said..."></textarea>
+      <div class="tl-group"><div class="tl-label">Are designs resonating?</div><div class="tl-opts"><div class="tl-btn g" onclick="setTL('brand','g',this)">✓ Strong reaction</div><div class="tl-btn y" onclick="setTL('brand','y',this)">~ Some reaction</div><div class="tl-btn r" onclick="setTL('brand','r',this)">✗ Mostly silence</div></div></div>
+      <div class="warn r" id="w-brand-r" style="display:none"><div class="warn-title">⚠️ Product Signal Warning</div>Silence on designs is a product problem, not a marketing problem. Show your 5 designs to 10 people and ask which they'd pay $65 for.</div>
+      <div class="warn y" id="w-brand-y" style="display:none"><div class="warn-title">📋 Iterate</div>Look at which specific designs got the most engagement — double down on that direction.</div>
+    </div>
+  </div>
+
+  <!-- CONSISTENCY -->
+  <div class="signal-card" id="sig-ig">
+    <div class="signal-hdr" onclick="togSig('sig-ig')">
+      <div class="signal-icon">📱</div><div class="signal-title">Instagram Consistency</div>
+      <div class="signal-status s-na" id="ss-ig">Not filled</div><div class="signal-chev">▼</div>
+    </div>
+    <div class="signal-body">
+      <div class="fi-row">
+        <div><span class="fi-label">Followers Now</span><textarea class="fi fi-single" id="f-foll-now" placeholder="0"></textarea></div>
+        <div><span class="fi-label">Followers Last Month</span><textarea class="fi fi-single" id="f-foll-last" placeholder="0"></textarea></div>
+      </div>
+      <div class="tl-group"><div class="tl-label">Did you post consistently? (target: 5x/week)</div><div class="tl-opts"><div class="tl-btn g" onclick="setTL('ig','g',this)">✓ Consistent</div><div class="tl-btn y" onclick="setTL('ig','y',this)">~ Some gaps</div><div class="tl-btn r" onclick="setTL('ig','r',this)">✗ Fell off</div></div></div>
+      <div class="warn r" id="w-ig-r" style="display:none"><div class="warn-title">⚠️ Consistency Failure</div>Inconsistency is the #1 silent killer of brand growth. Even 3 posts/week done consistently beats 20 in one week then silence. Reset and commit to a lower sustainable number.</div>
+    </div>
+  </div>
+
+  <!-- FOUNDER -->
+  <div class="signal-card" id="sig-founder">
+    <div class="signal-hdr" onclick="togSig('sig-founder')">
+      <div class="signal-icon">😰</div><div class="signal-title">Founder Energy</div>
+      <div class="signal-status s-na" id="ss-founder">Not filled</div><div class="signal-chev">▼</div>
+    </div>
+    <div class="signal-body">
+      <span class="fi-label">How are you actually doing?</span>
+      <textarea class="fi" id="f-founder" placeholder="Be honest. What's energizing you? What's draining you?"></textarea>
+      <div class="tl-group"><div class="tl-label">Your honest energy level</div><div class="tl-opts"><div class="tl-btn g" onclick="setTL('founder','g',this)">✓ Motivated</div><div class="tl-btn y" onclick="setTL('founder','y',this)">~ Tired but going</div><div class="tl-btn r" onclick="setTL('founder','r',this)">✗ Burnt out</div></div></div>
+      <div class="warn r" id="w-founder-r" style="display:none"><div class="warn-title">🚨 Burnout Warning</div>A burnt out founder makes bad decisions — panic, premature pivots, discounting. Take 3 days completely off from content. Come back when you want to, not when you feel you have to.</div>
+    </div>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="signal-card" id="sig-refl">
+    <div class="signal-hdr" onclick="togSig('sig-refl')">
+      <div class="signal-icon">📊</div><div class="signal-title">Month Reflection</div>
+      <div class="signal-status s-na" id="ss-refl">Not filled</div><div class="signal-chev">▼</div>
+    </div>
+    <div class="signal-body">
+      <span class="fi-label">3 Things That Worked</span>
+      <textarea class="fi" id="f-worked" placeholder="Be specific. 'Posted consistently' is weak. 'The park Reel got 400 views and 3 DMs' is useful."></textarea>
+      <span class="fi-label" style="margin-top:10px">1 Thing to Change Next Month</span>
+      <textarea class="fi" id="f-change" placeholder="One thing only. What's the highest leverage change you can make?"></textarea>
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveHealth()">💾 SAVE THIS MONTH'S CHECK-IN</button>
+  <div class="save-ok" id="healthOk">✓ Saved!</div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">Health Check · Wesley · Austin TX</div></div>
+</div>
+
+<!-- HISTORY -->
+<div class="pg" id="pg-history">
+  <div class="sec">Monthly Record</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px">
+    <div class="hist-row hd"><div class="hc">Month</div><div class="hc">Revenue</div><div class="hc">Bills?</div><div class="hc">Grade</div></div>
+    <div id="histTable"><div style="padding:16px;text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">No check-ins saved yet.</div></div>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px">
+    <div class="sec">What to Look For</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:14px;flex-shrink:0">📈</div><div style="font-size:12px;color:var(--muted);line-height:1.6"><strong style="color:var(--text)">Revenue trend</strong> — Growing month over month, even slowly, is healthy. Flat for 3+ months means something needs to change.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:14px;flex-shrink:0">🔄</div><div style="font-size:12px;color:var(--muted);line-height:1.6"><strong style="color:var(--text)">Rover vs Uber Eats balance</strong> — Both declining at the same time is a red flag requiring immediate action.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:14px;flex-shrink:0">😰</div><div style="font-size:12px;color:var(--muted);line-height:1.6"><strong style="color:var(--text)">Founder energy</strong> — Consistent red flags here predict eventual abandonment. Address it before it compounds.</div></div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-b">SBW Co.</div><div class="footer-s">History · Wesley · Austin TX</div></div>
+</div>
+
+<script>
+let curMonth='';
+const tlSel={};
+
+function sp(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  event.target.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function togSig(id){document.getElementById(id).classList.toggle('open')}
+function setMonth(m){
+  curMonth=m;
+  document.querySelectorAll('.ms-btn').forEach(b=>{b.classList.toggle('on',b.textContent===m)});
+  loadHealth(m);
+}
+function setTL(key,color,el){
+  const parent=el.parentElement;
+  parent.querySelectorAll('.tl-btn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  tlSel[key]=color;
+  // warnings
+  const warns={rev:['w-rev-r','w-rev-g'],bills:['w-bills-r'],brand:['w-brand-r','w-brand-y'],ig:['w-ig-r'],founder:['w-founder-r']};
+  if(warns[key])warns[key].forEach(w=>{const e=document.getElementById(w);if(e)e.style.display='none'});
+  const show={rev:{r:'w-rev-r',g:'w-rev-g'},bills:{r:'w-bills-r'},brand:{r:'w-brand-r',y:'w-brand-y'},ig:{r:'w-ig-r'},founder:{r:'w-founder-r'}};
+  if(show[key]&&show[key][color]){const e=document.getElementById(show[key][color]);if(e)e.style.display='block';}
+  // status pill
+  const pilMap={rev:'ss-rev',bills:'ss-bills',brand:'ss-brand',ig:'ss-ig',founder:'ss-founder'};
+  if(pilMap[key]){const p=document.getElementById(pilMap[key]);const labels={g:'Healthy ✓',y:'Watch ⚠️',r:'Action ✗'};const cls={g:'s-g',y:'s-y',r:'s-r'};p.textContent=labels[color];p.className='signal-status '+cls[color];}
+  updScore();
+}
+function updScore(){
+  const vals=Object.values(tlSel);if(!vals.length)return;
+  const pts=vals.reduce((s,c)=>s+(c==='g'?3:c==='y'?2:1),0);
+  const pct=pts/(vals.length*3);
+  let grade,color;
+  if(pct>=.85){grade='A';color='#4ade80';}
+  else if(pct>=.70){grade='B';color='#86efac';}
+  else if(pct>=.55){grade='C';color='#fde047';}
+  else if(pct>=.40){grade='D';color='var(--amber)';}
+  else{grade='F';color='#fca5a5';}
+  document.getElementById('scoreGrade').textContent=grade;
+  document.getElementById('scoreGrade').style.color=color;
+  document.getElementById('scoreDesc').textContent='Based on '+vals.length+' signals';
+}
+function saveHealth(){
+  if(!curMonth){alert('Select a month first!');return;}
+  const data={month:curMonth,rev:document.getElementById('f-rev').value,target:document.getElementById('f-target').value,cash:document.getElementById('f-cash').value,burn:document.getElementById('f-burn').value,brand:document.getElementById('f-brand').value,foll_now:document.getElementById('f-foll-now').value,foll_last:document.getElementById('f-foll-last').value,founder:document.getElementById('f-founder').value,worked:document.getElementById('f-worked').value,change:document.getElementById('f-change').value,tl:{...tlSel},grade:document.getElementById('scoreGrade').textContent};
+  const all=JSON.parse(localStorage.getItem('rm_health')||'{}');all[curMonth]=data;
+  localStorage.setItem('rm_health',JSON.stringify(all));
+  buildHistory();
+  const ok=document.getElementById('healthOk');ok.style.display='block';setTimeout(()=>ok.style.display='none',2500);
+}
+function loadHealth(m){
+  const all=JSON.parse(localStorage.getItem('rm_health')||'{}');const d=all[m];if(!d)return;
+  ['f-rev','f-target','f-cash','f-burn','f-brand','f-foll-now','f-foll-last','f-founder','f-worked','f-change'].forEach(id=>{const el=document.getElementById(id);if(el&&d[id.replace('f-','').replace(/-/g,'_')])el.value=d[id.replace('f-','').replace(/-/g,'_')]||'';});
+  if(d.tl)Object.entries(d.tl).forEach(([k,v])=>{tlSel[k]=v;});
+  updScore();
+}
+function buildHistory(){
+  const all=JSON.parse(localStorage.getItem('rm_health')||'{}');const months=Object.keys(all);
+  const t=document.getElementById('histTable');
+  if(!months.length){t.innerHTML='<div style="padding:16px;text-align:center;font-family:\'DM Mono\',monospace;font-size:10px;color:var(--muted)">No check-ins saved yet.</div>';return;}
+  const gradeColor={A:'#4ade80',B:'#86efac',C:'#fde047',D:'var(--amber)',F:'#fca5a5'};
+  t.innerHTML=months.map(m=>{const d=all[m];const gc=gradeColor[d.grade]||'var(--muted)';return`<div class="hist-row"><div class="hc" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--amber)">${m}</div><div class="hc">$${d.rev||'0'}</div><div class="hc">${d.tl&&d.tl.bills?{g:'✓',y:'~',r:'✗'}[d.tl.bills]:'—'}</div><div class="hc" style="font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:${gc}">${d.grade||'—'}</div></div>`;}).join('');
+}
+window.addEventListener('DOMContentLoaded',()=>buildHistory());
+</script>
+</body>
+</html>
