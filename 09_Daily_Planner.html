@@ -1106,20 +1106,88 @@ body {
   </div>
 
   <!-- DAILY TARGET REMINDER -->
-  <div style="background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;">
-    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">Daily Targets to Cover Bills</div>
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
-        <div style="font-size:13px;color:var(--dark);">🛵 Uber Eats per day needed</div>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--amber);font-weight:600;">~$67/day</div>
+  <div style="background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;">
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;">Realistic Monthly Income Targets</div>
+
+    <!-- MONTH TABS -->
+    <div style="display:flex;gap:6px;margin-bottom:14px;" id="monthPhaseTabs">
+      <div onclick="setPhase(1)" id="phase1tab" style="flex:1;text-align:center;padding:7px 4px;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.05em;background:var(--amber);color:white;border:1px solid var(--amber);font-weight:600;-webkit-tap-highlight-color:transparent;">Month 1–2</div>
+      <div onclick="setPhase(2)" id="phase2tab" style="flex:1;text-align:center;padding:7px 4px;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.05em;background:transparent;color:var(--muted);border:1px solid var(--border);-webkit-tap-highlight-color:transparent;">Month 3–4</div>
+      <div onclick="setPhase(3)" id="phase3tab" style="flex:1;text-align:center;padding:7px 4px;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.05em;background:transparent;color:var(--muted);border:1px solid var(--border);-webkit-tap-highlight-color:transparent;">Month 6+</div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div id="phase1" style="display:block;">
+      <div style="background:var(--amber-light);border:1px solid rgba(201,116,10,0.25);border-radius:7px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--amber);line-height:1.5;">
+        <strong>Month 1–2 reality:</strong> Building reviews and reputation. Total combined income likely $1,100–$1,800. You may fall short of $2,000 — that's completely normal and expected.
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
-        <div style="font-size:13px;color:var(--dark);">🐾 Rover walks needed/day</div>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);font-weight:600;">~4 walks</div>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🛵 Uber Eats daily target</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Both peak windows, ~4 hrs</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);font-weight:600;">$40–$55</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">realistic</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🐾 Rover daily target</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">1–2 walks + building reviews</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green);font-weight:600;">$15–$35</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">realistic</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">💼 Freelance monthly</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">First clients, building Fiverr</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--blue);font-weight:600;">$200–$400</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">/month</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;">
+          <div><div style="font-size:13px;color:var(--dark);">📊 Combined monthly est.</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">All streams combined</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--dark);font-weight:600;">$1,100–$1,800</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">total</div></div>
+        </div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
-        <div style="font-size:13px;color:var(--dark);">📅 Days in month to hit goal</div>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--blue);font-weight:600;">30 days</div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div id="phase2" style="display:none;">
+      <div style="background:var(--green-light);border:1px solid rgba(45,106,79,0.25);border-radius:7px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--green);line-height:1.5;">
+        <strong>Month 3–4 reality:</strong> Reviews building, repeat clients forming. This is where $2,000/month becomes consistently achievable for the first time.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🛵 Uber Eats daily target</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Both peaks, faster routing</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);font-weight:600;">$55–$75</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">realistic</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🐾 Rover daily target</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">2–3 walks + weekend boarding</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green);font-weight:600;">$35–$60</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">realistic</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">💼 Freelance monthly</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Steady pipeline, raised rates</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--blue);font-weight:600;">$400–$700</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">/month</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;">
+          <div><div style="font-size:13px;color:var(--dark);">📊 Combined monthly est.</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Bills covered — breathing room</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green);font-weight:600;">$2,000–$2,800</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">total</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div id="phase3" style="display:none;">
+      <div style="background:var(--blue-light);border:1px solid rgba(30,64,175,0.2);border-radius:7px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:var(--blue);line-height:1.5;">
+        <strong>Month 6+ reality:</strong> SBW generating real revenue, Rover fully booked on weekends, Uber Eats optimized. Well above bills — building savings and reinvesting in SBW.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🛵 Uber Eats daily target</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Peak windows only — optimized</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--amber);font-weight:600;">$60–$80</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">realistic</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🐾 Rover daily target</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">3–4 walks + full weekends</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green);font-weight:600;">$50–$80</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">realistic</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);">
+          <div><div style="font-size:13px;color:var(--dark);">🛍️ SBW monthly revenue</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Drop 2+ live, repeat buyers</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--purple);font-weight:600;">$800–$1,500</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">/month</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;">
+          <div><div style="font-size:13px;color:var(--dark);">📊 Combined monthly est.</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">Bills covered + savings building</div></div>
+          <div style="text-align:right;"><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--green);font-weight:600;">$3,500–$5,000</div><div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);">total</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1373,6 +1441,27 @@ function loadNotes() {
   const today = new Date().toDateString();
   const saved = localStorage.getItem('daily_notes_' + today);
   if (saved) document.getElementById('dailyNotes').value = saved;
+}
+
+// ── PHASE TABS ──
+function setPhase(n) {
+  [1,2,3].forEach(i => {
+    const tab = document.getElementById('phase'+i+'tab');
+    const content = document.getElementById('phase'+i);
+    if (i === n) {
+      tab.style.background = 'var(--amber)';
+      tab.style.color = 'white';
+      tab.style.borderColor = 'var(--amber)';
+      tab.style.fontWeight = '600';
+      content.style.display = 'block';
+    } else {
+      tab.style.background = 'transparent';
+      tab.style.color = 'var(--muted)';
+      tab.style.borderColor = 'var(--border)';
+      tab.style.fontWeight = 'normal';
+      content.style.display = 'none';
+    }
+  });
 }
 
 // ── BILLS TRACKER ──
