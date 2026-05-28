@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBW Co. — Weekly Data Capture</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gray-100: #f4f4f4;
+    --gray-200: #e0e0e0;
+    --gray-400: #9a9a9a;
+    --gray-600: #555555;
+    --accent: #0a0a0a;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  html { color-scheme: light; }
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--black);
+    min-height: 100vh;
+    forced-color-adjust: none;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 2px solid var(--black);
+    padding: 32px 48px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-left h1 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 64px);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .header-left p {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-600);
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-right {
+    text-align: right;
+  }
+  .week-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+  }
+  .week-selector label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-600);
+  }
+  .week-selector input[type="date"] {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 1.5px solid var(--black);
+    padding: 6px 10px;
+    background: var(--white);
+    color: var(--black);
+    cursor: pointer;
+  }
+  .week-selector input[type="date"]:focus { outline: 2px solid var(--black); outline-offset: 2px; }
+
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1.5px solid var(--black);
+    background: var(--black);
+    color: var(--white);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn:hover { background: var(--white); color: var(--black); }
+  .btn.secondary { background: var(--white); color: var(--black); }
+  .btn.secondary:hover { background: var(--black); color: var(--white); }
+  .btn.danger { border-color: #c00; color: #c00; background: var(--white); }
+  .btn.danger:hover { background: #c00; color: var(--white); }
+
+  /* NAV TABS */
+  nav {
+    border-bottom: 1.5px solid var(--black);
+    display: flex;
+    padding: 0 48px;
+  }
+  nav button {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    padding: 14px 20px 11px;
+    cursor: pointer;
+    color: var(--gray-400);
+    transition: color 0.15s, border-color 0.15s;
+    margin-bottom: -1.5px;
+  }
+  nav button.active { color: var(--black); border-bottom-color: var(--black); }
+  nav button:hover:not(.active) { color: var(--black); }
+
+  /* MAIN */
+  main { padding: 40px 48px 80px; max-width: 1100px; }
+
+  /* SECTION BLOCKS */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 0.03em;
+    border-bottom: 1.5px solid var(--black);
+    padding-bottom: 10px;
+    margin-bottom: 28px;
+  }
+
+  .sub-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-600);
+    margin-bottom: 10px;
+    margin-top: 28px;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; }
+    .header-right { text-align: left; }
+    nav { padding: 0 16px; overflow-x: auto; }
+    main { padding: 24px 16px 60px; }
+  }
+
+  /* FIELD */
+  .field { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-600);
+    margin-bottom: 5px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 1.5px solid var(--gray-200);
+    background: var(--gray-100);
+    color: var(--black);
+    padding: 9px 12px;
+    transition: border-color 0.15s, background 0.15s;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none;
+    border-color: var(--black);
+    background: var(--white);
+  }
+  .field input[type="number"] { -moz-appearance: textfield; }
+  .field input[type="number"]::-webkit-outer-spin-button,
+  .field input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .field textarea { min-height: 72px; }
+
+  /* CARD */
+  .card {
+    border: 1.5px solid var(--gray-200);
+    padding: 20px;
+    background: var(--gray-100);
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .card .fields { display: flex; flex-direction: column; gap: 12px; }
+
+  /* STAT DISPLAY */
+  .stat-box {
+    border: 1.5px solid var(--black);
+    padding: 16px 20px;
+    background: var(--white);
+  }
+  .stat-box .stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-600);
+    margin-bottom: 4px;
+  }
+  .stat-box .stat-value {
+    font-family: var(--font-display);
+    font-size: 32px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .stat-box .stat-delta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .stat-box .stat-delta.up { color: #1a7a1a; }
+  .stat-box .stat-delta.down { color: #c00; }
+  .stat-box .stat-delta.flat { color: var(--gray-400); }
+
+  /* HISTORY TABLE */
+  .history-wrap { overflow-x: auto; margin-top: 8px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  thead tr { border-bottom: 2px solid var(--black); }
+  thead th {
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 8px 12px 8px 0;
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--gray-200); }
+  tbody tr:hover { background: var(--gray-100); }
+  tbody td { padding: 10px 12px 10px 0; vertical-align: top; }
+  tbody td:first-child { font-weight: 500; white-space: nowrap; }
+  .delta-up { color: #1a7a1a; }
+  .delta-down { color: #c00; }
+
+  /* CHART */
+  .chart-wrap {
+    border: 1.5px solid var(--gray-200);
+    padding: 24px;
+    background: var(--gray-100);
+    margin-top: 8px;
+  }
+  canvas { display: block; width: 100% !important; }
+
+  /* NOTICE */
+  .notice {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-600);
+    border-left: 3px solid var(--gray-200);
+    padding: 10px 14px;
+    margin-top: 12px;
+  }
+
+  /* SAVE BAR */
+  .save-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--black);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 48px;
+    z-index: 100;
+  }
+  .save-bar span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+  }
+  .save-bar .btn { background: var(--white); color: var(--black); border-color: var(--white); }
+  .save-bar .btn:hover { background: var(--gray-200); }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    top: 24px; right: 24px;
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 12px 20px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    z-index: 200;
+    letter-spacing: 0.05em;
+  }
+  #toast.show { opacity: 1; }
+
+  /* EXPORT SECTION */
+  .export-panel {
+    border: 1.5px solid var(--black);
+    padding: 24px;
+    margin-top: 24px;
+  }
+  .export-panel h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .export-panel p {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .export-panel .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .portfolio-note {
+    background: var(--black);
+    color: var(--white);
+    padding: 20px 24px;
+    margin-top: 32px;
+  }
+  .portfolio-note h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .portfolio-note ul {
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 2;
+    color: var(--gray-400);
+  }
+  .portfolio-note ul li::before { content: "→ "; color: var(--white); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>SBW CO. — DATA LOG</h1>
+    <p>Weekly Marketing & Revenue Tracker — Portfolio Case Study</p>
+  </div>
+  <div class="header-right">
+    <div class="week-selector">
+      <label>Week of</label>
+      <input type="date" id="weekDate">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+      <button class="btn secondary" onclick="loadWeek()">Load</button>
+      <button class="btn" onclick="saveWeek()">Save Week</button>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="switchTab('instagram')">Instagram</button>
+  <button onclick="switchTab('revenue')">Revenue</button>
+  <button onclick="switchTab('funnel')">Funnel</button>
+  <button onclick="switchTab('notes')">Notes</button>
+  <button onclick="switchTab('history')">History</button>
+  <button onclick="switchTab('export')">Export</button>
+</nav>
+
+<main>
+
+  <!-- INSTAGRAM TAB -->
+  <div class="section active" id="tab-instagram">
+    <div class="section-title">INSTAGRAM METRICS</div>
+
+    <div class="sub-title">@sbwco — Growth</div>
+    <div class="grid-4">
+      <div class="field"><label>Followers</label><input type="number" id="ig_followers" placeholder="0"></div>
+      <div class="field"><label>Following</label><input type="number" id="ig_following" placeholder="0"></div>
+      <div class="field"><label>Posts This Week</label><input type="number" id="ig_posts" placeholder="0"></div>
+      <div class="field"><label>Stories This Week</label><input type="number" id="ig_stories" placeholder="0"></div>
+    </div>
+
+    <div class="sub-title">Engagement (Total This Week)</div>
+    <div class="grid-4">
+      <div class="field"><label>Likes</label><input type="number" id="ig_likes" placeholder="0"></div>
+      <div class="field"><label>Comments</label><input type="number" id="ig_comments" placeholder="0"></div>
+      <div class="field"><label>Saves</label><input type="number" id="ig_saves" placeholder="0"></div>
+      <div class="field"><label>Shares</label><input type="number" id="ig_shares" placeholder="0"></div>
+    </div>
+
+    <div class="sub-title">Reach & Discovery</div>
+    <div class="grid-3">
+      <div class="field"><label>Accounts Reached</label><input type="number" id="ig_reach" placeholder="0"></div>
+      <div class="field"><label>Profile Visits</label><input type="number" id="ig_profile_visits" placeholder="0"></div>
+      <div class="field"><label>Link in Bio Clicks</label><input type="number" id="ig_link_clicks" placeholder="0"></div>
+    </div>
+
+    <div class="sub-title">Best Post This Week</div>
+    <div class="grid-3">
+      <div class="field"><label>Post Description</label><input type="text" id="ig_best_post" placeholder="e.g. Design process reel"></div>
+      <div class="field"><label>Likes</label><input type="number" id="ig_best_likes" placeholder="0"></div>
+      <div class="field"><label>Saves</label><input type="number" id="ig_best_saves" placeholder="0"></div>
+    </div>
+
+    <div class="notice">
+      Saves are the most important engagement metric for a brand account — they signal purchase intent. Track saves weekly even if follower count is small.
+    </div>
+  </div>
+
+  <!-- REVENUE TAB -->
+  <div class="section" id="tab-revenue">
+    <div class="section-title">REVENUE & SALES</div>
+
+    <div class="sub-title">Store Performance</div>
+    <div class="grid-4">
+      <div class="field"><label>Store Visitors</label><input type="number" id="rev_visitors" placeholder="0"></div>
+      <div class="field"><label>Add to Carts</label><input type="number" id="rev_carts" placeholder="0"></div>
+      <div class="field"><label>Orders Placed</label><input type="number" id="rev_orders" placeholder="0"></div>
+      <div class="field"><label>Gross Revenue ($)</label><input type="number" id="rev_gross" placeholder="0.00" step="0.01"></div>
+    </div>
+
+    <div class="sub-title">Product Breakdown</div>
+    <div class="grid-3">
+      <div class="field"><label>T-Shirts Sold</label><input type="number" id="rev_tshirts" placeholder="0"></div>
+      <div class="field"><label>Crewnecks Sold</label><input type="number" id="rev_crewnecks" placeholder="0"></div>
+      <div class="field"><label>Hoodies Sold</label><input type="number" id="rev_hoodies" placeholder="0"></div>
+    </div>
+
+    <div class="sub-title">Email List</div>
+    <div class="grid-3">
+      <div class="field"><label>Total Subscribers</label><input type="number" id="rev_email_subs" placeholder="0"></div>
+      <div class="field"><label>New This Week</label><input type="number" id="rev_email_new" placeholder="0"></div>
+      <div class="field"><label>Open Rate (%)</label><input type="number" id="rev_email_open" placeholder="0" step="0.1"></div>
+    </div>
+
+    <div class="notice">
+      Pre-launch: track store visitors and email signups even with $0 revenue. That data becomes your "demand proof" section in the portfolio case study.
+    </div>
+  </div>
+
+  <!-- FUNNEL TAB -->
+  <div class="section" id="tab-funnel">
+    <div class="section-title">CONVERSION FUNNEL</div>
+
+    <div class="sub-title">Weekly Funnel Snapshot</div>
+    <p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;line-height:1.7;">
+      Fill in each stage. Conversion rates calculate automatically below.
+    </p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">TOP OF FUNNEL</div>
+        <div class="fields">
+          <div class="field"><label>Instagram Reach (Accounts)</label><input type="number" id="fn_reach" placeholder="0" oninput="calcFunnel()"></div>
+          <div class="field"><label>Profile Visits</label><input type="number" id="fn_profile" placeholder="0" oninput="calcFunnel()"></div>
+          <div class="field"><label>Link Clicks</label><input type="number" id="fn_link" placeholder="0" oninput="calcFunnel()"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">BOTTOM OF FUNNEL</div>
+        <div class="fields">
+          <div class="field"><label>Store Visitors</label><input type="number" id="fn_visitors" placeholder="0" oninput="calcFunnel()"></div>
+          <div class="field"><label>Add to Carts</label><input type="number" id="fn_carts" placeholder="0" oninput="calcFunnel()"></div>
+          <div class="field"><label>Purchases</label><input type="number" id="fn_purchases" placeholder="0" oninput="calcFunnel()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-title">Calculated Conversion Rates</div>
+    <div class="grid-4" id="funnel-calcs">
+      <div class="stat-box">
+        <div class="stat-label">Reach → Profile</div>
+        <div class="stat-value" id="cr_reach_profile">—</div>
+        <div class="stat-delta flat">% of reached visit profile</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Profile → Store</div>
+        <div class="stat-value" id="cr_profile_store">—</div>
+        <div class="stat-delta flat">% click through to shop</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Store → Cart</div>
+        <div class="stat-value" id="cr_store_cart">—</div>
+        <div class="stat-delta flat">% add to cart</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Cart → Purchase</div>
+        <div class="stat-value" id="cr_cart_purchase">—</div>
+        <div class="stat-delta flat">% complete purchase</div>
+      </div>
+    </div>
+
+    <div class="sub-title">Funnel Leak Notes</div>
+    <div class="field"><textarea id="fn_notes" placeholder="Where are people dropping off? What might be causing it? What will you test next week?"></textarea></div>
+  </div>
+
+  <!-- NOTES TAB -->
+  <div class="section" id="tab-notes">
+    <div class="section-title">WEEKLY NOTES</div>
+
+    <div class="sub-title">What Worked</div>
+    <div class="field"><textarea id="note_worked" placeholder="Posts, captions, timing, formats that performed well..."></textarea></div>
+
+    <div class="sub-title">What Didn't Work</div>
+    <div class="field"><textarea id="note_didnt" placeholder="What flopped or underperformed..."></textarea></div>
+
+    <div class="sub-title">Content Hypothesis Next Week</div>
+    <div class="field"><textarea id="note_hypothesis" placeholder="What will you test next week and why? Be specific."></textarea></div>
+
+    <div class="sub-title">Milestones & Moments</div>
+    <div class="field"><textarea id="note_milestones" placeholder="First sale, first 100 followers, press mention, sample arrival — capture everything worth putting in the case study..."></textarea></div>
+
+    <div class="sub-title">Overall Week Rating</div>
+    <div class="field">
+      <label>1 (Rough) → 5 (Strong)</label>
+      <select id="note_rating">
+        <option value="">— Select —</option>
+        <option value="1">1 — Rough</option>
+        <option value="2">2 — Below average</option>
+        <option value="3">3 — Solid</option>
+        <option value="4">4 — Strong</option>
+        <option value="5">5 — Exceptional</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div class="section" id="tab-history">
+    <div class="section-title">GROWTH HISTORY</div>
+
+    <div class="sub-title">Follower Growth</div>
+    <div class="chart-wrap">
+      <canvas id="followerChart" height="180"></canvas>
+    </div>
+
+    <div class="sub-title">Revenue History</div>
+    <div class="chart-wrap">
+      <canvas id="revenueChart" height="180"></canvas>
+    </div>
+
+    <div class="sub-title">All Weeks</div>
+    <div class="history-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Followers</th>
+            <th>Δ Followers</th>
+            <th>Revenue</th>
+            <th>Orders</th>
+            <th>Saves</th>
+            <th>Reach</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody id="historyTableBody">
+          <tr><td colspan="8" style="color:var(--gray-400);padding:20px 0;font-size:12px;">No weeks saved yet. Fill in a week and save it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn secondary" onclick="clearHistory()">Clear All History</button>
+      <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
+    </div>
+  </div>
+
+  <!-- EXPORT TAB -->
+  <div class="section" id="tab-export">
+    <div class="section-title">PORTFOLIO EXPORT</div>
+
+    <div class="export-panel">
+      <h3>CASE STUDY SNAPSHOT</h3>
+      <p>Generate a formatted text summary of your key metrics to paste into your portfolio case study write-up, a pitch deck, or a client presentation.</p>
+      <div class="btn-row">
+        <button class="btn" onclick="generateSnapshot()">Generate Snapshot</button>
+        <button class="btn secondary" onclick="exportCSV()">Export CSV (All Weeks)</button>
+      </div>
+      <div id="snapshot-output" style="display:none;margin-top:20px;"></div>
+    </div>
+
+    <div class="portfolio-note">
+      <h3>WHAT TO CAPTURE FOR YOUR CASE STUDY</h3>
+      <ul>
+        <li>Screenshot Instagram Insights every Sunday — saves and reach are the key metrics</li>
+        <li>Record store analytics weekly even before launch (traffic sources, bounce rate)</li>
+        <li>Note every experiment: what you tested, why, and what happened</li>
+        <li>Save your best-performing posts with their stats for the portfolio gallery</li>
+        <li>Document the funnel at 30, 60, and 90 days — that arc is the story</li>
+        <li>First sale screenshot is portfolio gold — capture the moment</li>
+        <li>Email list milestones (first 50, 100, 250) show pre-launch demand</li>
+        <li>Saves-to-followers ratio matters more than follower count alone</li>
+      </ul>
+    </div>
+
+    <div class="export-panel" style="margin-top:24px;">
+      <h3>HOW THIS BECOMES A PORTFOLIO PIECE</h3>
+      <p>Your case study arc: <strong>Problem → Strategy → Execution → Results</strong>. The data you log here gives you the "Results" section with real numbers. The weekly notes give you the "What I Learned" narrative. Together they show strategic thinking plus execution — exactly what creative directors and marketing teams hire for.</p>
+    </div>
+  </div>
+
+</main>
+
+<div class="save-bar">
+  <span id="lastSaved">No data saved yet</span>
+  <button class="btn" onclick="saveWeek()">Save This Week</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────
+const STORAGE_KEY = 'sbw_data_log';
+let allWeeks = [];
+
+// ─── INIT ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+  document.getElementById('weekDate').value = monday.toISOString().split('T')[0];
+
+  loadFromStorage();
+  renderHistory();
+});
+
+// ─── TABS ────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'history') renderHistory();
+}
+
+// ─── FIELDS ──────────────────────────────────────────────────
+const FIELDS = [
+  'ig_followers','ig_following','ig_posts','ig_stories',
+  'ig_likes','ig_comments','ig_saves','ig_shares',
+  'ig_reach','ig_profile_visits','ig_link_clicks',
+  'ig_best_post','ig_best_likes','ig_best_saves',
+  'rev_visitors','rev_carts','rev_orders','rev_gross',
+  'rev_tshirts','rev_crewnecks','rev_hoodies',
+  'rev_email_subs','rev_email_new','rev_email_open',
+  'fn_reach','fn_profile','fn_link',
+  'fn_visitors','fn_carts','fn_purchases','fn_notes',
+  'note_worked','note_didnt','note_hypothesis','note_milestones','note_rating'
+];
+
+function getFormData() {
+  const d = {};
+  FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    d[f] = el ? el.value : '';
+  });
+  return d;
+}
+
+function setFormData(d) {
+  FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    if (el && d[f] !== undefined) el.value = d[f];
+  });
+  calcFunnel();
+}
+
+function clearForm() {
+  FIELDS.forEach(f => {
+    const el = document.getElementById(f);
+    if (el) el.value = '';
+  });
+  calcFunnel();
+}
+
+// ─── SAVE / LOAD ─────────────────────────────────────────────
+function saveWeek() {
+  const weekDate = document.getElementById('weekDate').value;
+  if (!weekDate) { showToast('Select a week date first'); return; }
+
+  const entry = { weekDate, data: getFormData(), savedAt: new Date().toISOString() };
+  const idx = allWeeks.findIndex(w => w.weekDate === weekDate);
+  if (idx >= 0) allWeeks[idx] = entry;
+  else allWeeks.push(entry);
+
+  allWeeks.sort((a, b) => a.weekDate.localeCompare(b.weekDate));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(allWeeks));
+
+  document.getElementById('lastSaved').textContent = 'Saved: Week of ' + formatDate(weekDate);
+  showToast('Week saved ✓');
+  renderHistory();
+}
+
+function loadWeek() {
+  const weekDate = document.getElementById('weekDate').value;
+  if (!weekDate) { showToast('Select a week date first'); return; }
+
+  const entry = allWeeks.find(w => w.weekDate === weekDate);
+  if (entry) {
+    setFormData(entry.data);
+    showToast('Week loaded');
+  } else {
+    clearForm();
+    showToast('No data for this week — form cleared');
+  }
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    allWeeks = raw ? JSON.parse(raw) : [];
+    if (allWeeks.length > 0) {
+      const last = allWeeks[allWeeks.length - 1];
+      document.getElementById('lastSaved').textContent = 'Last saved: Week of ' + formatDate(last.weekDate);
+    }
+  } catch(e) { allWeeks = []; }
+}
+
+// ─── FUNNEL CALC ─────────────────────────────────────────────
+function calcFunnel() {
+  const reach = +document.getElementById('fn_reach').value || 0;
+  const profile = +document.getElementById('fn_profile').value || 0;
+  const link = +document.getElementById('fn_link').value || 0;
+  const visitors = +document.getElementById('fn_visitors').value || 0;
+  const carts = +document.getElementById('fn_carts').value || 0;
+  const purchases = +document.getElementById('fn_purchases').value || 0;
+
+  const set = (id, num, den) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = den > 0 ? (num / den * 100).toFixed(1) + '%' : '—';
+  };
+
+  set('cr_reach_profile', profile, reach);
+  set('cr_profile_store', visitors, profile || link);
+  set('cr_store_cart', carts, visitors);
+  set('cr_cart_purchase', purchases, carts);
+}
+
+// ─── HISTORY ─────────────────────────────────────────────────
+function renderHistory() {
+  const tbody = document.getElementById('historyTableBody');
+  if (allWeeks.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--gray-400);padding:20px 0;font-size:12px;">No weeks saved yet. Fill in a week and save it.</td></tr>';
+    renderCharts([]);
+    return;
+  }
+
+  tbody.innerHTML = allWeeks.map((w, i) => {
+    const d = w.data;
+    const prevFollowers = i > 0 ? (+allWeeks[i-1].data.ig_followers || 0) : null;
+    const followers = +d.ig_followers || 0;
+    const delta = prevFollowers !== null ? followers - prevFollowers : null;
+    const deltaStr = delta !== null
+      ? `<span class="${delta >= 0 ? 'delta-up' : 'delta-down'}">${delta >= 0 ? '+' : ''}${delta}</span>`
+      : '—';
+
+    return `<tr>
+      <td>${formatDate(w.weekDate)}</td>
+      <td>${followers || '—'}</td>
+      <td>${deltaStr}</td>
+      <td>${d.rev_gross ? '$' + (+d.rev_gross).toFixed(2) : '—'}</td>
+      <td>${d.rev_orders || '—'}</td>
+      <td>${d.ig_saves || '—'}</td>
+      <td>${d.ig_reach || '—'}</td>
+      <td>${d.note_rating ? '★'.repeat(+d.note_rating) : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  renderCharts(allWeeks);
+}
+
+function renderCharts(weeks) {
+  drawLineChart('followerChart', weeks.map(w => formatDate(w.weekDate, true)), weeks.map(w => +w.data.ig_followers || 0), 'Followers');
+  drawLineChart('revenueChart', weeks.map(w => formatDate(w.weekDate, true)), weeks.map(w => +w.data.rev_gross || 0), 'Revenue ($)');
+}
+
+function drawLineChart(canvasId, labels, values, label) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement.clientWidth - 48;
+  const H = 180;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  if (values.length < 2) {
+    ctx.font = '12px IBM Plex Mono, monospace';
+    ctx.fillStyle = '#9a9a9a';
+    ctx.textAlign = 'center';
+    ctx.fillText('Save 2+ weeks to see chart', W / 2, H / 2);
+    return;
+  }
+
+  const pad = { top: 20, right: 20, bottom: 40, left: 55 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+  const max = Math.max(...values, 1);
+  const min = 0;
+
+  // Grid lines
+  ctx.strokeStyle = '#e0e0e0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + cH - (i / 4) * cH;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + cW, y);
+    ctx.stroke();
+    ctx.font = '10px IBM Plex Mono, monospace';
+    ctx.fillStyle = '#9a9a9a';
+    ctx.textAlign = 'right';
+    const val = Math.round(min + (max - min) * (i / 4));
+    ctx.fillText(label.includes('$') ? '$' + val : val, pad.left - 6, y + 3);
+  }
+
+  // X labels
+  ctx.font = '10px IBM Plex Mono, monospace';
+  ctx.fillStyle = '#9a9a9a';
+  ctx.textAlign = 'center';
+  const step = Math.max(1, Math.ceil(labels.length / 6));
+  labels.forEach((lbl, i) => {
+    if (i % step === 0 || i === labels.length - 1) {
+      const x = pad.left + (i / (labels.length - 1)) * cW;
+      ctx.fillText(lbl, x, H - 6);
+    }
+  });
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = '#0a0a0a';
+  ctx.lineWidth = 2;
+  values.forEach((v, i) => {
+    const x = pad.left + (i / (values.length - 1)) * cW;
+    const y = pad.top + cH - ((v - min) / (max - min || 1)) * cH;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Dots
+  values.forEach((v, i) => {
+    const x = pad.left + (i / (values.length - 1)) * cW;
+    const y = pad.top + cH - ((v - min) / (max - min || 1)) * cH;
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+}
+
+// ─── CLEAR HISTORY ───────────────────────────────────────────
+function clearHistory() {
+  if (!confirm('Delete all saved weeks? This cannot be undone.')) return;
+  allWeeks = [];
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('lastSaved').textContent = 'No data saved yet';
+  renderHistory();
+  showToast('History cleared');
+}
+
+// ─── EXPORT CSV ──────────────────────────────────────────────
+function exportCSV() {
+  if (allWeeks.length === 0) { showToast('No weeks to export'); return; }
+  const headers = ['Week','Followers','Posts','Saves','Shares','Reach','ProfileVisits','LinkClicks','Revenue','Orders','EmailSubs','Rating'];
+  const rows = allWeeks.map(w => {
+    const d = w.data;
+    return [
+      w.weekDate,
+      d.ig_followers||0,d.ig_posts||0,d.ig_saves||0,d.ig_shares||0,
+      d.ig_reach||0,d.ig_profile_visits||0,d.ig_link_clicks||0,
+      d.rev_gross||0,d.rev_orders||0,d.rev_email_subs||0,d.note_rating||''
+    ].join(',');
+  });
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sbw-data-log.csv';
+  a.click();
+  showToast('CSV exported');
+}
+
+// ─── SNAPSHOT ────────────────────────────────────────────────
+function generateSnapshot() {
+  const weekDate = document.getElementById('weekDate').value;
+  const d = getFormData();
+  const out = document.getElementById('snapshot-output');
+
+  const lines = [
+    `SBW CO. — CASE STUDY SNAPSHOT`,
+    `Week of ${formatDate(weekDate)}`,
+    ``,
+    `INSTAGRAM (@sbwco)`,
+    `Followers: ${d.ig_followers || '—'} | Posts: ${d.ig_posts || '—'} | Saves: ${d.ig_saves || '—'}`,
+    `Reach: ${d.ig_reach || '—'} | Profile Visits: ${d.ig_profile_visits || '—'} | Link Clicks: ${d.ig_link_clicks || '—'}`,
+    ``,
+    `REVENUE`,
+    `Gross: $${d.rev_gross || '0'} | Orders: ${d.rev_orders || '0'} | Store Visitors: ${d.rev_visitors || '0'}`,
+    `Email Subscribers: ${d.rev_email_subs || '0'} | New This Week: ${d.rev_email_new || '0'}`,
+    ``,
+    `NOTES`,
+    `Worked: ${d.note_worked || '—'}`,
+    `Testing next week: ${d.note_hypothesis || '—'}`,
+    `Week rating: ${d.note_rating ? '★'.repeat(+d.note_rating) + ' (' + d.note_rating + '/5)' : '—'}`,
+  ].join('\n');
+
+  out.style.display = 'block';
+  out.innerHTML = `
+    <div style="background:var(--gray-100);border:1.5px solid var(--gray-200);padding:20px;">
+      <pre style="font-family:var(--font-mono);font-size:12px;white-space:pre-wrap;line-height:1.8;color:var(--black);">${lines}</pre>
+      <button class="btn secondary" style="margin-top:12px;" onclick="copySnapshot(this)" data-text="${encodeURIComponent(lines)}">Copy to Clipboard</button>
+    </div>
+  `;
+}
+
+function copySnapshot(btn) {
+  const text = decodeURIComponent(btn.getAttribute('data-text'));
+  navigator.clipboard.writeText(text).then(() => showToast('Copied ✓'));
+}
+
+// ─── UTILS ───────────────────────────────────────────────────
+function formatDate(iso, short = false) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return short ? `${months[+m-1]} ${+d}` : `${months[+m-1]} ${+d}, ${y}`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
