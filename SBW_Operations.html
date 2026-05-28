@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations Hub · SBW Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f2;--white:#ffffff;--black:#111010;--border:#ddd9d2;--muted:#8a8278;--soft:#f0ece6;
+  --amber:#d97706;--amber-bg:#fef3c7;--amber-border:rgba(217,119,6,0.3);
+  --green:#16a34a;--green-bg:#dcfce7;--green-border:rgba(22,163,74,0.3);
+  --blue:#2563eb;--blue-bg:#dbeafe;--blue-border:rgba(37,99,235,0.3);
+  --purple:#9333ea;--purple-bg:#f3e8ff;--purple-border:rgba(147,51,234,0.3);
+  --red:#dc2626;--red-bg:#fee2e2;--red-border:rgba(220,38,38,0.3);
+  --font-d:'Bebas Neue',sans-serif;--font-b:'IBM Plex Sans',sans-serif;--font-m:'IBM Plex Mono',monospace;
+}
+html{color-scheme:light}
+body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-bottom:40px}
+
+.hdr{background:var(--black);padding:14px 20px 0;position:sticky;top:0;z-index:30;border-bottom:3px solid var(--amber)}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hdr-logo{font-family:var(--font-d);font-size:22px;letter-spacing:.08em;color:var(--white)}
+.hdr-logo span{color:var(--amber)}
+.hdr-title{font-family:var(--font-d);font-size:16px;letter-spacing:.04em;color:var(--amber)}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-t{font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border:none;border-bottom:3px solid transparent;background:none;color:#6b6b6b;cursor:pointer;white-space:nowrap;transition:all .15s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.nav-t.on{color:var(--amber);border-bottom-color:var(--amber)}
+
+.pg{display:none;padding:20px}.pg.on{display:block}
+.sec{font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;margin-top:4px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* PROGRESS */
+.prog-card{background:var(--white);border:1.5px solid var(--border);padding:16px;margin-bottom:14px}
+.prog-wrap{background:var(--border);height:8px;margin:10px 0 6px;overflow:hidden}
+.prog-fill{height:8px;background:var(--amber);transition:width .4s}
+
+/* PRIORITY BANNER */
+.dark-card{background:var(--black);padding:16px;margin-bottom:12px}
+.dark-card p{font-size:12px;color:#c4b9a8;line-height:1.9;font-family:var(--font-b)}
+.dark-card strong{color:var(--amber)}
+
+/* CHECKLIST GROUPS */
+.check-group{background:var(--white);border:1.5px solid var(--border);overflow:hidden;margin-bottom:8px}
+.cg-hdr{background:var(--black);padding:11px 14px;display:flex;align-items:center;gap:10px}
+.cg-icon{font-size:16px}
+.cg-title{font-family:var(--font-d);font-size:17px;letter-spacing:.04em;color:var(--amber);flex:1}
+.cg-count{font-family:var(--font-m);font-size:9px;color:#6b6b6b}
+.cg-body{padding:8px 14px 12px}
+.ci{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
+.ci:last-child{border-bottom:none}
+.ci.done{opacity:.5}
+.cibox{width:18px;height:18px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+.ci.done .cibox{background:var(--green);border-color:var(--green)}
+.ci-check{color:white;font-size:9px;font-weight:700;display:none}
+.ci.done .ci-check{display:block}
+.ci-content{flex:1}
+.ci-title{font-size:13px;color:var(--black);font-weight:500;line-height:1.3}
+.ci.done .ci-title{text-decoration:line-through;color:var(--muted)}
+.ci-detail{font-size:11px;color:var(--muted);line-height:1.5;margin-top:2px;font-family:var(--font-m)}
+.ci.done .ci-detail{text-decoration:line-through}
+.tag{font-family:var(--font-m);font-size:8px;padding:1px 6px;margin-top:4px;display:inline-block;letter-spacing:.04em}
+.t-urgent{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.t-free{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.t-paid{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.t-opt{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
+
+/* TAX */
+.q-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.q-box{background:var(--white);border:1.5px solid var(--border);padding:12px}
+.q-label{font-family:var(--font-m);font-size:8px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.q-date{font-family:var(--font-d);font-size:18px;letter-spacing:.02em;color:var(--black)}
+.q-covers{font-size:11px;color:var(--muted);margin-top:3px;font-family:var(--font-m)}
+
+/* DEDUCTIONS TABLE */
+.deduct-table{background:var(--white);border:1.5px solid var(--border);overflow:hidden;margin-bottom:12px}
+.deduct-row{display:flex;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px}
+.deduct-row:last-child{border-bottom:none}
+.deduct-row:nth-child(even){background:var(--soft)}
+.deduct-name{color:var(--black);font-weight:500}
+.deduct-val{font-family:var(--font-m);font-size:11px;color:var(--green)}
+
+/* BANKING */
+.bank-structure{background:var(--white);border:1.5px solid var(--border);overflow:hidden;margin-bottom:12px}
+.bank-row{padding:14px;border-bottom:1px solid var(--border)}
+.bank-row:last-child{border-bottom:none}
+.bank-row-inner{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.bank-icon{font-size:18px;flex-shrink:0}
+.bank-name{font-family:var(--font-d);font-size:17px;letter-spacing:.03em;color:var(--black)}
+.bank-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+.routine-row{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.routine-row:last-child{border-bottom:none}
+.routine-num{font-family:var(--font-m);font-size:10px;color:var(--amber);min-width:22px;font-weight:600}
+.routine-text{font-size:12px;color:var(--black);line-height:1.5}
+
+/* RESOURCES */
+.res-card{background:var(--white);border:1.5px solid var(--border);padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.res-icon{font-size:20px;flex-shrink:0}
+.res-title{font-size:13px;font-weight:600;color:var(--black);margin-bottom:2px}
+.res-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.res-link{font-family:var(--font-m);font-size:9px;color:var(--blue);margin-top:3px;display:block;letter-spacing:.04em}
+
+/* BUTTONS */
+.reset-btn{width:100%;background:transparent;color:var(--muted);border:1.5px solid var(--border);padding:9px;font-family:var(--font-m);font-size:9px;cursor:pointer;margin-top:10px;letter-spacing:.06em}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px 0 0;border-top:1.5px solid var(--border);margin-top:16px}
+.footer-b{font-family:var(--font-d);font-size:20px;letter-spacing:.1em;color:var(--border)}
+.footer-s{font-family:var(--font-m);font-size:8px;color:var(--border);margin-top:3px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-logo">SBW<span>.</span></div>
+    <div class="hdr-title">OPERATIONS</div>
+  </div>
+  <div class="nav">
+    <div class="nav-t on" onclick="sp('checklist')">Checklist</div>
+    <div class="nav-t" onclick="sp('taxes')">Taxes</div>
+    <div class="nav-t" onclick="sp('banking')">Banking</div>
+    <div class="nav-t" onclick="sp('resources')">Resources</div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="pg on" id="pg-checklist">
+  <div class="prog-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black)">Setup Progress</div>
+      <div style="font-family:var(--font-m);font-size:12px;color:var(--amber)" id="progPct">0%</div>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)" id="progLabel">0 of 0 items</div>
+  </div>
+
+  <div class="dark-card">
+    <div class="sec" style="color:var(--amber);border-color:#2a2a2a">🔥 Do These First — Next 30 Days</div>
+    <p>
+      <strong>1. Form LLC</strong> — Texas SOS, $300, sos.state.tx.us<br>
+      <strong>2. Get EIN</strong> — Free, irs.gov, 10 minutes<br>
+      <strong>3. Open Mercury business account</strong> — Free, mercuryhq.com<br>
+      <strong>4. Register TX Sales Tax Permit</strong> — Free, comptroller.texas.gov<br>
+      <strong>5. Set up Klaviyo email collection</strong> — Free to 250 subscribers
+    </p>
+  </div>
+
+  <div class="sec">Legal Formation</div>
+  <div class="check-group">
+    <div class="cg-hdr"><div class="cg-icon">🏢</div><div class="cg-title">Business Formation</div><div class="cg-count" id="cnt-legal"></div></div>
+    <div class="cg-body">
+      <div class="ci" onclick="togCI(this,'legal')" data-id="llc"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Form SBW Co. LLC in Texas</div><div class="ci-detail">sos.state.tx.us · Certificate of Formation · 3–5 business days</div><div><span class="tag t-urgent">Do First</span> <span class="tag t-paid">$300</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'legal')" data-id="ein"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Get EIN from IRS</div><div class="ci-detail">irs.gov · Free · 10 minutes · Required for bank account and taxes</div><div><span class="tag t-urgent">Do First</span> <span class="tag t-free">Free</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'legal')" data-id="dba"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">File DBA for "SBW Co." if needed</div><div class="ci-detail">Travis County · Required if LLC name differs from operating name</div><div><span class="tag t-paid">~$20</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'legal')" data-id="opagree"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Create LLC Operating Agreement</div><div class="ci-detail">Not required in TX but strongly recommended · Free templates at Northwest Registered Agent</div><div><span class="tag t-free">Free template</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec">Tax Setup</div>
+  <div class="check-group">
+    <div class="cg-hdr"><div class="cg-icon">💰</div><div class="cg-title">Tax Registration</div><div class="cg-count" id="cnt-tax"></div></div>
+    <div class="cg-body">
+      <div class="ci" onclick="togCI(this,'tax')" data-id="salestax"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Register Texas Sales Tax Permit</div><div class="ci-detail">comptroller.texas.gov · Free · Required before first sale · 8.25% in Austin</div><div><span class="tag t-urgent">Before First Sale</span> <span class="tag t-free">Free</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'tax')" data-id="shopifytax"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Configure Shopify Sales Tax</div><div class="ci-detail">Shopify Settings → Taxes → Add Texas with permit number</div><div><span class="tag t-urgent">Before Launch</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'tax')" data-id="taxsavings"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Open dedicated Tax Fund savings account</div><div class="ci-detail">Transfer 25–30% of all income weekly — never touch it until quarterly payment</div><div><span class="tag t-urgent">Week 1</span> <span class="tag t-free">Free</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'tax')" data-id="mileiq"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Set up mileage tracking (MileIQ)</div><div class="ci-detail">Every Uber Eats trip + supply runs = 67¢/mile deductible</div><div><span class="tag t-free">Free app</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'tax')" data-id="cpa"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Find a CPA for small creative businesses</div><div class="ci-detail">Even one session to identify deductions: home office, phone, Adobe CC, MacBook, heat press</div><div><span class="tag t-paid">$150–$300</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec">Banking</div>
+  <div class="check-group">
+    <div class="cg-hdr"><div class="cg-icon">🏦</div><div class="cg-title">Financial Infrastructure</div><div class="cg-count" id="cnt-banking"></div></div>
+    <div class="cg-body">
+      <div class="ci" onclick="togCI(this,'banking')" data-id="mercury"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Open Mercury business checking</div><div class="ci-detail">mercuryhq.com · Free · No minimums · Built for startups · Requires EIN + LLC docs</div><div><span class="tag t-urgent">Do First</span> <span class="tag t-free">Free</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'banking')" data-id="taxaccount"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Open Tax Fund savings account</div><div class="ci-detail">Marcus, Ally, or Mercury savings · Label it "Tax Fund" · 4–5% APY on money waiting</div><div><span class="tag t-free">Free</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'banking')" data-id="wave"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Set up Wave Accounting</div><div class="ci-detail">waveapps.com · Free · Connect Mercury account · Auto-categorizes transactions</div><div><span class="tag t-free">Free forever</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'banking')" data-id="shopifypay"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Enable Shopify Payments + Apple Pay</div><div class="ci-detail">Settings → Payments → Reduces cart abandonment significantly</div><div><span class="tag t-urgent">Before Launch</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec">Intellectual Property</div>
+  <div class="check-group">
+    <div class="cg-hdr"><div class="cg-icon">™️</div><div class="cg-title">Brand Protection</div><div class="cg-count" id="cnt-ip"></div></div>
+    <div class="cg-body">
+      <div class="ci" onclick="togCI(this,'ip')" data-id="tmsearch"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Search trademark database — SBW Co. name</div><div class="ci-detail">tmsearch.uspto.gov · Free search before filing · Class 25 is clothing</div><div><span class="tag t-free">Free search</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'ip')" data-id="trademark"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">File trademark — SBW Co. name + logo</div><div class="ci-detail">uspto.gov · Class 25 (clothing) · Filing date = legal protection date</div><div><span class="tag t-paid">$250–$350</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'ip')" data-id="watermark"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Watermark all design previews before launch</div><div class="ci-detail">Any design shown publicly before production should be cropped or watermarked</div><div><span class="tag t-free">Free in Adobe</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec">Store Policies</div>
+  <div class="check-group">
+    <div class="cg-hdr"><div class="cg-icon">📄</div><div class="cg-title">Legal Docs & Policies</div><div class="cg-count" id="cnt-policies"></div></div>
+    <div class="cg-body">
+      <div class="ci" onclick="togCI(this,'policies')" data-id="returns"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Write returns & refund policy on Shopify</div><div class="ci-detail">POD = typically final sale. Damaged/defective = always replace. Be clear and fair.</div><div><span class="tag t-urgent">Before Launch</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'policies')" data-id="shipping"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Write shipping policy on Shopify</div><div class="ci-detail">Processing time (2–5 days POD), estimated delivery (7–14 days), lost package policy</div><div><span class="tag t-urgent">Before Launch</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'policies')" data-id="privacy"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Add Privacy Policy + Terms of Service</div><div class="ci-detail">Shopify Admin → Settings → Policies → Create from template · 15 minutes</div><div><span class="tag t-urgent">Before Launch</span> <span class="tag t-free">Free template</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'policies')" data-id="freelancecontract"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Create one-page freelance design contract</div><div class="ci-detail">Scope, payment terms, revision limits, IP ownership · AND.CO has free templates</div><div><span class="tag t-free">Free template</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'policies')" data-id="investoragree"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Draft investor agreement before taking money</div><div class="ci-detail">Even from a friend · Clerky.com · Revenue share or convertible note · Never a handshake</div><div><span class="tag t-paid">$100–$300</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec">Marketing Infrastructure</div>
+  <div class="check-group">
+    <div class="cg-hdr"><div class="cg-icon">📧</div><div class="cg-title">Owned Audience Building</div><div class="cg-count" id="cnt-marketing"></div></div>
+    <div class="cg-body">
+      <div class="ci" onclick="togCI(this,'marketing')" data-id="klaviyo"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Set up Klaviyo email collection on Shopify</div><div class="ci-detail">Free to 250 subscribers · Add popup "Join Drop 1 early access" before launch</div><div><span class="tag t-urgent">Before Launch</span> <span class="tag t-free">Free</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'marketing')" data-id="email"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Set up professional business email</div><div class="ci-detail">hello@sbwco.com · Google Workspace $6/mo or Shopify email forwarding (free)</div><div><span class="tag t-paid">$6/mo</span></div></div></div>
+      <div class="ci" onclick="togCI(this,'marketing')" data-id="handles"><div class="cibox"><span class="ci-check">✓</span></div><div class="ci-content"><div class="ci-title">Claim @sbwco on all major platforms</div><div class="ci-detail">Instagram, TikTok, Twitter/X, Pinterest, YouTube · Use Namecheckr.com · 20 minutes</div><div><span class="tag t-urgent">This Week</span> <span class="tag t-free">Free</span></div></div></div>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetChecklist()">↺ Reset all checklist items</button>
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Operations · Checklist · Austin TX</div></div>
+</div>
+
+<!-- TAXES -->
+<div class="pg" id="pg-taxes">
+  <div class="dark-card">
+    <div class="sec" style="color:var(--amber);border-color:#2a2a2a">The One Rule</div>
+    <p>Set aside <strong>25–30% of every dollar you earn</strong> into a dedicated Tax Fund savings account every week. This covers federal income tax + self-employment tax (15.3%). Texas has no state income tax — a real advantage.</p>
+  </div>
+
+  <div class="sec">2026 Quarterly Due Dates</div>
+  <div class="q-grid">
+    <div class="q-box" style="border-top:3px solid var(--amber)"><div class="q-label">Q1 Payment</div><div class="q-date">April 15, 2026</div><div class="q-covers">Covers Jan–Mar income</div></div>
+    <div class="q-box" style="border-top:3px solid var(--red)"><div class="q-label">Q2 Payment</div><div class="q-date">June 16, 2026</div><div class="q-covers">Covers Apr–May income</div></div>
+    <div class="q-box" style="border-top:3px solid var(--blue)"><div class="q-label">Q3 Payment</div><div class="q-date">Sept 15, 2026</div><div class="q-covers">Covers Jun–Aug income</div></div>
+    <div class="q-box" style="border-top:3px solid var(--green)"><div class="q-label">Q4 Payment</div><div class="q-date">Jan 15, 2027</div><div class="q-covers">Covers Sep–Dec income</div></div>
+  </div>
+
+  <div class="sec">Key Deductions — Keep Every Receipt</div>
+  <div class="deduct-table">
+    <div class="deduct-row"><div class="deduct-name">MacBook Pro</div><div class="deduct-val">100% deductible (Section 179)</div></div>
+    <div class="deduct-row"><div class="deduct-name">Heat Press</div><div class="deduct-val">100% deductible</div></div>
+    <div class="deduct-row"><div class="deduct-name">Adobe Creative Cloud</div><div class="deduct-val">100% deductible</div></div>
+    <div class="deduct-row"><div class="deduct-name">Shopify + Apps</div><div class="deduct-val">100% deductible</div></div>
+    <div class="deduct-row"><div class="deduct-name">Transit / Transport (business)</div><div class="deduct-val">100% deductible</div></div>
+    <div class="deduct-row"><div class="deduct-name">Phone (business %)</div><div class="deduct-val">Deduct business-use percentage</div></div>
+    <div class="deduct-row"><div class="deduct-name">Home Office</div><div class="deduct-val">% of rent for exclusive work space</div></div>
+    <div class="deduct-row"><div class="deduct-name">Mileage (business trips)</div><div class="deduct-val">67¢/mile — track with MileIQ</div></div>
+  </div>
+
+  <div style="background:var(--amber-bg);border:1px solid var(--amber-border);padding:12px 14px;font-family:var(--font-m);font-size:11px;color:var(--amber);line-height:1.6;margin-bottom:10px">
+    <strong>1099 Forms:</strong> Rover, Uber Eats, and any freelance client paying $600+/year will send a 1099-NEC by January 31. The IRS already knows about this income — report everything accurately.
+  </div>
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Operations · Taxes · Austin TX</div></div>
+</div>
+
+<!-- BANKING -->
+<div class="pg" id="pg-banking">
+  <div class="dark-card">
+    <div class="sec" style="color:var(--amber);border-color:#2a2a2a">The One Rule</div>
+    <p>Never mix personal and business money. Personal and business money in the same account makes taxes a nightmare, makes financials unreadable to investors, and can pierce your LLC's legal protection.</p>
+  </div>
+
+  <div class="sec">3-Account Structure</div>
+  <div class="bank-structure">
+    <div class="bank-row" style="border-left:4px solid var(--amber)">
+      <div class="bank-row-inner"><div class="bank-icon">🏦</div><div class="bank-name">Business Checking (Mercury)</div></div>
+      <div class="bank-desc">All SBW revenue in. All business expenses out. Pay yourself an owner's draw monthly. Free at mercuryhq.com.</div>
+    </div>
+    <div class="bank-row" style="border-left:4px solid var(--green)">
+      <div class="bank-row-inner"><div class="bank-icon">💰</div><div class="bank-name">Tax Fund Savings</div></div>
+      <div class="bank-desc">25–30% of every dollar earned. Never touch it. Marcus or Ally — 4–5% APY so your tax money earns interest while waiting.</div>
+    </div>
+    <div class="bank-row" style="border-left:4px solid var(--blue)">
+      <div class="bank-row-inner"><div class="bank-icon">👤</div><div class="bank-name">Personal Checking (Existing)</div></div>
+      <div class="bank-desc">Receive your monthly owner's draw here. Living expenses come from this account only. Clean separation.</div>
+    </div>
+  </div>
+
+  <div class="sec">20-Minute Monthly Bookkeeping Routine</div>
+  <div style="background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:12px">
+    <div class="routine-row"><div class="routine-num">1.</div><div class="routine-text">Categorize all transactions in Wave Accounting</div></div>
+    <div class="routine-row"><div class="routine-num">2.</div><div class="routine-text">Run Profit & Loss report — compare to financial model</div></div>
+    <div class="routine-row"><div class="routine-num">3.</div><div class="routine-text">Transfer this month's tax set-aside to Tax Fund</div></div>
+    <div class="routine-row"><div class="routine-num">4.</div><div class="routine-text">Pay yourself an owner's draw if the business earned it</div></div>
+    <div class="routine-row"><div class="routine-num">5.</div><div class="routine-text">Note unusual expenses for your CPA</div></div>
+  </div>
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Operations · Banking · Austin TX</div></div>
+</div>
+
+<!-- RESOURCES -->
+<div class="pg" id="pg-resources">
+  <div class="sec">Legal Formation</div>
+  <div class="res-card"><div class="res-icon">🏢</div><div><div class="res-title">Texas Secretary of State — LLC</div><div class="res-desc">File Certificate of Formation online. $300. 3–5 business days.</div><div class="res-link">sos.state.tx.us → Business Filings</div></div></div>
+  <div class="res-card"><div class="res-icon">🔢</div><div><div class="res-title">IRS EIN Application</div><div class="res-desc">Free. Instant online. Required for bank account and quarterly taxes.</div><div class="res-link">irs.gov → Apply for EIN Online</div></div></div>
+  <div class="res-card"><div class="res-icon">™️</div><div><div class="res-title">USPTO Trademark Filing</div><div class="res-desc">Search first at tmsearch.uspto.gov. File under Class 25 (clothing). $250–$350.</div><div class="res-link">uspto.gov</div></div></div>
+
+  <div class="sec">Tax & Banking</div>
+  <div class="res-card"><div class="res-icon">🤠</div><div><div class="res-title">Texas Sales Tax Permit</div><div class="res-desc">Free. Required before selling physical goods to Texas customers. 8.25% in Austin.</div><div class="res-link">comptroller.texas.gov → Sales Tax Permit</div></div></div>
+  <div class="res-card"><div class="res-icon">💸</div><div><div class="res-title">IRS Direct Pay — Quarterly Taxes</div><div class="res-desc">Pay quarterly estimated taxes directly. Free. Bookmark this.</div><div class="res-link">irs.gov/payments → Direct Pay</div></div></div>
+  <div class="res-card"><div class="res-icon">🏦</div><div><div class="res-title">Mercury — Business Checking</div><div class="res-desc">Free. No minimums. FDIC insured. Built for startups. Best option for SBW Co.</div><div class="res-link">mercuryhq.com</div></div></div>
+  <div class="res-card"><div class="res-icon">📊</div><div><div class="res-title">Wave Accounting</div><div class="res-desc">Free bookkeeping forever. Connect bank, categorize transactions, generate P&L reports.</div><div class="res-link">waveapps.com</div></div></div>
+
+  <div class="sec">Austin Mentorship & Support</div>
+  <div class="res-card"><div class="res-icon">👴</div><div><div class="res-title">SCORE Austin — Free Mentoring</div><div class="res-desc">Free one-on-one mentoring from retired executives. No catch. Bring your financial model.</div><div class="res-link">score.org → Find a Mentor → Austin TX</div></div></div>
+  <div class="res-card"><div class="res-icon">🌆</div><div><div class="res-title">Austin Small Business Program</div><div class="res-desc">Free consulting and workshops for Austin founders. Local regulations and networking.</div><div class="res-link">austintexas.gov/smallbusiness</div></div></div>
+  <div class="res-card"><div class="res-icon">🏛️</div><div><div class="res-title">SBA Austin — Microloans</div><div class="res-desc">Free counseling + microloans $500–$50,000. Worth exploring before private investors.</div><div class="res-link">sba.gov/local-assistance → Austin TX</div></div></div>
+
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Operations · Resources · Austin TX</div></div>
+</div>
+
+<script>
+function sp(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-t').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  event.target.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+const groups=['legal','tax','banking','ip','policies','marketing'];
+function togCI(el,group){el.classList.toggle('done');saveChecklist();updProgress();updGroupCount(group);}
+function saveChecklist(){
+  const s={};document.querySelectorAll('.ci[data-id]').forEach(el=>{s[el.dataset.id]=el.classList.contains('done')});
+  localStorage.setItem('ops_checklist',JSON.stringify(s));
+}
+function updProgress(){
+  const all=document.querySelectorAll('.ci[data-id]').length;
+  const done=document.querySelectorAll('.ci[data-id].done').length;
+  const pct=all?Math.round(done/all*100):0;
+  document.getElementById('progBar').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progLabel').textContent=done+' of '+all+' items completed';
+}
+function updGroupCount(g){
+  const all=document.querySelectorAll(`.ci[onclick*="'${g}'"]`).length;
+  const done=document.querySelectorAll(`.ci[onclick*="'${g}'"].done`).length;
+  const el=document.getElementById('cnt-'+g);if(el)el.textContent=done+'/'+all;
+}
+function resetChecklist(){
+  if(!confirm('Reset all items?'))return;
+  document.querySelectorAll('.ci').forEach(el=>el.classList.remove('done'));
+  localStorage.removeItem('ops_checklist');updProgress();groups.forEach(g=>updGroupCount(g));
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  const s=localStorage.getItem('ops_checklist');
+  if(s){const states=JSON.parse(s);document.querySelectorAll('.ci[data-id]').forEach(el=>{if(states[el.dataset.id])el.classList.add('done')});}
+  updProgress();groups.forEach(g=>updGroupCount(g));
+});
+</script>
+</body>
+</html>

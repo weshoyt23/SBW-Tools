@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily HQ · SBW Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f5f2;--white:#ffffff;--black:#111010;--border:#ddd9d2;--muted:#8a8278;--soft:#f0ece6;
+  --amber:#d97706;--amber-bg:#fef3c7;--amber-border:rgba(217,119,6,0.3);
+  --green:#16a34a;--green-bg:#dcfce7;--green-border:rgba(22,163,74,0.3);
+  --blue:#2563eb;--blue-bg:#dbeafe;--blue-border:rgba(37,99,235,0.3);
+  --purple:#9333ea;--purple-bg:#f3e8ff;--purple-border:rgba(147,51,234,0.3);
+  --red:#dc2626;--red-bg:#fee2e2;
+  --font-d:'Bebas Neue',sans-serif;--font-b:'IBM Plex Sans',sans-serif;--font-m:'IBM Plex Mono',monospace;
+}
+html{color-scheme:light}
+body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-bottom:40px}
+
+/* HEADER */
+.hdr{background:var(--black);padding:14px 20px 0;position:sticky;top:0;z-index:30;border-bottom:3px solid var(--amber)}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hdr-logo{font-family:var(--font-d);font-size:22px;letter-spacing:.08em;color:var(--white)}
+.hdr-logo span{color:var(--amber)}
+.hdr-date{font-family:var(--font-m);font-size:10px;color:#6b6b6b;letter-spacing:.06em}
+.day-bar-wrap{background:#2a2a2a;height:3px;margin-bottom:10px}
+.day-bar{background:var(--amber);height:3px;transition:width .5s}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:0}
+.nav::-webkit-scrollbar{display:none}
+.nav-t{font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border:none;border-bottom:3px solid transparent;background:none;color:#6b6b6b;cursor:pointer;white-space:nowrap;transition:all .15s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.nav-t.on{color:var(--amber);border-bottom-color:var(--amber)}
+
+/* PAGES */
+.pg{display:none;padding:20px}
+.pg.on{display:block}
+.sec{font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;margin-top:4px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* NOW STRIP */
+.now-strip{background:var(--amber-bg);border:1.5px solid var(--amber-border);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.now-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.now-label{font-family:var(--font-m);font-size:10px;color:var(--amber);flex:1;letter-spacing:.06em;text-transform:uppercase}
+.now-time{font-family:var(--font-d);font-size:26px;color:var(--amber);line-height:1}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat{background:var(--white);border:1.5px solid var(--border);padding:12px 14px}
+.stat-v{font-family:var(--font-d);font-size:26px;line-height:1}
+.stat-l{font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+
+/* SCHEDULE BLOCKS */
+.block{background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;transition:border-color .2s}
+.block.now{border-color:var(--amber);border-width:2px}
+.block-hdr{padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.block-time{font-family:var(--font-m);font-size:9px;color:var(--white);background:var(--black);padding:3px 8px;flex-shrink:0;min-width:72px;text-align:center;letter-spacing:.04em}
+.block-name{flex:1;font-size:13px;font-weight:600;color:var(--black)}
+.block-badge{font-family:var(--font-m);font-size:8px;padding:2px 7px;flex-shrink:0;letter-spacing:.05em;text-transform:uppercase}
+.block-chev{font-size:10px;color:var(--muted);flex-shrink:0;transition:transform .2s;font-family:var(--font-m)}
+.block.open .block-chev{transform:rotate(180deg)}
+.block-body{display:none;padding:0 14px 12px;border-top:1px solid var(--border)}
+.block.open .block-body{display:block}
+
+/* BLOCK TASKS */
+.bt{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--soft);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bt:last-of-type{border-bottom:none}
+.bt.done{opacity:.5}
+.bcheck{width:17px;height:17px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
+.bt.done .bcheck{background:var(--green);border-color:var(--green)}
+.bcheck-i{color:white;font-size:9px;font-weight:700;display:none}
+.bt.done .bcheck-i{display:block}
+.bt-text{font-size:12px;color:var(--black);line-height:1.4;flex:1}
+.bt.done .bt-text{text-decoration:line-through;color:var(--muted)}
+.bnote{font-size:11px;color:var(--muted);line-height:1.5;margin-top:8px;padding:7px 10px;background:var(--soft);font-style:italic}
+.earn{display:inline-flex;align-items:center;gap:4px;background:var(--green-bg);border:1px solid var(--green-border);padding:3px 8px;margin-top:8px;font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:.04em}
+.peak-flag{background:var(--amber-bg);border:1px solid var(--amber-border);padding:3px 8px;font-family:var(--font-m);font-size:9px;color:var(--amber);margin-top:8px;display:inline-block;letter-spacing:.04em}
+
+/* TASKS */
+.cat{background:var(--white);border:1.5px solid var(--border);overflow:hidden;margin-bottom:8px}
+.cat-hdr{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cat-icon{font-size:16px;flex-shrink:0}
+.cat-name{font-family:var(--font-d);font-size:18px;letter-spacing:.04em;color:var(--black);flex:1}
+.cat-count{font-family:var(--font-m);font-size:9px;color:var(--muted)}
+.cat-body{display:none;padding:0 14px 12px;border-top:1px solid var(--border)}
+.cat.open .cat-body{display:block}
+.add-row{display:flex;gap:7px;margin-top:10px}
+.add-inp{flex:1;background:var(--soft);border:1.5px solid var(--border);padding:7px 10px;font-family:var(--font-b);font-size:12px;color:var(--black)}
+.add-inp:focus{outline:none;border-color:var(--amber)}
+.add-btn{background:var(--amber);color:white;border:none;padding:7px 12px;font-family:var(--font-m);font-size:9px;font-weight:600;cursor:pointer;letter-spacing:.06em;-webkit-tap-highlight-color:transparent}
+
+/* INCOME */
+.inc-card{background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:10px}
+.inc-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.inc-row:last-child{border-bottom:none}
+.inc-l{font-size:12px;color:var(--black);flex:1;font-weight:500}
+.inc-inp{background:var(--soft);border:1.5px solid var(--border);padding:6px 8px;font-family:var(--font-m);font-size:12px;color:var(--black);width:82px;text-align:right}
+.inc-inp:focus{outline:none;border-color:var(--amber)}
+.total-bar{background:var(--black);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.total-lbl{font-family:var(--font-m);font-size:9px;color:#6b6b6b;text-transform:uppercase;letter-spacing:.1em}
+.total-val{font-family:var(--font-d);font-size:32px;color:var(--amber)}
+.tax-box{background:var(--red-bg);border:1px solid rgba(220,38,38,.2);padding:10px 12px;margin-bottom:10px;font-family:var(--font-m);font-size:11px;color:var(--red);line-height:1.5}
+.week-box{background:var(--white);border:1.5px solid var(--border);overflow:hidden;margin-bottom:10px}
+.week-row{display:flex;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px}
+.week-row:last-child{border-bottom:none}
+.week-foot{padding:9px 12px;background:var(--soft);display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+
+/* BILLS */
+.bill-hero{background:var(--black);padding:18px;margin-bottom:12px;position:relative;overflow:hidden}
+.bill-total-target{font-family:var(--font-d);font-size:48px;color:var(--white);line-height:1}
+.bill-sub{font-family:var(--font-m);font-size:9px;color:#6b6b6b;letter-spacing:.1em;margin-top:4px}
+.bill-card{background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:10px}
+.prog-wrap{background:var(--border);height:10px;overflow:hidden;margin:10px 0 6px}
+.prog{height:10px;transition:width .5s ease}
+.bill-input-row{display:flex;gap:7px;align-items:center;margin-top:10px}
+.bill-inp{flex:1;background:var(--soft);border:1.5px solid var(--border);padding:7px 10px;font-family:var(--font-m);font-size:13px;color:var(--black);text-align:right}
+.bill-inp:focus{outline:none;border-color:var(--amber)}
+.bill-btn-a{background:var(--amber);color:white;border:none;padding:7px 12px;font-family:var(--font-m);font-size:9px;font-weight:600;cursor:pointer;letter-spacing:.06em}
+.bill-btn-b{background:var(--blue);color:white;border:none;padding:7px 12px;font-family:var(--font-m);font-size:9px;font-weight:600;cursor:pointer;letter-spacing:.06em}
+.done-banner{display:none;margin-top:8px;background:var(--green-bg);border:1px solid var(--green-border);padding:8px 12px;font-family:var(--font-m);font-size:10px;color:var(--green);text-align:center;font-weight:600;letter-spacing:.06em}
+.phase-tabs{display:flex;gap:5px;margin-bottom:12px}
+.ptab{flex:1;text-align:center;padding:7px 4px;cursor:pointer;font-family:var(--font-m);font-size:9px;letter-spacing:.04em;border:1.5px solid var(--border);background:var(--white);color:var(--muted);transition:all .15s;-webkit-tap-highlight-color:transparent}
+.ptab.on{background:var(--amber);border-color:var(--amber);color:white;font-weight:600}
+.phase{display:none}.phase.on{display:block}
+.phase-note{padding:8px 10px;margin-bottom:10px;font-size:11px;line-height:1.5;font-family:var(--font-m)}
+.p-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)}
+.p-row:last-child{border-bottom:none}
+.p-left-main{font-size:12px;color:var(--black);font-weight:500}
+.p-left-sub{font-size:10px;color:var(--muted);margin-top:1px;font-family:var(--font-m)}
+.p-right-val{font-family:var(--font-m);font-size:12px;font-weight:600;text-align:right}
+.p-right-sub{font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;margin-top:1px}
+
+/* NOTES */
+.notes-ta{width:100%;background:var(--white);border:1.5px solid var(--border);padding:12px;font-family:var(--font-b);font-size:13px;color:var(--black);line-height:1.7;resize:vertical;min-height:130px}
+.notes-ta:focus{outline:none;border-color:var(--amber)}
+.mantras{background:var(--black);padding:16px;margin-top:14px}
+.mantra-q{font-family:var(--font-m);font-size:11px;color:#c4b9a8;line-height:1.7;padding:10px 0;border-bottom:1px solid #2a2a2a;letter-spacing:.02em}
+.mantra-q:last-child{border-bottom:none}
+
+/* BUTTONS */
+.save-btn{width:100%;background:var(--black);color:var(--amber);border:none;padding:12px;font-family:var(--font-m);font-size:10px;letter-spacing:.1em;font-weight:600;cursor:pointer;margin-top:10px;text-transform:uppercase}
+.reset-btn{width:100%;background:transparent;color:var(--muted);border:1.5px solid var(--border);padding:9px;font-family:var(--font-m);font-size:9px;cursor:pointer;margin-top:8px;letter-spacing:.06em}
+.save-ok{text-align:center;font-family:var(--font-m);font-size:9px;color:var(--green);margin-top:5px;display:none;letter-spacing:.06em}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px 0 0;border-top:1.5px solid var(--border);margin-top:16px}
+.footer-b{font-family:var(--font-d);font-size:20px;letter-spacing:.1em;color:var(--border)}
+.footer-s{font-family:var(--font-m);font-size:8px;color:var(--border);margin-top:3px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-logo">SBW<span>.</span></div>
+    <div style="text-align:right">
+      <div class="hdr-logo" style="font-size:16px;letter-spacing:.04em;color:var(--amber)">DAILY HQ</div>
+      <div class="hdr-date" id="hdrDate">—</div>
+    </div>
+  </div>
+  <div class="day-bar-wrap"><div class="day-bar" id="dayBar" style="width:0%"></div></div>
+  <div class="nav">
+    <div class="nav-t on" onclick="showPg('schedule')">Schedule</div>
+    <div class="nav-t" onclick="showPg('tasks')">Tasks</div>
+    <div class="nav-t" onclick="showPg('income')">Income</div>
+    <div class="nav-t" onclick="showPg('bills')">Bills</div>
+    <div class="nav-t" onclick="showPg('notes')">Notes</div>
+  </div>
+</div>
+
+<!-- ── SCHEDULE ── -->
+<div class="pg on" id="pg-schedule">
+  <div class="now-strip">
+    <div class="now-dot"></div>
+    <div class="now-label">Right Now</div>
+    <div class="now-time" id="nowTime">—</div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat" style="border-top:3px solid var(--amber)"><div class="stat-v" id="s-earned" style="color:var(--amber)">$0</div><div class="stat-l">Today's Income</div></div>
+    <div class="stat" style="border-top:3px solid var(--green)"><div class="stat-v" id="s-pct" style="color:var(--green)">0%</div><div class="stat-l">Day Complete</div></div>
+  </div>
+  <div class="sec">Full Day — Tap to Expand</div>
+
+  <div class="block" id="b0">
+    <div class="block-hdr" onclick="tog('b0')">
+      <div class="block-time">6:00 AM</div>
+      <div class="block-name">Wake Up & Morning Reset</div>
+      <div class="block-badge" style="background:var(--green-bg);color:var(--green)">Morning</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Drink water immediately — before phone</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Check and reply to all Rover messages</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Quick stretch — 10 minutes</div></div>
+      <div class="bnote">Rover response time is your #1 ranking factor. Reply before anything else.</div>
+    </div>
+  </div>
+
+  <div class="block" id="b1">
+    <div class="block-hdr" onclick="tog('b1')">
+      <div class="block-time">7:00 AM</div>
+      <div class="block-name">Breakfast & Day Prep</div>
+      <div class="block-badge" style="background:var(--purple-bg);color:var(--purple)">Meal</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Eat a real breakfast</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Review today's priority tasks (Tasks tab)</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Check Instagram — reply to comments and DMs</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Confirm any Rover bookings for today</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b2">
+    <div class="block-hdr" onclick="tog('b2')">
+      <div class="block-time">8:00–10:00 AM</div>
+      <div class="block-name">SBW Design Block</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">SBW 🎨</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Open Adobe — work on current design</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post Instagram content before 9:30am</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post daily story</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Work on Shopify store or product page</div></div>
+      <div class="bnote">Peak creative window. Phone on do not disturb. This is where SBW gets built.</div>
+    </div>
+  </div>
+
+  <div class="block" id="b3">
+    <div class="block-hdr" onclick="tog('b3')">
+      <div class="block-time">10:00 AM</div>
+      <div class="block-name">Rover Morning Walk</div>
+      <div class="block-badge" style="background:var(--green-bg);color:var(--green)">🐾 Rover</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Morning walk if booked — Waterloo or Pease Park</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Take 3+ photos — send update to client mid-walk</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">If no walk — freelance outreach or Fiverr work</div></div>
+      <div class="earn">🐾 ~$16–$24 net per walk</div>
+    </div>
+  </div>
+
+  <div class="block" id="b4">
+    <div class="block-hdr" onclick="tog('b4')">
+      <div class="block-time">11:00 AM–2:00 PM</div>
+      <div class="block-name">Uber Eats — Lunch Rush</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">🔥 PEAK</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">CapMetro day pass — open Uber Eats app</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Position near 18th & Lavaca / University area</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Cold water + electrolytes packed</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">$3/mile rule — decline anything under that</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Wrap by 2pm — head home to cool down</div></div>
+      <div class="peak-flag">🔥 Highest order volume window. Don't skip this.</div>
+      <div class="earn">🛵 ~$42–$54 net for 3-hour session</div>
+    </div>
+  </div>
+
+  <div class="block" id="b5">
+    <div class="block-hdr" onclick="tog('b5')">
+      <div class="block-time">2:00 PM</div>
+      <div class="block-name">Lunch + Cool Down</div>
+      <div class="block-badge" style="background:var(--purple-bg);color:var(--purple)">Meal + Rest</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Eat a real lunch</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Cool down indoors — minimum 30 min in summer</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Log Uber Eats earnings in Income tab</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reply to any Rover messages</div></div>
+      <div class="bnote">2–5pm is the hottest window. Stay indoors. Don't fight the heat.</div>
+    </div>
+  </div>
+
+  <div class="block" id="b6">
+    <div class="block-hdr" onclick="tog('b6')">
+      <div class="block-time">3:00–5:00 PM</div>
+      <div class="block-name">SBW / Freelance Work</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">SBW</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Shopify store updates or product work</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Freelance client work or Fiverr orders</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Rover afternoon walk if booked</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b7">
+    <div class="block-hdr" onclick="tog('b7')">
+      <div class="block-time">5:00 PM</div>
+      <div class="block-name">Rest & Recharge</div>
+      <div class="block-badge" style="background:var(--blue-bg);color:var(--blue)">Rest</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Phone down — genuine rest, not scrolling</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Snack and hydrate before dinner rush</div></div>
+      <div class="bnote">Rest is not optional. Burnout costs more than a slow hour.</div>
+    </div>
+  </div>
+
+  <div class="block" id="b8">
+    <div class="block-hdr" onclick="tog('b8')">
+      <div class="block-time">5:30–7:30 PM</div>
+      <div class="block-name">Uber Eats — Dinner Rush</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">🔥 PEAK</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Back on the bus — open Uber Eats</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Position near 18th & Lavaca or 6th Street</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">$3/mile rule — stay disciplined</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Wrap by 7:30pm</div></div>
+      <div class="peak-flag">🔥 Second peak — two sessions per day is the baseline target.</div>
+      <div class="earn">🛵 ~$28–$36 net for 2-hour session</div>
+    </div>
+  </div>
+
+  <div class="block" id="b9">
+    <div class="block-hdr" onclick="tog('b9')">
+      <div class="block-time">7:30 PM</div>
+      <div class="block-name">Dinner</div>
+      <div class="block-badge" style="background:var(--purple-bg);color:var(--purple)">Meal</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Cook or order a real meal</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Log all day's earnings in Income tab</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Check Rover — reply to evening messages</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b10">
+    <div class="block-hdr" onclick="tog('b10')">
+      <div class="block-time">8:30 PM</div>
+      <div class="block-name">Evening SBW & Wind Down</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">SBW</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Light SBW — content ideas, mood boards</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Instagram engagement — reply and interact</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Write tomorrow's top 3 priorities</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Set Rover availability for tomorrow</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b11">
+    <div class="block-hdr" onclick="tog('b11')">
+      <div class="block-time">10:00 PM</div>
+      <div class="block-name">Sleep Prep</div>
+      <div class="block-badge" style="background:var(--blue-bg);color:var(--blue)">Rest</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Phone down — no work after 10pm</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">In bed by 10:30 — tomorrow starts at 6am</div></div>
+      <div class="bnote">Sleep is a business investment. A tired founder makes bad decisions.</div>
+    </div>
+  </div>
+
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Daily HQ · Wesley · Austin TX</div></div>
+</div>
+
+<!-- ── TASKS ── -->
+<div class="pg" id="pg-tasks">
+  <div class="sec">Today's Priorities</div>
+  <div class="cat open" id="c-sbw">
+    <div class="cat-hdr" onclick="togC('c-sbw')"><div class="cat-icon">🎨</div><div class="cat-name">SBW Co.</div><div class="cat-count" id="cnt-sbw"></div></div>
+    <div class="cat-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Work on active design in Adobe</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post Instagram content before 9:30am</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post daily Instagram story</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Shopify store update</div></div>
+      <div class="add-row"><input class="add-inp" id="inp-sbw" placeholder="Add SBW task..." onkeydown="if(event.key==='Enter')addT('c-sbw','inp-sbw')"><button class="add-btn" onclick="addT('c-sbw','inp-sbw')">+ Add</button></div>
+    </div>
+  </div>
+  <div class="cat" id="c-rover">
+    <div class="cat-hdr" onclick="togC('c-rover')"><div class="cat-icon">🐾</div><div class="cat-name">Rover</div><div class="cat-count" id="cnt-rover"></div></div>
+    <div class="cat-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reply to all Rover messages</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Update Rover calendar availability</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Complete booked walks — send photo updates</div></div>
+      <div class="add-row"><input class="add-inp" id="inp-rover" placeholder="Add Rover task..." onkeydown="if(event.key==='Enter')addT('c-rover','inp-rover')"><button class="add-btn" onclick="addT('c-rover','inp-rover')">+ Add</button></div>
+    </div>
+  </div>
+  <div class="cat" id="c-ue">
+    <div class="cat-hdr" onclick="togC('c-ue')"><div class="cat-icon">🛵</div><div class="cat-name">Uber Eats</div><div class="cat-count" id="cnt-ue"></div></div>
+    <div class="cat-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Lunch rush completed (11am–2pm)</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Dinner rush completed (5:30–7:30pm)</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Log today's earnings</div></div>
+      <div class="add-row"><input class="add-inp" id="inp-ue" placeholder="Add UE task..." onkeydown="if(event.key==='Enter')addT('c-ue','inp-ue')"><button class="add-btn" onclick="addT('c-ue','inp-ue')">+ Add</button></div>
+    </div>
+  </div>
+  <div class="cat" id="c-fl">
+    <div class="cat-hdr" onclick="togC('c-fl')"><div class="cat-icon">💼</div><div class="cat-name">Freelance</div><div class="cat-count" id="cnt-fl"></div></div>
+    <div class="cat-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Check Fiverr for orders or messages</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">DM 5 Austin businesses offering design</div></div>
+      <div class="add-row"><input class="add-inp" id="inp-fl" placeholder="Add freelance task..." onkeydown="if(event.key==='Enter')addT('c-fl','inp-fl')"><button class="add-btn" onclick="addT('c-fl','inp-fl')">+ Add</button></div>
+    </div>
+  </div>
+  <div class="cat" id="c-personal">
+    <div class="cat-hdr" onclick="togC('c-personal')"><div class="cat-icon">🌿</div><div class="cat-name">Personal</div><div class="cat-count" id="cnt-personal"></div></div>
+    <div class="cat-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">3 meals eaten today</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Hydrated — especially after Uber Eats</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">At least one genuine rest period</div></div>
+      <div class="add-row"><input class="add-inp" id="inp-personal" placeholder="Add personal task..." onkeydown="if(event.key==='Enter')addT('c-personal','inp-personal')"><button class="add-btn" onclick="addT('c-personal','inp-personal')">+ Add</button></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="resetTasks()">↺ Reset all tasks for new day</button>
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Tasks · Wesley · Austin TX</div></div>
+</div>
+
+<!-- ── INCOME ── -->
+<div class="pg" id="pg-income">
+  <div class="sec">Log Today's Earnings</div>
+  <div class="inc-card">
+    <div class="inc-row"><div class="inc-l">🐾 Rover — Walks</div><input class="inc-inp" type="number" id="i-rw" placeholder="0" oninput="calcInc()"></div>
+    <div class="inc-row"><div class="inc-l">🏠 Rover — Boarding</div><input class="inc-inp" type="number" id="i-rb" placeholder="0" oninput="calcInc()"></div>
+    <div class="inc-row"><div class="inc-l">🛵 Uber Eats — Lunch</div><input class="inc-inp" type="number" id="i-ul" placeholder="0" oninput="calcInc()"></div>
+    <div class="inc-row"><div class="inc-l">🛵 Uber Eats — Dinner</div><input class="inc-inp" type="number" id="i-ud" placeholder="0" oninput="calcInc()"></div>
+    <div class="inc-row"><div class="inc-l">💼 Freelance Design</div><input class="inc-inp" type="number" id="i-fl" placeholder="0" oninput="calcInc()"></div>
+    <div class="inc-row"><div class="inc-l">🛍️ SBW Sales</div><input class="inc-inp" type="number" id="i-sbw" placeholder="0" oninput="calcInc()"></div>
+    <div class="inc-row"><div class="inc-l">Other</div><input class="inc-inp" type="number" id="i-oth" placeholder="0" oninput="calcInc()"></div>
+  </div>
+  <div class="total-bar">
+    <div class="total-lbl">Today's Total</div>
+    <div class="total-val" id="incTotal">$0.00</div>
+  </div>
+  <div class="tax-box" id="taxBox">Set aside <strong id="taxAmt">$0.00</strong> (28%) → Tax Fund. Do this today.</div>
+  <div style="display:flex;gap:8px;margin-bottom:10px;">
+    <button class="save-btn" style="margin-top:0" onclick="saveInc()">Save to Weekly Log</button>
+    <button class="reset-btn" style="margin-top:0;width:auto;padding:0 16px;" onclick="resetInc()">Clear</button>
+  </div>
+  <div class="save-ok" id="incOk">✓ Saved to weekly log!</div>
+  <div class="sec" style="margin-top:20px;">Weekly Running Total</div>
+  <div class="week-box">
+    <div id="weekRows"></div>
+    <div class="week-foot">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">7-Day Total</div>
+      <div style="font-family:var(--font-d);font-size:22px;color:var(--amber)" id="weekTot">$0.00</div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Income · Wesley · Austin TX</div></div>
+</div>
+
+<!-- ── BILLS ── -->
+<div class="pg" id="pg-bills">
+  <div class="bill-hero">
+    <div style="font-family:var(--font-m);font-size:9px;color:#6b6b6b;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px">Monthly Target</div>
+    <div class="bill-total-target">$2,000</div>
+    <div class="bill-sub">Rent $1,850 · Phone $150 · Non-negotiable.</div>
+  </div>
+
+  <div class="bill-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div style="font-size:20px">🏠</div>
+      <div style="flex:1">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black)">Rent</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">$1,850 / month</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-d);font-size:24px;color:var(--black)" id="rentSaved">$0</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">of $1,850</div>
+      </div>
+    </div>
+    <div class="prog-wrap"><div class="prog" id="rentBar" style="background:var(--amber);width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--amber)" id="rentPct">0%</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)" id="rentLeft">$1,850 to go</div>
+    </div>
+    <div class="bill-input-row">
+      <div style="font-size:12px;color:var(--muted);flex:1">Add saved:</div>
+      <input type="number" id="rentInp" placeholder="0" class="bill-inp">
+      <button class="bill-btn-a" onclick="addRent()">+ Add</button>
+    </div>
+    <div class="done-banner" id="rentDone">🎉 RENT COVERED!</div>
+  </div>
+
+  <div class="bill-card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <div style="font-size:20px">📱</div>
+      <div style="flex:1">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black)">Phone Bill</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">$150 / month</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-d);font-size:24px;color:var(--black)" id="phoneSaved">$0</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">of $150</div>
+      </div>
+    </div>
+    <div class="prog-wrap"><div class="prog" id="phoneBar" style="background:var(--blue);width:0%"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--blue)" id="phonePct">0%</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)" id="phoneLeft">$150 to go</div>
+    </div>
+    <div class="bill-input-row">
+      <div style="font-size:12px;color:var(--muted);flex:1">Add saved:</div>
+      <input type="number" id="phoneInp" placeholder="0" class="bill-inp">
+      <button class="bill-btn-b" onclick="addPhone()">+ Add</button>
+    </div>
+    <div class="done-banner" id="phoneDone">🎉 PHONE COVERED!</div>
+  </div>
+
+  <div style="background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:12px">
+    <div class="sec" style="margin-top:0">Combined Progress</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px">
+      <div>
+        <div style="font-family:var(--font-d);font-size:32px;color:var(--black)" id="totSaved">$0</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">saved so far</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-d);font-size:32px;color:var(--muted)" id="totLeft">$2,000</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">remaining</div>
+      </div>
+    </div>
+    <div class="prog-wrap" style="height:14px"><div class="prog" id="totBar" style="background:var(--green);width:0%;height:14px"></div></div>
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--green);text-align:center;margin-top:5px;letter-spacing:.04em" id="totPct">0% of monthly bills covered</div>
+  </div>
+
+  <div style="background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:12px">
+    <div class="sec" style="margin-top:0">Realistic Monthly Targets by Phase</div>
+    <div class="phase-tabs">
+      <div class="ptab on" onclick="setPhase(1)">Month 1–2</div>
+      <div class="ptab" onclick="setPhase(2)">Month 3–4</div>
+      <div class="ptab" onclick="setPhase(3)">Month 6+</div>
+    </div>
+    <div class="phase on" id="ph1">
+      <div class="phase-note" style="background:var(--amber-bg);color:var(--amber)">Honest: You may fall short of $2,000. Total likely $1,100–$1,800. That's completely normal Month 1.</div>
+      <div class="p-row"><div><div class="p-left-main">🛵 Uber Eats daily</div><div class="p-left-sub">Both peaks, ~4 hrs</div></div><div><div class="p-right-val" style="color:var(--amber)">$40–$55</div><div class="p-right-sub">realistic</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">🐾 Rover daily</div><div class="p-left-sub">1–2 walks, building reviews</div></div><div><div class="p-right-val" style="color:var(--green)">$15–$35</div><div class="p-right-sub">realistic</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">💼 Freelance monthly</div><div class="p-left-sub">First clients</div></div><div><div class="p-right-val" style="color:var(--blue)">$200–$400</div><div class="p-right-sub">/month</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">📊 Combined total</div></div><div><div class="p-right-val">$1,100–$1,800</div><div class="p-right-sub">/month</div></div></div>
+    </div>
+    <div class="phase" id="ph2">
+      <div class="phase-note" style="background:var(--green-bg);color:var(--green)">$2,000/month becomes consistently achievable. Reviews building, repeat clients forming.</div>
+      <div class="p-row"><div><div class="p-left-main">🛵 Uber Eats daily</div><div class="p-left-sub">Faster routing, better tips</div></div><div><div class="p-right-val" style="color:var(--amber)">$55–$75</div><div class="p-right-sub">realistic</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">🐾 Rover daily</div><div class="p-left-sub">2–3 walks + weekend boarding</div></div><div><div class="p-right-val" style="color:var(--green)">$35–$60</div><div class="p-right-sub">realistic</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">💼 Freelance monthly</div><div class="p-left-sub">Steady pipeline</div></div><div><div class="p-right-val" style="color:var(--blue)">$400–$700</div><div class="p-right-sub">/month</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">📊 Combined total</div></div><div><div class="p-right-val" style="color:var(--green)">$2,000–$2,800</div><div class="p-right-sub">/month</div></div></div>
+    </div>
+    <div class="phase" id="ph3">
+      <div class="phase-note" style="background:var(--blue-bg);color:var(--blue)">Well above bills. SBW generating revenue. Building savings and reinvesting.</div>
+      <div class="p-row"><div><div class="p-left-main">🛵 Uber Eats daily</div><div class="p-left-sub">Peak windows, optimized</div></div><div><div class="p-right-val" style="color:var(--amber)">$60–$80</div><div class="p-right-sub">realistic</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">🐾 Rover daily</div><div class="p-left-sub">3–4 walks + full weekends</div></div><div><div class="p-right-val" style="color:var(--green)">$50–$80</div><div class="p-right-sub">realistic</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">🛍️ SBW monthly</div><div class="p-left-sub">Drop 2+, repeat buyers</div></div><div><div class="p-right-val" style="color:var(--purple)">$800–$1,500</div><div class="p-right-sub">/month</div></div></div>
+      <div class="p-row"><div><div class="p-left-main">📊 Combined total</div></div><div><div class="p-right-val" style="color:var(--green)">$3,500–$5,000</div><div class="p-right-sub">/month</div></div></div>
+    </div>
+  </div>
+  <button class="reset-btn" onclick="resetBills()">↺ Reset bills for new month</button>
+  <div class="footer"><div class="footer-b">SBW CO.</div><div class="footer-s">Bills · $2,000/month · Austin TX</div></div>
+</div>
+
+<!-- ── NOTES ── -->
+<div class="pg" id="pg-notes">
+  <div class="sec">Today's Notes</div>
+  <textarea class="notes-ta" id="notesTA" placeholder="What's on your mind? Ideas, wins, reflections, anything..."></textarea>
+  <button class="save-btn" onclick="saveNotes()">Save Notes</button>
+  <div class="save-ok" id="notesOk">✓ Saved!</div>
+  <div class="mantras" style="margin-top:16px;">
+    <div class="mantra-q">"The question isn't whether anyone will buy. Someone will. The question is whether you'll stay consistent long enough to find the people who were always going to love what you make."</div>
+    <div class="mantra-q">"Progress over perfection — always. One post, one walk, one delivery at a time."</div>
+    <div class="mantra-q">"Rest is not laziness. Burnout costs more than any slow day ever will."</div>
+    <div class="mantra-q">"You built more in one day than most people build in a month. Keep going."</div>
+  </div>
+  <div class="footer" style="margin-top:14px"><div class="footer-b">SBW CO.</div><div class="footer-s">Notes · Wesley · Austin TX</div></div>
+</div>
+
+<script>
+function showPg(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-t').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  event.target.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updAllCounts();
+}
+function tick(){
+  const n=new Date(),h=n.getHours(),m=n.getMinutes();
+  const ts=(h%12||12)+':'+(m<10?'0':'')+m+(h>=12?'pm':'am');
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('nowTime').textContent=ts;
+  document.getElementById('hdrDate').textContent=days[n.getDay()]+' '+months[n.getMonth()]+' '+n.getDate();
+  const start=6*60,end=23*60,cur=h*60+m;
+  const pct=Math.max(0,Math.min(100,(cur-start)/(end-start)*100));
+  document.getElementById('dayBar').style.width=pct+'%';
+  const blocks=[{id:'b0',s:6*60,e:7*60},{id:'b1',s:7*60,e:8*60},{id:'b2',s:8*60,e:10*60},{id:'b3',s:10*60,e:11*60},{id:'b4',s:11*60,e:14*60},{id:'b5',s:14*60,e:15*60},{id:'b6',s:15*60,e:17*60},{id:'b7',s:17*60,e:17*60+30},{id:'b8',s:17*60+30,e:19*60+30},{id:'b9',s:19*60+30,e:20*60+30},{id:'b10',s:20*60+30,e:22*60},{id:'b11',s:22*60,e:23*60}];
+  blocks.forEach(b=>{
+    const el=document.getElementById(b.id);if(!el)return;
+    if(cur>=b.s&&cur<b.e){el.classList.add('now');if(!el.classList.contains('open'))el.classList.add('open');}
+    else el.classList.remove('now');
+  });
+}
+tick();setInterval(tick,30000);
+function tog(id){document.getElementById(id).classList.toggle('open')}
+function togT(el,e){if(e)e.stopPropagation();el.classList.toggle('done');saveTasks();updAllCounts();updStats();}
+function togC(id){document.getElementById(id).classList.toggle('open')}
+function addT(catId,inpId){
+  const inp=document.getElementById(inpId),txt=inp.value.trim();if(!txt)return;
+  const body=document.querySelector('#'+catId+' .cat-body');
+  const addRow=body.querySelector('.add-row');
+  const d=document.createElement('div');d.className='bt';d.onclick=function(e){togT(this,e)};
+  d.innerHTML='<div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">'+txt+'</div>';
+  body.insertBefore(d,addRow);inp.value='';saveTasks();updAllCounts();
+}
+function updAllCounts(){
+  [['c-sbw','cnt-sbw'],['c-rover','cnt-rover'],['c-ue','cnt-ue'],['c-fl','cnt-fl'],['c-personal','cnt-personal']].forEach(([cid,kid])=>{
+    const el=document.getElementById(cid);if(!el)return;
+    const all=el.querySelectorAll('.bt').length,done=el.querySelectorAll('.bt.done').length;
+    const cnt=document.getElementById(kid);if(cnt)cnt.textContent=done+'/'+all;
+  });
+}
+function updStats(){
+  const all=document.querySelectorAll('.bt'),done=document.querySelectorAll('.bt.done');
+  const pct=all.length?Math.round(done.length/all.length*100):0;
+  document.getElementById('s-pct').textContent=pct+'%';
+}
+function saveTasks(){
+  const states={};document.querySelectorAll('.bt').forEach((el,i)=>{states['t'+i]=el.classList.contains('done')});
+  localStorage.setItem('hq_tasks_'+new Date().toDateString(),JSON.stringify(states));
+}
+function loadTasks(){
+  const saved=localStorage.getItem('hq_tasks_'+new Date().toDateString());if(!saved)return;
+  const states=JSON.parse(saved);document.querySelectorAll('.bt').forEach((el,i)=>{if(states['t'+i])el.classList.add('done')});
+}
+function resetTasks(){if(!confirm('Reset all tasks?'))return;document.querySelectorAll('.bt').forEach(el=>el.classList.remove('done'));localStorage.removeItem('hq_tasks_'+new Date().toDateString());updAllCounts();updStats();}
+const INC_IDS=['i-rw','i-rb','i-ul','i-ud','i-fl','i-sbw','i-oth'];
+function calcInc(){
+  const tot=INC_IDS.reduce((s,id)=>s+(parseFloat(document.getElementById(id).value)||0),0);
+  document.getElementById('incTotal').textContent='$'+tot.toFixed(2);
+  document.getElementById('taxAmt').textContent='$'+(tot*.28).toFixed(2);
+  document.getElementById('s-earned').textContent='$'+tot.toFixed(0);
+}
+function saveInc(){
+  const data={};INC_IDS.forEach(id=>data[id]=document.getElementById(id).value||'0');
+  data.total=document.getElementById('incTotal').textContent;data.date=new Date().toDateString();
+  const w=JSON.parse(localStorage.getItem('hq_weekly')||'[]');
+  const ex=w.findIndex(d=>d.date===data.date);
+  if(ex>=0)w[ex]=data;else w.push(data);
+  const last7=w.slice(-7);localStorage.setItem('hq_weekly',JSON.stringify(last7));
+  buildWeek(last7);
+  const ok=document.getElementById('incOk');ok.style.display='block';setTimeout(()=>ok.style.display='none',2500);
+}
+function buildWeek(w){
+  if(!w||!w.length)return;
+  const c=document.getElementById('weekRows');let html='',tot=0;
+  w.forEach(d=>{const t=parseFloat(d.total.replace('$',''))||0;tot+=t;html+=`<div class="week-row"><div style="color:var(--muted);font-family:var(--font-m);font-size:11px">${d.date}</div><div style="font-family:var(--font-m);font-weight:600">${d.total}</div></div>`;});
+  c.innerHTML=html;document.getElementById('weekTot').textContent='$'+tot.toFixed(2);
+}
+function resetInc(){INC_IDS.forEach(id=>document.getElementById(id).value='');calcInc();}
+const RENT=1850,PHONE=150;
+function getBills(){const m=new Date().toISOString().slice(0,7);return JSON.parse(localStorage.getItem('hq_bills_'+m)||'{"rent":0,"phone":0}');}
+function saveBills(d){const m=new Date().toISOString().slice(0,7);localStorage.setItem('hq_bills_'+m,JSON.stringify(d));}
+function updBills(){
+  const b=getBills();
+  const r=Math.min(b.rent,RENT),p=Math.min(b.phone,PHONE);
+  const rp=Math.min(100,r/RENT*100),pp=Math.min(100,p/PHONE*100);
+  document.getElementById('rentSaved').textContent='$'+b.rent.toFixed(0);
+  document.getElementById('rentBar').style.width=rp+'%';
+  document.getElementById('rentPct').textContent=rp.toFixed(0)+'%';
+  document.getElementById('rentLeft').textContent=b.rent>=RENT?'✓ Covered!':'$'+(RENT-b.rent).toFixed(0)+' to go';
+  document.getElementById('rentDone').style.display=b.rent>=RENT?'block':'none';
+  document.getElementById('phoneSaved').textContent='$'+b.phone.toFixed(0);
+  document.getElementById('phoneBar').style.width=pp+'%';
+  document.getElementById('phonePct').textContent=pp.toFixed(0)+'%';
+  document.getElementById('phoneLeft').textContent=b.phone>=PHONE?'✓ Covered!':'$'+(PHONE-b.phone).toFixed(0)+' to go';
+  document.getElementById('phoneDone').style.display=b.phone>=PHONE?'block':'none';
+  const tot=r+p,tg=RENT+PHONE,tp=Math.min(100,tot/tg*100);
+  document.getElementById('totSaved').textContent='$'+tot.toFixed(0);
+  document.getElementById('totLeft').textContent=tot>=tg?'$0':'$'+(tg-tot).toFixed(0);
+  document.getElementById('totBar').style.width=tp+'%';
+  document.getElementById('totPct').textContent=tp.toFixed(0)+'% of monthly bills covered'+(tp>=100?' 🎉':'');
+}
+function addRent(){const v=parseFloat(document.getElementById('rentInp').value)||0;if(v<=0)return;const b=getBills();b.rent=(b.rent||0)+v;saveBills(b);document.getElementById('rentInp').value='';updBills();}
+function addPhone(){const v=parseFloat(document.getElementById('phoneInp').value)||0;if(v<=0)return;const b=getBills();b.phone=(b.phone||0)+v;saveBills(b);document.getElementById('phoneInp').value='';updBills();}
+function resetBills(){if(!confirm('Reset bills for new month?'))return;const m=new Date().toISOString().slice(0,7);localStorage.removeItem('hq_bills_'+m);updBills();}
+function setPhase(n){
+  [1,2,3].forEach(i=>{
+    const t=document.querySelectorAll('.ptab')[i-1],p=document.getElementById('ph'+i);
+    if(i===n){t.classList.add('on');p.classList.add('on');}else{t.classList.remove('on');p.classList.remove('on');}
+  });
+}
+function saveNotes(){
+  localStorage.setItem('hq_notes_'+new Date().toDateString(),document.getElementById('notesTA').value);
+  const ok=document.getElementById('notesOk');ok.style.display='block';setTimeout(()=>ok.style.display='none',2500);
+}
+function loadNotes(){const s=localStorage.getItem('hq_notes_'+new Date().toDateString());if(s)document.getElementById('notesTA').value=s;}
+window.addEventListener('DOMContentLoaded',()=>{
+  loadTasks();loadNotes();updAllCounts();updStats();updBills();
+  const w=JSON.parse(localStorage.getItem('hq_weekly')||'[]');if(w.length)buildWeek(w);
+});
+</script>
+</body>
+</html>
