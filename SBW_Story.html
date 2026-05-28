@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building SBW Co. — Wesley McDaniel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0e0d0b;
+  --white:#faf8f4;
+  --amber:#d97706;
+  --amber-light:#fef3c7;
+  --green:#16a34a;
+  --green-light:#dcfce7;
+  --border:#2a2824;
+  --muted:#6b6560;
+  --font-d:'Bebas Neue',sans-serif;
+  --font-b:'Fraunces',serif;
+  --font-m:'IBM Plex Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--font-b);
+  overflow-x:hidden;
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:40px 28px 48px;
+  position:relative;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(217,119,6,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(22,163,74,0.06) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-num{
+  font-family:var(--font-d);
+  font-size:clamp(100px,30vw,220px);
+  line-height:0.85;
+  color:rgba(255,255,255,0.04);
+  position:absolute;
+  top:24px;
+  right:-10px;
+  letter-spacing:-0.02em;
+  pointer-events:none;
+  user-select:none;
+}
+.hero-eyebrow{
+  font-family:var(--font-m);
+  font-size:10px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--amber);
+  margin-bottom:20px;
+}
+.hero-title{
+  font-family:var(--font-d);
+  font-size:clamp(52px,14vw,96px);
+  line-height:0.92;
+  letter-spacing:0.01em;
+  margin-bottom:24px;
+}
+.hero-title em{color:var(--amber);font-style:normal}
+.hero-sub{
+  font-size:clamp(15px,4vw,18px);
+  line-height:1.7;
+  color:rgba(255,255,255,0.65);
+  max-width:480px;
+  margin-bottom:32px;
+  font-style:italic;
+  font-weight:300;
+}
+.hero-meta{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.meta-chip{
+  font-family:var(--font-m);
+  font-size:9px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:6px 12px;
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+.meta-chip span{color:var(--amber)}
+.scroll-hint{
+  position:absolute;
+  bottom:24px;
+  right:28px;
+  font-family:var(--font-m);
+  font-size:9px;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.scroll-hint::after{
+  content:'';
+  display:block;
+  width:1px;
+  height:40px;
+  background:linear-gradient(to bottom, var(--amber), transparent);
+  animation:drip 2s ease-in-out infinite;
+}
+@keyframes drip{0%,100%{opacity:0.4;transform:scaleY(0.8)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ── SECTIONS ── */
+section{
+  padding:56px 28px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+section.visible{opacity:1;transform:translateY(0)}
+
+.s-label{
+  font-family:var(--font-m);
+  font-size:9px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--amber);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.s-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.s-title{
+  font-family:var(--font-d);
+  font-size:clamp(36px,9vw,64px);
+  line-height:0.95;
+  letter-spacing:0.02em;
+  margin-bottom:20px;
+}
+.s-title em{color:var(--amber);font-style:normal}
+
+.s-body{
+  font-size:clamp(14px,3.5vw,16px);
+  line-height:1.85;
+  color:rgba(255,255,255,0.72);
+  font-weight:300;
+  max-width:600px;
+}
+.s-body strong{color:var(--white);font-weight:400}
+.s-body em{color:var(--amber);font-style:italic}
+
+/* ── MOMENT CARDS ── */
+.moment{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  padding:18px 20px;
+  margin-top:20px;
+}
+.moment-label{
+  font-family:var(--font-m);
+  font-size:8px;
+  color:var(--amber);
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.moment p{
+  font-size:13px;
+  color:rgba(255,255,255,0.65);
+  line-height:1.7;
+  font-style:italic;
+}
+.moment p strong{color:var(--white);font-style:normal}
+
+/* ── INCOME STACK ── */
+.stack{display:flex;flex-direction:column;gap:3px;margin-top:24px}
+.stack-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  transition:border-color 0.2s;
+}
+.stack-item:hover{border-color:rgba(217,119,6,0.4)}
+.stack-num{
+  font-family:var(--font-d);
+  font-size:28px;
+  color:rgba(255,255,255,0.12);
+  line-height:1;
+  min-width:28px;
+}
+.stack-content{flex:1}
+.stack-name{
+  font-family:var(--font-d);
+  font-size:18px;
+  letter-spacing:0.04em;
+  color:var(--white);
+  line-height:1;
+  margin-bottom:3px;
+}
+.stack-desc{
+  font-family:var(--font-m);
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:0.06em;
+}
+.stack-earn{
+  font-family:var(--font-m);
+  font-size:10px;
+  color:var(--green);
+  text-align:right;
+  flex-shrink:0;
+}
+
+/* ── RULES ── */
+.rules{display:flex;flex-direction:column;gap:0;margin-top:24px}
+.rule{
+  display:flex;
+  gap:16px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+  align-items:flex-start;
+}
+.rule:last-child{border-bottom:none}
+.rule-n{
+  font-family:var(--font-d);
+  font-size:36px;
+  color:var(--amber);
+  line-height:1;
+  flex-shrink:0;
+  min-width:36px;
+}
+.rule-text{
+  padding-top:6px;
+}
+.rule-title{
+  font-family:var(--font-d);
+  font-size:20px;
+  letter-spacing:0.03em;
+  color:var(--white);
+  margin-bottom:4px;
+}
+.rule-body{
+  font-size:13px;
+  line-height:1.7;
+  color:rgba(255,255,255,0.6);
+  font-style:italic;
+}
+
+/* ── NUMBERS ── */
+.numbers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:3px;
+  margin-top:24px;
+}
+.num-box{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  padding:18px 16px;
+}
+.num-val{
+  font-family:var(--font-d);
+  font-size:clamp(28px,7vw,40px);
+  color:var(--amber);
+  line-height:1;
+  margin-bottom:4px;
+}
+.num-label{
+  font-family:var(--font-m);
+  font-size:8px;
+  color:var(--muted);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  line-height:1.5;
+}
+
+/* ── QUOTE ── */
+.quote-block{
+  border-left:3px solid var(--amber);
+  padding:20px 24px;
+  margin-top:32px;
+  background:rgba(217,119,6,0.05);
+}
+.quote-text{
+  font-size:clamp(16px,4vw,20px);
+  line-height:1.6;
+  color:var(--white);
+  font-style:italic;
+  font-weight:300;
+  margin-bottom:10px;
+}
+.quote-attr{
+  font-family:var(--font-m);
+  font-size:9px;
+  color:var(--amber);
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+}
+
+/* ── CTA ── */
+.cta-section{
+  padding:56px 28px 72px;
+  text-align:center;
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+.cta-section.visible{opacity:1;transform:translateY(0)}
+.cta-title{
+  font-family:var(--font-d);
+  font-size:clamp(40px,10vw,72px);
+  line-height:0.92;
+  letter-spacing:0.02em;
+  margin-bottom:16px;
+}
+.cta-title em{color:var(--amber);font-style:normal}
+.cta-sub{
+  font-size:14px;
+  color:rgba(255,255,255,0.5);
+  line-height:1.7;
+  font-style:italic;
+  max-width:400px;
+  margin:0 auto 32px;
+}
+.cta-links{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.cta-link{
+  font-family:var(--font-m);
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:12px 20px;
+  border:1px solid var(--border);
+  color:var(--muted);
+  text-decoration:none;
+  transition:all 0.2s;
+  display:inline-block;
+}
+.cta-link:hover{border-color:var(--amber);color:var(--amber)}
+.cta-link.primary{background:var(--amber);border-color:var(--amber);color:var(--black)}
+.cta-link.primary:hover{background:transparent;color:var(--amber)}
+
+/* ── FOOTER ── */
+footer{
+  padding:24px 28px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.footer-brand{font-family:var(--font-d);font-size:20px;letter-spacing:0.1em;color:rgba(255,255,255,0.15)}
+.footer-note{font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:0.08em}
+
+/* ── DIVIDER ── */
+.divider{
+  width:32px;height:2px;
+  background:var(--amber);
+  margin:24px 0;
+}
+
+@media(min-width:640px){
+  .hero,.section-inner{max-width:720px;margin:0 auto}
+  section{padding:72px 40px}
+  .cta-section{padding:72px 40px 96px}
+  footer{padding:28px 40px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-num">1</div>
+  <div class="hero-eyebrow">Austin, TX · May 2026</div>
+  <h1 class="hero-title">BUILDING<br><em>SBW CO.</em><br>FROM ZERO</h1>
+  <p class="hero-sub">I lost my job. I had $0 in the business. I had a phone, a design background, and a city. Here's exactly what I did on Day 1 — and what I'm building toward.</p>
+  <div class="hero-meta">
+    <div class="meta-chip">Wesley McDaniel <span>/ Founder</span></div>
+    <div class="meta-chip">4 Income Streams <span>/ Day 1</span></div>
+    <div class="meta-chip">Premium Apparel <span>/ Brand</span></div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</div>
+
+<!-- THE SITUATION -->
+<section id="s1">
+  <div class="s-label">The Starting Point</div>
+  <h2 class="s-title">NO JOB.<br><em>NO EXCUSES.</em></h2>
+  <p class="s-body">
+    I'm a graphic designer with 8 years of experience. I just got let go. 
+    Rent is <strong>$1,850 a month</strong>. Phone is <strong>$150</strong>. 
+    That's $2,000 I need to find every single month — starting now.
+    <br><br>
+    I had two choices: panic, or build. I chose to build. 
+    <em>Not because I wasn't scared. Because being broke and building something 
+    is still better than being broke and doing nothing.</em>
+  </p>
+  <div class="moment">
+    <div class="moment-label">Day 1 · May 27, 2026</div>
+    <p>I launched my Rover dog sitting profile, completed <strong>9 Uber Eats deliveries</strong>, and made <strong>$89.92 gross</strong> — all before dinner. It wasn't glamorous. It was proof that action beats anxiety every time.</p>
+  </div>
+</section>
+
+<!-- THE REAL GOAL -->
+<section id="s2">
+  <div class="s-label">The Vision</div>
+  <h2 class="s-title">SBW CO.<br>IS THE<br><em>MISSION.</em></h2>
+  <p class="s-body">
+    The side hustles keep the lights on. But <strong>SBW Co.</strong> is the real play.
+    <br><br>
+    Premium graphic apparel. <em>Not fast fashion. Not luxury prices.</em> 
+    The gap in between — where the design actually means something and the quality 
+    actually holds up. T-shirts at $65. Crewnecks at $95. Hoodies at $110. 
+    5 original designs. Drop 1 launching late 2026.
+    <br><br>
+    I'm a graphic designer building a design brand. The unfair advantage 
+    was always there. I just needed the right conditions to use it.
+  </p>
+  <div class="divider"></div>
+  <p class="s-body">
+    Year 1 target: <strong>~$16,600 in SBW revenue.</strong><br>
+    Year 2 target: <strong>$27,000–$32,000, with $8–12K net profit.</strong><br>
+    Gross margins: <strong>64–66%.</strong><br>
+    Break-even: <em>Month 8–12.</em>
+  </p>
+</section>
+
+<!-- THE INCOME STACK -->
+<section id="s3">
+  <div class="s-label">The Strategy</div>
+  <h2 class="s-title">4 STREAMS.<br><em>ONE GOAL.</em></h2>
+  <p class="s-body">I didn't wait for SBW to be ready before making money. I stacked four income streams from day one — each one funding the next phase of the brand.</p>
+
+  <div class="stack">
+    <div class="stack-item">
+      <div class="stack-num">01</div>
+      <div class="stack-content">
+        <div class="stack-name">SBW CO. — APPAREL BRAND</div>
+        <div class="stack-desc">Primary mission · Shopify · POD then bulk · Drop model</div>
+      </div>
+      <div class="stack-earn">Month 3+<br>$300–$1K/mo</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-num">02</div>
+      <div class="stack-content">
+        <div class="stack-name">ROVER — DOG SITTING</div>
+        <div class="stack-desc">Boarding, walks, drop-ins · Austin parks · Review ladder</div>
+      </div>
+      <div class="stack-earn">Week 1+<br>$800–$1.5K/mo</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-num">03</div>
+      <div class="stack-content">
+        <div class="stack-name">UBER EATS — DELIVERY</div>
+        <div class="stack-desc">CapMetro bus · $3/mile rule · Lunch + dinner peaks</div>
+      </div>
+      <div class="stack-earn">Day 1+<br>$900 promo</div>
+    </div>
+    <div class="stack-item">
+      <div class="stack-num">04</div>
+      <div class="stack-content">
+        <div class="stack-name">FREELANCE DESIGN</div>
+        <div class="stack-desc">Direct DMs to Austin businesses · Free first concept · Fiverr</div>
+      </div>
+      <div class="stack-earn">Month 1+<br>$200–$900/mo</div>
+    </div>
+  </div>
+</section>
+
+<!-- THE NUMBERS -->
+<section id="s4">
+  <div class="s-label">The Reality</div>
+  <h2 class="s-title">WHAT THE<br><em>NUMBERS</em><br>LOOK LIKE.</h2>
+  <p class="s-body">No projections without context. Here's the honest math — what Month 1 looks like, what Month 6 looks like, and what I'm working toward.</p>
+
+  <div class="numbers">
+    <div class="num-box">
+      <div class="num-val">$1,100</div>
+      <div class="num-label">Month 1 minimum realistic income</div>
+    </div>
+    <div class="num-box">
+      <div class="num-val">$2,000</div>
+      <div class="num-label">Monthly bills (non-negotiable)</div>
+    </div>
+    <div class="num-box">
+      <div class="num-val">$3,300</div>
+      <div class="num-label">Month 6 target — bills covered + reinvesting</div>
+    </div>
+    <div class="num-box">
+      <div class="num-val">64%</div>
+      <div class="num-label">SBW gross margin — by design, not accident</div>
+    </div>
+    <div class="num-box">
+      <div class="num-val">$900</div>
+      <div class="num-label">Uber Eats promo for 80 deliveries by June 26</div>
+    </div>
+    <div class="num-box">
+      <div class="num-val">28%</div>
+      <div class="num-label">Set aside weekly for taxes — no exceptions</div>
+    </div>
+  </div>
+
+  <div class="moment" style="margin-top:20px;border-left-color:var(--green)">
+    <div class="moment-label" style="color:var(--green)">The Honest Truth</div>
+    <p>Month 1 might not cover rent. That's <strong>completely normal and expected.</strong> The goal isn't to survive Month 1 perfectly — it's to build systems in Month 1 that make Month 6 inevitable.</p>
+  </div>
+</section>
+
+<!-- THE RULES -->
+<section id="s5">
+  <div class="s-label">What I Learned Fast</div>
+  <h2 class="s-title">RULES I<br>LIVE BY<br><em>NOW.</em></h2>
+
+  <div class="rules">
+    <div class="rule">
+      <div class="rule-n">01</div>
+      <div class="rule-text">
+        <div class="rule-title">ACTION BEFORE PERFECT</div>
+        <div class="rule-body">The Rover profile didn't need to be perfect to go live. The first Instagram post didn't need to be perfect to get posted. Done beats perfect every time when you're starting from zero.</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rule-n">02</div>
+      <div class="rule-text">
+        <div class="rule-title">KNOW YOUR NUMBER</div>
+        <div class="rule-body">My number is $2,000/month. Every decision I make gets filtered through that. Does this move me toward $2,000 or away from it? It's a surprisingly powerful question.</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rule-n">03</div>
+      <div class="rule-text">
+        <div class="rule-title">USE WHAT YOU HAVE</div>
+        <div class="rule-body">I have a design background. I have a phone. I have 8 years of creative experience. Most people overlook what they already have because it doesn't feel like enough. It's enough.</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rule-n">04</div>
+      <div class="rule-text">
+        <div class="rule-title">SEPARATE THE MONEY</div>
+        <div class="rule-body">Business checking. Tax fund savings. Personal checking. Three accounts, zero confusion. Set aside 25–30% of everything for taxes before you spend a dollar of it.</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rule-n">05</div>
+      <div class="rule-text">
+        <div class="rule-title">REST IS PRODUCTIVE</div>
+        <div class="rule-body">A burned-out founder makes bad decisions. The schedule I built has real rest built in — not as a reward, but as infrastructure. You can't build something lasting on empty.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE QUOTE -->
+<section id="s6">
+  <div class="s-label">The Long Game</div>
+  <h2 class="s-title">MONTH 1<br>IS NOT THE<br><em>STORY.</em></h2>
+  <p class="s-body">
+    The story is Month 24. SBW Co. doing <strong>$4,000–$6,000 a month in revenue.</strong> 
+    A real brand, built from a phone and an apartment in Austin. 
+    5,000 followers who actually care. Wholesale inquiries from local boutiques. 
+    The dog sitting scaled back to weekends only because I don't need it anymore.
+    <br><br>
+    <em>That's not a fantasy. That's a plan with a timeline, a financial model, 
+    and a founder who woke up on Day 1 and got to work.</em>
+  </p>
+
+  <div class="quote-block">
+    <div class="quote-text">"The gap between where you are and where you want to be is bridged by what you do every day. Not what you feel like doing. What you actually do."</div>
+    <div class="quote-attr">Wesley McDaniel · SBW Co. · Austin, TX</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="cta">
+  <h2 class="cta-title">FOLLOW<br>THE<br><em>BUILD.</em></h2>
+  <p class="cta-sub">This is being built in public, one week at a time. Follow along — or reach out if you're building something too.</p>
+  <div class="cta-links">
+    <a class="cta-link primary" href="https://instagram.com/sbwco" target="_blank">@sbwco on Instagram</a>
+    <a class="cta-link" href="https://instagram.com/wesleyspawsatx" target="_blank">@wesleyspawsatx</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">SBW CO.</div>
+  <div class="footer-note">Austin, TX · Built from scratch · 2026</div>
+</footer>
+
+<script>
+// Intersection observer for reveal animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('section, .cta-section').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
