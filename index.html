@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBW Co. — Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Base — white + near-black */
+  --bg: #f7f5f2;
+  --white: #ffffff;
+  --black: #111010;
+  --border: #ddd9d2;
+  --muted: #8a8278;
+  --soft: #f0ece6;
+
+  /* Dopamine accents */
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --amber-border: rgba(217,119,6,0.3);
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --green-border: rgba(22,163,74,0.3);
+  --blue: #2563eb;
+  --blue-bg: #dbeafe;
+  --blue-border: rgba(37,99,235,0.3);
+  --purple: #9333ea;
+  --purple-bg: #f3e8ff;
+  --purple-border: rgba(147,51,234,0.3);
+  --pink: #db2777;
+  --pink-bg: #fce7f3;
+  --pink-border: rgba(219,39,119,0.3);
+  --orange: #ea580c;
+  --orange-bg: #ffedd5;
+  --orange-border: rgba(234,88,12,0.3);
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+html { color-scheme: light; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--black);
+  min-height: 100vh;
+  forced-color-adjust: none;
+}
+
+/* ── GLOBAL NAV ─────────────────────────────────────────── */
+.app-header {
+  background: var(--black);
+  padding: 0 32px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid var(--amber);
+}
+.app-logo {
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  padding: 14px 24px 14px 0;
+  border-right: 1px solid #2a2a2a;
+  margin-right: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.app-logo span { color: var(--amber); }
+.app-nav { display: flex; overflow-x: auto; flex: 1; }
+.app-nav::-webkit-scrollbar { display: none; }
+.app-nav-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #7a7a7a;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0 18px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -3px;
+}
+.app-nav-btn:hover { color: var(--white); }
+.app-nav-btn.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* ── TOOL PAGES ─────────────────────────────────────────── */
+.tool-page { display: none; padding: 32px 32px 80px; max-width: 860px; }
+.tool-page.active { display: block; }
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────── */
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 72px);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--black);
+  margin-bottom: 6px;
+}
+.page-title .accent { color: var(--amber); }
+.page-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.page-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+  max-width: 580px;
+}
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 12px;
+  margin-top: 28px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.section-label:first-of-type { margin-top: 0; }
+
+/* ── CARDS ──────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── GRIDS ──────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+@media(max-width:640px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .app-header { padding: 0 16px; }
+  .tool-page { padding: 20px 16px 80px; }
+}
+
+/* ── ACCENT CHIPS ───────────────────────────────────────── */
+.chip {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.chip-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.chip-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.chip-blue  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-border); }
+.chip-purple{ background: var(--purple-bg);color: var(--purple);border: 1px solid var(--purple-border); }
+.chip-pink  { background: var(--pink-bg);  color: var(--pink);  border: 1px solid var(--pink-border); }
+.chip-orange{ background: var(--orange-bg);color: var(--orange);border: 1px solid var(--orange-border); }
+
+/* ── STAT BOX ───────────────────────────────────────────── */
+.stat-box {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  padding: 16px 18px;
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 30px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.stat-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── MANTRA BAR ─────────────────────────────────────────── */
+.mantra {
+  background: var(--black);
+  padding: 16px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.mantra-mark {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--amber);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.mantra-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #c4b9a8;
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+}
+
+/* ── CHECK ITEMS ────────────────────────────────────────── */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  margin-bottom: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.check-item.checked {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  opacity: 0.75;
+}
+.check-box {
+  width: 20px; height: 20px;
+  border: 2px solid var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.check-item.checked .check-box { background: var(--green); border-color: var(--green); }
+.check-icon { color: white; font-size: 11px; font-weight: 700; display: none; }
+.check-item.checked .check-icon { display: block; }
+.check-text { font-size: 13px; color: var(--black); line-height: 1.4; font-family: var(--font-body); }
+.check-item.checked .check-text { text-decoration: line-through; color: var(--muted); }
+
+/* ── TASK ITEMS (weekly planner) ────────────────────────── */
+.task-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  margin-bottom: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.task-item.checked { background: var(--green-bg); border-color: var(--green-border); opacity: 0.75; }
+.task-check {
+  width: 22px; height: 22px;
+  border: 2px solid var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s;
+}
+.task-item.checked .task-check { background: var(--green); border-color: var(--green); }
+.task-check-icon { color: white; font-size: 12px; font-weight: 700; display: none; }
+.task-item.checked .task-check-icon { display: block; }
+.task-text { flex: 1; font-size: 13px; color: var(--black); line-height: 1.4; }
+.task-item.checked .task-text { text-decoration: line-through; color: var(--muted); }
+.task-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────── */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: 1.5px solid var(--black);
+  background: var(--black);
+  color: var(--white);
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  display: inline-block;
+}
+.btn:hover { background: var(--white); color: var(--black); }
+.btn.ghost { background: var(--white); color: var(--black); }
+.btn.ghost:hover { background: var(--black); color: var(--white); }
+.btn.amber { background: var(--amber); border-color: var(--amber); color: var(--white); }
+.btn.amber:hover { background: var(--white); color: var(--amber); }
+
+/* ── DAY TABS ───────────────────────────────────────────── */
+.day-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.day-tab {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.day-tab.active { border-color: var(--black); background: var(--black); color: var(--amber); }
+.day-tab:hover:not(.active) { border-color: var(--black); color: var(--black); }
+
+/* ── TIME BLOCKS ────────────────────────────────────────── */
+.time-block { overflow: hidden; border: 1.5px solid var(--border); margin-bottom: 10px; }
+.time-block-header {
+  padding: 9px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.time-block-label { font-family: var(--font-display); font-size: 15px; letter-spacing: 0.04em; color: var(--white); }
+.time-block-time { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,0.75); letter-spacing: 0.08em; }
+.time-block-body { padding: 12px 14px; background: var(--white); }
+.block-task { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 7px; }
+.block-task:last-child { margin-bottom: 0; }
+.block-dot { width: 4px; height: 4px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+.block-task-text { font-size: 13px; color: var(--black); line-height: 1.5; }
+
+/* ── INCOME GRID ────────────────────────────────────────── */
+.income-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  padding: 14px 16px;
+}
+.income-timeline { font-family: var(--font-mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.income-amount { font-family: var(--font-display); font-size: 22px; color: var(--black); letter-spacing: 0.02em; }
+.income-name { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+/* ── MILESTONES ─────────────────────────────────────────── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--amber), var(--purple));
+}
+.milestone { position: relative; margin-bottom: 16px; }
+.milestone::before {
+  content: '';
+  position: absolute;
+  left: -22px; top: 7px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  background: var(--amber);
+  box-shadow: 0 0 0 2px var(--amber);
+}
+.milestone.blue::before { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+.milestone.green::before { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+.milestone.purple::before { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+.milestone-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  padding: 16px 18px;
+}
+.milestone-date {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+.milestone-title { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.03em; color: var(--black); margin-bottom: 6px; }
+.milestone-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+.milestone-wins { display: flex; flex-direction: column; gap: 5px; }
+.milestone-win { display: flex; gap: 8px; align-items: flex-start; }
+.win-dot { width: 4px; height: 4px; border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+.win-text { font-size: 13px; color: var(--black); line-height: 1.5; }
+
+/* ── MONTH PLANS ────────────────────────────────────────── */
+.month-card { background: var(--white); border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+.month-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
+.month-name { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.04em; color: var(--white); }
+.month-focus { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,0.8); letter-spacing: 0.08em; }
+.month-body { padding: 14px 18px; }
+.month-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.pillar { padding: 10px 12px; border: 1px solid var(--border); background: var(--soft); }
+.pillar-label { font-family: var(--font-mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.pillar-value { font-size: 13px; color: var(--black); font-weight: 500; line-height: 1.4; }
+.month-target {
+  padding: 10px 14px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.month-target-icon { font-size: 16px; flex-shrink: 0; }
+.month-target p { font-size: 12px; color: var(--amber); line-height: 1.5; }
+
+/* ── FUNNEL STAGES ──────────────────────────────────────── */
+.funnel-stage {
+  padding: 14px 18px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: filter 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1.5px solid;
+}
+.funnel-stage:hover { filter: brightness(0.97); }
+.funnel-label { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.03em; }
+.funnel-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; opacity: 0.8; }
+.funnel-pct { font-family: var(--font-mono); font-size: 12px; flex-shrink: 0; }
+.funnel-arrow { text-align: center; color: var(--muted); font-size: 11px; margin: 3px 0; font-family: var(--font-mono); }
+
+/* ── STAGE DETAIL CARDS ─────────────────────────────────── */
+.stage-card { background: var(--white); border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 14px; }
+.stage-card-header { padding: 16px 18px; border-bottom: 1px solid var(--border); }
+.stage-card-body { padding: 16px 18px; }
+.stage-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; color: var(--muted); }
+.stage-title { font-family: var(--font-display); font-size: 24px; letter-spacing: 0.03em; }
+.stage-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-top: 8px; }
+.detail-label { font-family: var(--font-mono); font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; margin-top: 16px; border-bottom: 1px solid var(--amber-border); padding-bottom: 5px; }
+.action-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; background: var(--soft); border: 1px solid var(--border); margin-bottom: 7px; }
+.action-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.action-text { font-size: 13px; color: var(--black); line-height: 1.5; }
+.action-text strong { color: var(--amber); }
+.metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.metric-box { background: var(--soft); border: 1px solid var(--border); padding: 10px 12px; }
+.metric-val { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.03em; }
+.metric-label { font-family: var(--font-mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 3px; }
+.leak-box { background: var(--red-bg); border: 1px solid rgba(220,38,38,0.25); padding: 12px 14px; margin-top: 4px; }
+.leak-title { font-family: var(--font-mono); font-size: 9px; color: var(--red); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+.leak-text { font-size: 12px; color: var(--red); line-height: 1.6; }
+.fix-box { background: var(--green-bg); border: 1px solid var(--green-border); padding: 12px 14px; margin-top: 8px; }
+.fix-title { font-family: var(--font-mono); font-size: 9px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+.fix-text { font-size: 12px; color: var(--green); line-height: 1.6; }
+
+/* ── EMAIL CARDS ────────────────────────────────────────── */
+.email-card { background: var(--white); border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 8px; }
+.email-header { padding: 12px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.email-num { font-family: var(--font-mono); font-size: 10px; color: var(--amber); min-width: 28px; }
+.email-subject { font-size: 13px; font-weight: 600; color: var(--black); flex: 1; }
+.email-trigger { font-family: var(--font-mono); font-size: 9px; color: var(--muted); flex-shrink: 0; }
+.email-expand { color: var(--muted); font-size: 11px; transition: transform 0.2s; margin-left: 8px; font-family: var(--font-mono); }
+.email-card.open .email-expand { transform: rotate(180deg); }
+.email-body { display: none; padding: 0 16px 14px; border-top: 1px solid var(--border); }
+.email-card.open .email-body { display: block; }
+.email-copy {
+  font-family: var(--font-mono); font-size: 9px; padding: 3px 10px;
+  cursor: pointer; border: 1px solid var(--border); background: transparent;
+  color: var(--muted); transition: all 0.2s; margin-top: 8px; display: inline-block;
+  letter-spacing: 0.06em;
+}
+.email-copy.copied { border-color: var(--green); color: var(--green); }
+
+/* ── TOOL CARDS ─────────────────────────────────────────── */
+.tool-card { background: var(--white); border: 1.5px solid var(--border); padding: 16px 18px; margin-bottom: 8px; }
+.tool-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.tool-icon { font-size: 20px; flex-shrink: 0; }
+.tool-name { font-family: var(--font-display); font-size: 17px; letter-spacing: 0.03em; color: var(--black); }
+.tool-stage { font-family: var(--font-mono); font-size: 9px; color: var(--amber); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+.tool-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.tool-free { font-family: var(--font-mono); font-size: 9px; padding: 2px 8px; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); margin-left: auto; flex-shrink: 0; }
+.tool-paid { font-family: var(--font-mono); font-size: 9px; padding: 2px 8px; background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); margin-left: auto; flex-shrink: 0; }
+
+/* ── REMINDERS ──────────────────────────────────────────── */
+.reminders { background: var(--black); padding: 20px; margin-bottom: 24px; }
+.reminders-title { font-family: var(--font-mono); font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; }
+.reminder-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #2a2a2a; }
+.reminder-item:last-child { border-bottom: none; }
+.reminder-icon { font-size: 15px; flex-shrink: 0; }
+.reminder-text { font-size: 13px; color: #c4b9a8; line-height: 1.5; font-family: var(--font-body); }
+
+/* ── PROGRESS PILL ──────────────────────────────────────── */
+.progress-pill {
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 3px 10px; border: 1.5px solid var(--amber);
+  background: var(--amber-bg); color: var(--amber);
+  transition: all 0.3s;
+}
+.progress-pill.done { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+
+/* ── PLAN TABS ──────────────────────────────────────────── */
+.plan-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.plan-tab {
+  font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 8px 16px; border: 1.5px solid var(--border); background: var(--white);
+  color: var(--muted); cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.plan-tab.active { border-color: var(--black); background: var(--black); color: var(--amber); }
+.plan-section { display: none; }
+.plan-section.active { display: block; }
+
+/* ── WEEK PLAN BLOCKS ───────────────────────────────────── */
+.week-block { background: var(--white); border: 1.5px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+.week-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
+.week-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.03em; color: var(--white); }
+.week-theme { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,0.75); letter-spacing: 0.1em; text-transform: uppercase; }
+.week-body { padding: 16px 18px; }
+.focus-area { margin-bottom: 14px; }
+.focus-area:last-child { margin-bottom: 0; }
+.focus-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 7px; padding: 3px 8px; display: inline-block;
+}
+.task-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+.task-row:last-child { margin-bottom: 0; }
+.task-dot { width: 4px; height: 4px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+.task-row p { font-size: 13px; color: var(--black); line-height: 1.5; }
+.task-row p em { color: var(--muted); font-style: normal; font-size: 12px; }
+.week-goal { margin-top: 14px; padding: 10px 14px; background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.week-goal-label { font-family: var(--font-mono); font-size: 9px; color: var(--amber); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
+.week-goal p { font-size: 12px; color: var(--amber); line-height: 1.5; }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.page-footer { text-align: center; padding: 24px 0 8px; border-top: 1.5px solid var(--border); margin-top: 24px; }
+.footer-brand { font-family: var(--font-display); font-size: 24px; letter-spacing: 0.12em; color: var(--border); }
+.footer-sub { font-family: var(--font-mono); font-size: 9px; color: var(--border); margin-top: 4px; letter-spacing: 0.08em; }
+
+/* ── DASHBOARD HOME ─────────────────────────────────────── */
+.home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.home-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.home-card:hover { border-color: var(--black); transform: translateY(-1px); }
+.home-card-num { font-family: var(--font-display); font-size: 48px; color: var(--border); line-height: 1; margin-bottom: 4px; }
+.home-card-title { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.04em; color: var(--black); margin-bottom: 4px; }
+.home-card-desc { font-family: var(--font-mono); font-size: 9px; color: var(--muted); line-height: 1.6; letter-spacing: 0.06em; }
+.home-card-accent { width: 24px; height: 3px; margin-bottom: 10px; }
+
+@media(max-width:640px) { .home-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ═══ APP HEADER ═══════════════════════════════════════════ -->
+<div class="app-header">
+  <div class="app-logo">SBW<span>.</span></div>
+  <nav class="app-nav">
+    <button class="app-nav-btn active" onclick="showTool('home')">Home</button>
+    <button class="app-nav-btn" onclick="showTool('planner')">Weekly Plan</button>
+    <button class="app-nav-btn" onclick="showTool('roadmap')">Roadmap</button>
+    <button class="app-nav-btn" onclick="showTool('funnel')">Funnel</button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HOME
+═══════════════════════════════════════════════════════════ -->
+<div class="tool-page active" id="tool-home">
+  <div class="page-eyebrow">SBW Co. · Austin, TX</div>
+  <div class="page-title">COMMAND<br><span class="accent">CENTER</span></div>
+  <p class="page-subtitle">One week at a time. Build the brand. Stack the income. Don't blink.</p>
+
+  <div class="mantra">
+    <div class="mantra-mark">✦</div>
+    <div class="mantra-text">"You don't need to see the whole staircase. Just the next step."</div>
+  </div>
+
+  <div class="section-label">Tools</div>
+  <div class="home-grid">
+    <div class="home-card" onclick="showTool('planner')">
+      <div class="home-card-accent" style="background:var(--amber);"></div>
+      <div class="home-card-num">01</div>
+      <div class="home-card-title">WEEKLY GAME PLAN</div>
+      <div class="home-card-desc">DAY-BY-DAY SCHEDULE · TASK CHECKLIST · INCOME TARGETS</div>
+    </div>
+    <div class="home-card" onclick="showTool('roadmap')">
+      <div class="home-card-accent" style="background:var(--blue);"></div>
+      <div class="home-card-num">02</div>
+      <div class="home-card-title">MASTER ROADMAP</div>
+      <div class="home-card-desc">MONTH 1 PLAN · 6-MONTH ARC · 2-YEAR VISION</div>
+    </div>
+    <div class="home-card" onclick="showTool('funnel')">
+      <div class="home-card-accent" style="background:var(--purple);"></div>
+      <div class="home-card-num">03</div>
+      <div class="home-card-title">MARKETING FUNNEL</div>
+      <div class="home-card-desc">6-STAGE FUNNEL · EMAIL FLOWS · TOOLS · LAUNCH CHECKLIST</div>
+    </div>
+    <div class="home-card" style="cursor:default;opacity:0.5;">
+      <div class="home-card-accent" style="background:var(--green);"></div>
+      <div class="home-card-num">04</div>
+      <div class="home-card-title">MORE TOOLS</div>
+      <div class="home-card-desc">DAILY HQ · OPERATIONS · DATA CAPTURE — SEE GITHUB REPO</div>
+    </div>
+  </div>
+
+  <div class="section-label">Income Targets</div>
+  <div class="grid-4">
+    <div class="stat-box" style="border-top:3px solid var(--green);">
+      <div class="stat-label">Month 1</div>
+      <div class="stat-value" style="color:var(--green);">$1,100</div>
+      <div class="stat-sub">–$1,800 combined</div>
+    </div>
+    <div class="stat-box" style="border-top:3px solid var(--blue);">
+      <div class="stat-label">Month 3</div>
+      <div class="stat-value" style="color:var(--blue);">$2,200</div>
+      <div class="stat-sub">–$3,300 / bills covered</div>
+    </div>
+    <div class="stat-box" style="border-top:3px solid var(--amber);">
+      <div class="stat-label">Month 6</div>
+      <div class="stat-value" style="color:var(--amber);">$3,300</div>
+      <div class="stat-sub">–$5,000 / SBW live</div>
+    </div>
+    <div class="stat-box" style="border-top:3px solid var(--purple);">
+      <div class="stat-label">Year 2</div>
+      <div class="stat-value" style="color:var(--purple);">$4,000</div>
+      <div class="stat-sub">–$6,000 SBW revenue/mo</div>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-top:28px;">Fixed Monthly Bills</div>
+  <div class="grid-2">
+    <div class="stat-box"><div class="stat-label">Rent</div><div class="stat-value">$1,850</div></div>
+    <div class="stat-box"><div class="stat-label">Phone</div><div class="stat-value">$150</div></div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-brand">SBW CO.</div>
+    <div class="footer-sub">Built in Austin · One day at a time.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     WEEKLY PLANNER
+═══════════════════════════════════════════════════════════ -->
+<div class="tool-page" id="tool-planner">
+  <div class="page-eyebrow">SBW Co. · Founder Playbook</div>
+  <div class="page-title">WEEKLY<br><span class="accent">GAME PLAN</span></div>
+  <p class="page-subtitle">Three focus areas. Clear daily blocks. One week at a time. You don't need to do everything — you need to do the <em>right</em> things.</p>
+
+  <div class="mantra">
+    <div class="mantra-mark">✦</div>
+    <div class="mantra-text">"You don't need to see the whole staircase. Just the next step."</div>
+  </div>
+
+  <div class="section-label">Monthly Income Targets</div>
+  <div class="grid-2" style="margin-bottom:28px;">
+    <div class="income-card" style="border-left:3px solid var(--green);">
+      <div class="income-timeline">Week 1+</div>
+      <div class="income-amount">$800–$1,500</div>
+      <div class="income-name">Pet Boarding / Rover</div>
+    </div>
+    <div class="income-card" style="border-left:3px solid var(--amber);">
+      <div class="income-timeline">Week 2+</div>
+      <div class="income-amount">$500–$2,000</div>
+      <div class="income-name">Freelance Design</div>
+    </div>
+    <div class="income-card" style="border-left:3px solid var(--blue);">
+      <div class="income-timeline">Month 2+</div>
+      <div class="income-amount">$500–$1,500</div>
+      <div class="income-name">Uber Eats Delivery</div>
+    </div>
+    <div class="income-card" style="border-left:3px solid var(--purple);">
+      <div class="income-timeline">Month 3+</div>
+      <div class="income-amount">$300–$1,000</div>
+      <div class="income-name">SBW Co. Sales</div>
+    </div>
+  </div>
+
+  <div class="section-label">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span>This Week's Priorities</span>
+      <span class="progress-pill" id="progress-pill">0/0 done</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-title">LAUNCH WEEK CHECKLIST</div>
+    <div class="task-item" data-id="t0" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Form LLC — Texas SOS, $300</div><span class="task-badge chip-amber">SBW</span></div>
+    <div class="task-item" data-id="t1" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Get EIN — free, IRS.gov, 10 min</div><span class="task-badge chip-amber">SBW</span></div>
+    <div class="task-item" data-id="t2" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Open Mercury business checking</div><span class="task-badge chip-amber">SBW</span></div>
+    <div class="task-item" data-id="t3" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Set up Shopify store skeleton</div><span class="task-badge chip-amber">SBW</span></div>
+    <div class="task-item" data-id="t4" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Build Rover profile — photos, bio, rates</div><span class="task-badge chip-green">Income</span></div>
+    <div class="task-item" data-id="t5" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Build Fiverr profile — upload portfolio</div><span class="task-badge chip-green">Income</span></div>
+    <div class="task-item" data-id="t6" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">DM 5 Austin businesses today — offer free concept</div><span class="task-badge chip-green">Income</span></div>
+    <div class="task-item" data-id="t7" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Post intro content on @sbwco Instagram</div><span class="task-badge chip-blue">Brand</span></div>
+    <div class="task-item" data-id="t8" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Post Nextdoor Rover launch announcement</div><span class="task-badge chip-green">Income</span></div>
+    <div class="task-item" data-id="t9" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Shoot Pease Park morning footage before 9am</div><span class="task-badge chip-green">Rover</span></div>
+    <div class="task-item" data-id="t10" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Buy used bike ~$200 (Facebook Marketplace — June 5th)</div><span class="task-badge chip-blue">Admin</span></div>
+    <div class="task-item" data-id="t11" onclick="toggleTask(this)"><div class="task-check"><span class="task-check-icon">✓</span></div><div class="task-text">Save $800 to MacBook Fund from June 5th paycheck</div><span class="task-badge chip-blue">Admin</span></div>
+  </div>
+
+  <div class="section-label">Daily Schedule</div>
+  <div class="day-tabs">
+    <div class="day-tab active" onclick="setDay(0)">Mon</div>
+    <div class="day-tab" onclick="setDay(1)">Tue</div>
+    <div class="day-tab" onclick="setDay(2)">Wed</div>
+    <div class="day-tab" onclick="setDay(3)">Thu</div>
+    <div class="day-tab" onclick="setDay(4)">Fri</div>
+    <div class="day-tab" onclick="setDay(5)">Sat</div>
+    <div class="day-tab" onclick="setDay(6)">Sun</div>
+  </div>
+  <div id="day-detail"></div>
+
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;margin-bottom:24px;">
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;background:var(--amber);"></div><span style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">SBW Brand</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;background:var(--green);"></div><span style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Income</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;background:var(--blue);"></div><span style="font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Admin & Learn</span></div>
+  </div>
+
+  <div class="reminders">
+    <div class="reminders-title">Keep In Mind</div>
+    <div class="reminder-item"><div class="reminder-icon">🐾</div><div class="reminder-text">Weekends are your highest earning potential — protect them for pet boarding</div></div>
+    <div class="reminder-item"><div class="reminder-icon">🎨</div><div class="reminder-text">Your design skill is a real, valuable asset. Charge accordingly on Fiverr.</div></div>
+    <div class="reminder-item"><div class="reminder-icon">💤</div><div class="reminder-text">Rest is not laziness. Burnout will cost you more than a slow day ever will.</div></div>
+    <div class="reminder-item"><div class="reminder-icon">📱</div><div class="reminder-text">One Instagram post per day for SBW — consistency beats perfection.</div></div>
+    <div class="reminder-item"><div class="reminder-icon">📋</div><div class="reminder-text">Every Friday: review the week. Adjust. Don't just push forward blindly.</div></div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-brand">SBW CO.</div>
+    <div class="footer-sub">One week at a time.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MASTER ROADMAP
+═══════════════════════════════════════════════════════════ -->
+<div class="tool-page" id="tool-roadmap">
+  <div class="page-eyebrow">SBW Co. · Long Game</div>
+  <div class="page-title">MASTER<br><span class="accent">ROADMAP</span></div>
+  <p class="page-subtitle">Month 1 hustle. 6-month proof. 2-year vision. Every phase builds on the last — don't skip ahead, just execute.</p>
+
+  <div class="mantra">
+    <div class="mantra-mark">✦</div>
+    <div class="mantra-text">"The gap between where you are and where you want to be is bridged by what you do every day. Not what you feel like doing. What you actually do."</div>
+  </div>
+
+  <div class="plan-tabs">
+    <div class="plan-tab active" onclick="showPlan('m1')">Month 1</div>
+    <div class="plan-tab" onclick="showPlan('6mo')">6 Months</div>
+    <div class="plan-tab" onclick="showPlan('2yr')">2 Years</div>
+  </div>
+
+  <!-- MONTH 1 -->
+  <div class="plan-section active" id="plan-m1">
+    <div class="week-block">
+      <div class="week-header" style="background:var(--amber);">
+        <div class="week-title">Week 1</div><div class="week-theme">Launch & Foundation</div>
+      </div>
+      <div class="week-body">
+        <div class="focus-area">
+          <div class="focus-label chip-amber">SBW Brand</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Set up Shopify + buy domain. Research blank suppliers (Bella+Canvas, etc.)</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Post intro content on @sbwco Instagram</p></div>
+        </div>
+        <div class="focus-area">
+          <div class="focus-label chip-green">Income</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Rover profile live — photos, bio, rates, all services enabled</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Build Fiverr profile, DM 5 Austin businesses per day</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Uber Eats active — $3/mile rule, push toward 80-delivery promo</p></div>
+        </div>
+        <div class="focus-area">
+          <div class="focus-label chip-blue">Admin</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--blue);"></div><p>Form LLC, get EIN, open Mercury business checking</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--blue);"></div><p>Set up Tax Fund savings account (Marcus or Ally, 4–5% APY)</p></div>
+        </div>
+        <div class="week-goal"><div class="week-goal-label">Week 1 Goal</div><p>Everything is live and you've had at least 1 income-generating interaction across every stream.</p></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" style="background:#1d4ed8;">
+        <div class="week-title">Week 2</div><div class="week-theme">Momentum & Design</div>
+      </div>
+      <div class="week-body">
+        <div class="focus-area">
+          <div class="focus-label chip-amber">SBW Brand</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Sketch and digitize SBW designs #1–#3. Set up Adobe CC workspace.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Set up Printify and connect to Shopify. Upload first 2 products as drafts.</p></div>
+        </div>
+        <div class="focus-area">
+          <div class="focus-label chip-green">Income</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Follow up on any Fiverr / DM leads. Send 5 more pitches.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Continue Uber Eats daily. Aim for 15+ deliveries by end of week.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>First Rover booking — ask every client to leave a review.</p></div>
+        </div>
+        <div class="focus-area">
+          <div class="focus-label chip-blue">Admin</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--blue);"></div><p>Set up business email. Register Texas Sales Tax Permit (free, comptroller.texas.gov).</p></div>
+        </div>
+        <div class="week-goal"><div class="week-goal-label">Week 2 Goal</div><p>First freelance DM reply or Fiverr message. 3+ Rover bookings confirmed. 15+ Uber deliveries.</p></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" style="background:var(--purple);">
+        <div class="week-title">Week 3</div><div class="week-theme">Product & Proof</div>
+      </div>
+      <div class="week-body">
+        <div class="focus-area">
+          <div class="focus-label chip-amber">SBW Brand</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Digitize designs #4 and #5. Create mockups for tee, crewneck, hoodie.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Write product descriptions — story-driven, not spec sheets.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Post design process content — sketch to screen, behind the scenes.</p></div>
+        </div>
+        <div class="focus-area">
+          <div class="focus-label chip-green">Income</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>First freelance client deliverable (if any). Collect testimonial.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Uber Eats — target 40/80 deliveries. $900 promo deadline June 26.</p></div>
+        </div>
+        <div class="week-goal"><div class="week-goal-label">Week 3 Goal</div><p>All 5 SBW designs finalized in digital form. First Rover review earned.</p></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" style="background:var(--green);">
+        <div class="week-title">Week 4</div><div class="week-theme">Review & Ramp</div>
+      </div>
+      <div class="week-body">
+        <div class="focus-area">
+          <div class="focus-label chip-amber">SBW Brand</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Review all 5 designs — refine. Set Drop 1 target date (Late August, post MacBook).</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--amber);"></div><p>Begin email list building with Klaviyo — free to 250 subscribers.</p></div>
+        </div>
+        <div class="focus-area">
+          <div class="focus-label chip-green">Income</div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Month 1 income review — tally all streams vs. $2,000 bills target.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Raise Rover prices if 3–5 reviews earned. Price ladder is ready.</p></div>
+          <div class="task-row"><div class="task-dot" style="background:var(--green);"></div><p>Complete 80-delivery Uber Eats promo by June 26 — $900 guaranteed.</p></div>
+        </div>
+        <div class="week-goal"><div class="week-goal-label">Month 1 Close Goal</div><p>$1,100–$1,800 earned. Rover 3+ reviews. Store skeleton ready. MacBook Fund started.</p></div>
+      </div>
+    </div>
+
+    <div class="section-label">Month 1 Checklist</div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">LLC formed — Texas SOS</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">EIN obtained — IRS.gov</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Mercury business checking open</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Texas Sales Tax Permit registered</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Rover profile live with 3+ reviews</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Fiverr profile live with portfolio samples</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">All 5 SBW designs digitized</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shopify store skeleton built</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Uber Eats 80-delivery promo completed ($900)</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">MacBook Fund started — $800 from June 5 paycheck</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Used bike purchased ~$200 (Facebook Marketplace)</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Tax Fund savings account open — 25–30% set aside weekly</span></div>
+  </div>
+
+  <!-- 6 MONTHS -->
+  <div class="plan-section" id="plan-6mo">
+    <div class="month-card">
+      <div class="month-header" style="background:var(--amber);">
+        <div class="month-name">Month 1–2</div>
+        <div class="month-focus">Survival & Setup</div>
+      </div>
+      <div class="month-body">
+        <div class="month-pillars">
+          <div class="pillar"><div class="pillar-label">Income Target</div><div class="pillar-value">$1,100–$2,000</div></div>
+          <div class="pillar"><div class="pillar-label">Priority</div><div class="pillar-value">Cash flow + legal foundation</div></div>
+          <div class="pillar"><div class="pillar-label">SBW Focus</div><div class="pillar-value">All 5 designs done, store skeleton live</div></div>
+          <div class="pillar"><div class="pillar-label">Key Win</div><div class="pillar-value">$900 Uber promo + 3 Rover reviews</div></div>
+        </div>
+        <div class="month-target"><div class="month-target-icon">🎯</div><p>MacBook Pro M5 purchased by late August. LLC + EIN + Mercury complete. Tax system running.</p></div>
+      </div>
+    </div>
+
+    <div class="month-card">
+      <div class="month-header" style="background:var(--blue);">
+        <div class="month-name">Month 3–4</div>
+        <div class="month-focus">Consistency & Clients</div>
+      </div>
+      <div class="month-body">
+        <div class="month-pillars">
+          <div class="pillar"><div class="pillar-label">Income Target</div><div class="pillar-value">$2,200–$3,300</div></div>
+          <div class="pillar"><div class="pillar-label">Priority</div><div class="pillar-value">Bills covered every month</div></div>
+          <div class="pillar"><div class="pillar-label">SBW Focus</div><div class="pillar-value">Store fully live, Drop 1 launched</div></div>
+          <div class="pillar"><div class="pillar-label">Key Win</div><div class="pillar-value">First SBW sale. Rover 10+ reviews.</div></div>
+        </div>
+        <div class="month-target"><div class="month-target-icon">🎯</div><p>Freelance design generating $600–$900/month. SBW Shopify store open for real transactions. Consistent posting rhythm.</p></div>
+      </div>
+    </div>
+
+    <div class="month-card">
+      <div class="month-header" style="background:var(--purple);">
+        <div class="month-name">Month 5–6</div>
+        <div class="month-focus">SBW Goes Real</div>
+      </div>
+      <div class="month-body">
+        <div class="month-pillars">
+          <div class="pillar"><div class="pillar-label">Income Target</div><div class="pillar-value">$3,300–$5,000</div></div>
+          <div class="pillar"><div class="pillar-label">Priority</div><div class="pillar-value">SBW generating real revenue</div></div>
+          <div class="pillar"><div class="pillar-label">SBW Focus</div><div class="pillar-value">Data from Drop 1, prep Drop 2</div></div>
+          <div class="pillar"><div class="pillar-label">Key Win</div><div class="pillar-value">500+ Instagram followers. Email list growing.</div></div>
+        </div>
+        <div class="month-target"><div class="month-target-icon">🎯</div><p>SBW has real sales data. Best-selling design identified. Heat press purchase being evaluated. Portfolio case study taking shape.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 YEARS -->
+  <div class="plan-section" id="plan-2yr">
+    <div class="timeline">
+      <div class="milestone">
+        <div class="milestone-card">
+          <div class="milestone-date" style="color:var(--amber);">Month 1–3 · Now</div>
+          <div class="milestone-title">THE GRIND BEGINS</div>
+          <div class="milestone-desc">Four income streams active. Building the foundation while keeping the lights on. Every dollar earned is proof you can do this.</div>
+          <div class="milestone-wins">
+            <div class="milestone-win"><div class="win-dot" style="background:var(--amber);"></div><div class="win-text">All 4 income streams generating cash</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--amber);"></div><div class="win-text">LLC, EIN, Mercury, Tax Fund — all set up</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--amber);"></div><div class="win-text">MacBook Pro M5 purchased — creative setup complete</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--amber);"></div><div class="win-text">SBW Drop 1 designs ready, store live</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone green">
+        <div class="milestone-card">
+          <div class="milestone-date" style="color:var(--green);">Month 3–6 · Building</div>
+          <div class="milestone-title">PROOF OF CONCEPT</div>
+          <div class="milestone-desc">The grind phase. Not glamorous, but this is where the real business is built. Every repeat customer, every 5-star review, every sale is compounding.</div>
+          <div class="milestone-wins">
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">$2,000–$3,000/month in combined income</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">SBW has real sales data and a best-selling product</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">1,000+ Instagram followers across both accounts</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone blue">
+        <div class="milestone-card">
+          <div class="milestone-date" style="color:var(--blue);">Month 6–9 · Investor Ready</div>
+          <div class="milestone-title">THE PITCH</div>
+          <div class="milestone-desc">6 months of real data to put in front of an investor. Not projections — actual revenue, actual margins, actual proof you can execute.</div>
+          <div class="milestone-wins">
+            <div class="milestone-win"><div class="win-dot" style="background:var(--blue);"></div><div class="win-text">Updated SBW financial model with real numbers</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--blue);"></div><div class="win-text">Heat press purchased — in-house production begins</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--blue);"></div><div class="win-text">First bulk inventory order placed</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--blue);"></div><div class="win-text">Investor meeting scheduled</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone purple">
+        <div class="milestone-card">
+          <div class="milestone-date" style="color:var(--purple);">Month 9–12 · Year 1 Close</div>
+          <div class="milestone-title">SBW TAKES CENTER STAGE</div>
+          <div class="milestone-desc">The brand is real. Dog sitting is stable supplemental income. SBW is generating enough to reinvest. You're no longer just surviving — you're building.</div>
+          <div class="milestone-wins">
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">SBW generating $1,500–$2,500/month in revenue</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">Second design drop launched successfully</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">2,500+ combined Instagram followers</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">Investor funding secured or self-sustaining without it</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone green">
+        <div class="milestone-card">
+          <div class="milestone-date" style="color:var(--green);">Month 12–18 · Year 2 Begins</div>
+          <div class="milestone-title">SCALE & SYSTEMIZE</div>
+          <div class="milestone-desc">Year 2 is where it gets exciting. Startup costs are history. Systems are in place. Every dollar earned is cleaner profit than Year 1.</div>
+          <div class="milestone-wins">
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">SBW gross margins above 60% with bulk production</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">Third drop — seasonal collection</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">Pop-up shop or Austin market appearance</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">Monthly income covering rent + expenses without side income</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--green);"></div><div class="win-text">Dog sitting scaled back to weekends only</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone purple">
+        <div class="milestone-card">
+          <div class="milestone-date" style="color:var(--purple);">Month 18–24 · The Vision</div>
+          <div class="milestone-title">SBW CO. IS REAL</div>
+          <div class="milestone-desc">A real brand, a real income, a real creative business built from a phone and an apartment in Austin.</div>
+          <div class="milestone-wins">
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">$4,000–$6,000/month in SBW revenue</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">5,000+ Instagram followers — organic, loyal community</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">Wholesale inquiries from Austin boutiques</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">Brand collaborations with other Austin creatives</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">Full-time focus on SBW — the business supports you</div></div>
+            <div class="milestone-win"><div class="win-dot" style="background:var(--purple);"></div><div class="win-text">Looking back at Month 1 thinking: "I can't believe how far we've come."</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-brand">SBW CO.</div>
+    <div class="footer-sub">Master Roadmap · Built in Austin · One day at a time.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MARKETING FUNNEL
+═══════════════════════════════════════════════════════════ -->
+<div class="tool-page" id="tool-funnel">
+  <div class="page-eyebrow">SBW Co. · Marketing Strategy</div>
+  <div class="page-title">MARKETING<br><span class="accent">FUNNEL</span></div>
+  <p class="page-subtitle">Every person who buys an SBW piece travels through six stages. Your job is to move them forward at each one — and patch the leaks where they drop off.</p>
+
+  <div class="plan-tabs">
+    <div class="plan-tab active" onclick="showFunnel('overview')">Overview</div>
+    <div class="plan-tab" onclick="showFunnel('stages')">All Stages</div>
+    <div class="plan-tab" onclick="showFunnel('emails')">Email Flows</div>
+    <div class="plan-tab" onclick="showFunnel('tools')">Tools</div>
+    <div class="plan-tab" onclick="showFunnel('checklist')">Launch Checklist</div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="plan-section active" id="funnel-overview">
+    <div style="margin-bottom:28px;">
+      <div class="funnel-stage" style="background:var(--amber-bg);border-color:var(--amber-border);" onclick="showFunnel('stages');scrollStage('s1')">
+        <div><div class="funnel-label" style="color:var(--amber);">① Awareness</div><div class="funnel-sub" style="color:var(--amber);">They discover SBW Co.</div></div>
+        <div class="funnel-pct" style="color:var(--amber);">100%</div>
+      </div>
+      <div class="funnel-arrow">▼</div>
+      <div class="funnel-stage" style="background:var(--blue-bg);border-color:var(--blue-border);margin:0 4%;" onclick="showFunnel('stages');scrollStage('s2')">
+        <div><div class="funnel-label" style="color:var(--blue);">② Interest</div><div class="funnel-sub" style="color:var(--blue);">They follow & engage</div></div>
+        <div class="funnel-pct" style="color:var(--blue);">~40%</div>
+      </div>
+      <div class="funnel-arrow">▼</div>
+      <div class="funnel-stage" style="background:var(--purple-bg);border-color:var(--purple-border);margin:0 8%;" onclick="showFunnel('stages');scrollStage('s3')">
+        <div><div class="funnel-label" style="color:var(--purple);">③ Consideration</div><div class="funnel-sub" style="color:var(--purple);">They visit the store</div></div>
+        <div class="funnel-pct" style="color:var(--purple);">~15%</div>
+      </div>
+      <div class="funnel-arrow">▼</div>
+      <div class="funnel-stage" style="background:var(--pink-bg);border-color:var(--pink-border);margin:0 12%;" onclick="showFunnel('stages');scrollStage('s4')">
+        <div><div class="funnel-label" style="color:var(--pink);">④ Intent</div><div class="funnel-sub" style="color:var(--pink);">They add to cart</div></div>
+        <div class="funnel-pct" style="color:var(--pink);">~5%</div>
+      </div>
+      <div class="funnel-arrow">▼</div>
+      <div class="funnel-stage" style="background:var(--green-bg);border-color:var(--green-border);margin:0 16%;" onclick="showFunnel('stages');scrollStage('s5')">
+        <div><div class="funnel-label" style="color:var(--green);">⑤ Purchase</div><div class="funnel-sub" style="color:var(--green);">They buy</div></div>
+        <div class="funnel-pct" style="color:var(--green);">~2%</div>
+      </div>
+      <div class="funnel-arrow">▼</div>
+      <div class="funnel-stage" style="background:var(--orange-bg);border-color:var(--orange-border);margin:0 12%;" onclick="showFunnel('stages');scrollStage('s6')">
+        <div><div class="funnel-label" style="color:var(--orange);">⑥ Loyalty</div><div class="funnel-sub" style="color:var(--orange);">They return & refer</div></div>
+        <div class="funnel-pct" style="color:var(--orange);">∞</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">WHAT THE NUMBERS MEAN</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.9;">
+        If <strong style="color:var(--black);">1,000 people</strong> see an SBW post this month →<br>
+        <strong style="color:var(--blue);">~400</strong> follow or save it →<br>
+        <strong style="color:var(--purple);">~150</strong> visit the Shopify store →<br>
+        <strong style="color:var(--pink);">~50</strong> add something to cart →<br>
+        <strong style="color:var(--green);">~20</strong> complete a purchase →<br>
+        <strong style="color:var(--orange);">~5–8</strong> become repeat buyers who refer others.<br><br>
+        This is why <strong style="color:var(--black);">reach matters at the top</strong> and <strong style="color:var(--black);">conversion matters at the bottom.</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- ALL STAGES -->
+  <div class="plan-section" id="funnel-stages">
+    <div class="stage-card" id="s1">
+      <div class="stage-card-header" style="border-left:4px solid var(--amber);">
+        <div class="stage-num">Stage 01 · Top of Funnel</div>
+        <div class="stage-title" style="color:var(--amber);">Awareness</div>
+        <div class="stage-desc">They've never heard of SBW Co. They stumble across a Reel, see a hashtag post, or hear about it from someone in Austin. The goal is simple: stop the scroll.</div>
+      </div>
+      <div class="stage-card-body">
+        <div class="detail-label">What Drives Awareness for SBW</div>
+        <div class="action-item"><div class="action-icon">🎬</div><div class="action-text"><strong>Reels with high production value</strong> — cinematic, well-lit, Austin aesthetic. The algorithm pushes Reels to non-followers. This is your free advertising.</div></div>
+        <div class="action-item"><div class="action-icon">📍</div><div class="action-text"><strong>Austin location tags on every post</strong> — geo-tagged content shows up in Austin searches and gets local traction. Every post, every story, every Reel.</div></div>
+        <div class="action-item"><div class="action-icon">#️⃣</div><div class="action-text"><strong>Hashtag strategy</strong> — rotating sets of 5–10 relevant hashtags per post. Mix of small (#AustinStreetWear, ~50K), mid (#StreetWearBrand, ~500K), and large (#Streetwear, ~5M).</div></div>
+        <div class="action-item"><div class="action-icon">🤝</div><div class="action-text"><strong>Austin creator engagement</strong> — genuinely comment on posts from Austin-based creators, brands, and events. Real engagement builds awareness organically.</div></div>
+        <div class="detail-label">Metrics to Watch</div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-val" style="color:var(--amber);">Reach</div><div class="metric-label">Unique accounts who saw any post</div></div>
+          <div class="metric-box"><div class="metric-val" style="color:var(--amber);">Impressions</div><div class="metric-label">Total times content was seen</div></div>
+        </div>
+        <div class="leak-box"><div class="leak-title">⚠️ Common Leak</div><div class="leak-text">Posting inconsistently kills awareness. The algorithm stops showing your content to new people if you go quiet. Even one post per day keeps the pipeline full.</div></div>
+      </div>
+    </div>
+
+    <div class="stage-card" id="s2">
+      <div class="stage-card-header" style="border-left:4px solid var(--blue);">
+        <div class="stage-num">Stage 02 · Upper-Mid Funnel</div>
+        <div class="stage-title" style="color:var(--blue);">Interest</div>
+        <div class="stage-desc">They followed you, saved a post, or watched your Reel twice. They're curious but not committed. Your content, your voice, and your story are what keep them here.</div>
+      </div>
+      <div class="stage-card-body">
+        <div class="detail-label">What Builds Interest for SBW</div>
+        <div class="action-item"><div class="action-icon">🎨</div><div class="action-text"><strong>Design process content</strong> — showing the work builds credibility and curiosity simultaneously.</div></div>
+        <div class="action-item"><div class="action-icon">🖤</div><div class="action-text"><strong>Founder story posts</strong> — people follow people, not logos. Wesley building SBW from scratch in Austin is a compelling story. Tell it repeatedly in different ways.</div></div>
+        <div class="action-item"><div class="action-icon">💬</div><div class="action-text"><strong>Engaging captions</strong> — long, honest captions that make people feel something keep followers from unfollowing.</div></div>
+        <div class="action-item"><div class="action-icon">🗳️</div><div class="action-text"><strong>Polls and questions</strong> — colorway votes, design feedback, brand decisions made publicly. Participation creates investment in the brand's success.</div></div>
+        <div class="detail-label">Metrics to Watch</div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-val" style="color:var(--blue);">Saves</div><div class="metric-label">Strongest interest signal on IG</div></div>
+          <div class="metric-box"><div class="metric-val" style="color:var(--blue);">Story Views</div><div class="metric-label">Your warmest audience size</div></div>
+        </div>
+        <div class="leak-box"><div class="leak-title">⚠️ Common Leak</div><div class="leak-text">Posting only product content without personality. Balance brand posts with founder posts.</div></div>
+        <div class="fix-box"><div class="fix-title">✓ The Fix</div><div class="fix-text">For every 2 product/brand posts, post 1 personal founder post. This ratio keeps the brand human and builds emotional connection.</div></div>
+      </div>
+    </div>
+
+    <div class="stage-card" id="s3">
+      <div class="stage-card-header" style="border-left:4px solid var(--purple);">
+        <div class="stage-num">Stage 03 · Mid Funnel</div>
+        <div class="stage-title" style="color:var(--purple);">Consideration</div>
+        <div class="stage-desc">They tapped your link in bio and landed on the Shopify store. They're looking at product photos, reading descriptions, checking prices. This is where most small brands lose people.</div>
+      </div>
+      <div class="stage-card-body">
+        <div class="detail-label">What Your Shopify Store Must Have</div>
+        <div class="action-item"><div class="action-icon">📸</div><div class="action-text"><strong>Multiple product photos</strong> — front, back, close-up of graphic, lifestyle shot, flat lay. People need to see every angle before spending $65+.</div></div>
+        <div class="action-item"><div class="action-icon">✍️</div><div class="action-text"><strong>Compelling descriptions</strong> — not specs. Tell the story of the design. What inspired it. What it feels like. Emotion sells.</div></div>
+        <div class="action-item"><div class="action-icon">⭐</div><div class="action-text"><strong>Reviews visible</strong> — even 3–5 reviews dramatically increase conversion. Install Judge.me (free Shopify app).</div></div>
+        <div class="action-item"><div class="action-icon">🔒</div><div class="action-text"><strong>Trust signals</strong> — secure checkout badge, clear contact info, a real About page with Wesley's face and story.</div></div>
+        <div class="action-item"><div class="action-icon">📱</div><div class="action-text"><strong>Mobile-optimized</strong> — test every page on mobile before launch. Almost every SBW customer will shop on their phone.</div></div>
+        <div class="leak-box"><div class="leak-title">⚠️ The Biggest Leak</div><div class="leak-text">A beautiful Instagram driving traffic to a generic, unfinished Shopify store. The store must match the brand's quality.</div></div>
+        <div class="fix-box"><div class="fix-title">✓ The Fix</div><div class="fix-text">Spend as much time on your Shopify store as you do on your Instagram. Every product page is a landing page. Treat it like one.</div></div>
+      </div>
+    </div>
+
+    <div class="stage-card" id="s4">
+      <div class="stage-card-header" style="border-left:4px solid var(--pink);">
+        <div class="stage-num">Stage 04 · Lower-Mid Funnel</div>
+        <div class="stage-title" style="color:var(--pink);">Intent</div>
+        <div class="stage-desc">They added to cart. This is a very strong signal. But cart abandonment rates average 70%. Your job here is to close the gap between wanting and buying.</div>
+      </div>
+      <div class="stage-card-body">
+        <div class="detail-label">What Converts Intent to Purchase</div>
+        <div class="action-item"><div class="action-icon">⚡</div><div class="action-text"><strong>Frictionless checkout</strong> — enable Shop Pay and Apple Pay. One-tap checkout converts dramatically better than multi-step forms.</div></div>
+        <div class="action-item"><div class="action-icon">📧</div><div class="action-text"><strong>Abandoned cart email</strong> — a simple "you left something behind" email with a product photo recovers 5–15% of abandoned carts.</div></div>
+        <div class="action-item"><div class="action-icon">⏰</div><div class="action-text"><strong>Honest urgency</strong> — "Only 8 left in this size" or "Drop 1 closes [date]" creates real urgency when true. Never fake scarcity.</div></div>
+        <div class="action-item"><div class="action-icon">🎁</div><div class="action-text"><strong>Free shipping threshold</strong> — "Free shipping over $80" nudges people to add a second item. Increases AOV and reduces abandonment.</div></div>
+        <div class="detail-label">Metrics to Watch</div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-val" style="color:var(--pink);">Cart Rate</div><div class="metric-label">% of store visitors who add to cart</div></div>
+          <div class="metric-box"><div class="metric-val" style="color:var(--pink);">Abandonment</div><div class="metric-label">% who add to cart but don't buy</div></div>
+        </div>
+        <div class="leak-box"><div class="leak-title">⚠️ Common Leak</div><div class="leak-text">No email collection means abandoned carts are gone forever. Set up Klaviyo from day one.</div></div>
+      </div>
+    </div>
+
+    <div class="stage-card" id="s5">
+      <div class="stage-card-header" style="border-left:4px solid var(--green);">
+        <div class="stage-num">Stage 05 · Conversion</div>
+        <div class="stage-title" style="color:var(--green);">Purchase</div>
+        <div class="stage-desc">They bought. This is the moment everything has been building toward — and it's also the start of the next phase. How you treat them now determines if they ever come back.</div>
+      </div>
+      <div class="stage-card-body">
+        <div class="detail-label">What Makes the First Purchase Unforgettable</div>
+        <div class="action-item"><div class="action-icon">📦</div><div class="action-text"><strong>Packaging that surprises</strong> — tissue paper, a branded sticker, a handwritten thank-you card from Wesley. At $65–$110, people expect premium. Deliver it.</div></div>
+        <div class="action-item"><div class="action-icon">✉️</div><div class="action-text"><strong>Personal order confirmation</strong> — not a generic Shopify email. A message in SBW's voice that makes them feel like they're part of something.</div></div>
+        <div class="action-item"><div class="action-icon">📲</div><div class="action-text"><strong>Tag request card</strong> — "Tag us on Instagram @sbwco for a chance to be featured." This turns customers into content creators and awareness drivers.</div></div>
+        <div class="detail-label">Metrics to Watch</div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-val" style="color:var(--green);">Conv. Rate</div><div class="metric-label">% of store visitors who purchase</div></div>
+          <div class="metric-box"><div class="metric-val" style="color:var(--green);">AOV</div><div class="metric-label">Average order value</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-card" id="s6">
+      <div class="stage-card-header" style="border-left:4px solid var(--orange);">
+        <div class="stage-num">Stage 06 · Post-Purchase</div>
+        <div class="stage-title" style="color:var(--orange);">Loyalty</div>
+        <div class="stage-desc">They bought once. Your goal is to make them buy again and bring their friends. Repeat customers are 5x cheaper to convert than new ones.</div>
+      </div>
+      <div class="stage-card-body">
+        <div class="detail-label">What Builds Loyalty at SBW</div>
+        <div class="action-item"><div class="action-icon">💌</div><div class="action-text"><strong>Personal DM to every first-time buyer</strong> — "Hey [name], thank you so much — it means everything." This scales until you have too many orders for it not to.</div></div>
+        <div class="action-item"><div class="action-icon">📸</div><div class="action-text"><strong>Repost every tag</strong> — when a customer posts wearing SBW, repost it to your story immediately. This rewards buyers and signals to followers that real people love the brand.</div></div>
+        <div class="action-item"><div class="action-icon">🔑</div><div class="action-text"><strong>Drop 2 early access</strong> — email past buyers first. "You were one of our first — here's early access before the public drop." This creates an inner circle.</div></div>
+        <div class="action-item"><div class="action-icon">⭐</div><div class="action-text"><strong>Review request email</strong> — 7 days post-delivery. "How does it feel?" with a direct link to leave a review. Reviews drive the next wave of consideration.</div></div>
+        <div class="detail-label">Metrics to Watch</div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-val" style="color:var(--orange);">Repeat Rate</div><div class="metric-label">% who buy more than once</div></div>
+          <div class="metric-box"><div class="metric-val" style="color:var(--orange);">Review Rate</div><div class="metric-label">% who leave a review</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL FLOWS -->
+  <div class="plan-section" id="funnel-emails">
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">EMAIL SEQUENCE — DROP 1 LAUNCH</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;">6 emails. Start building this sequence in Klaviyo before launch. Each email has one job.</p>
+
+      <div class="email-card" id="e1">
+        <div class="email-header" onclick="toggleEmail('e1')">
+          <span class="email-num">E1</span>
+          <span class="email-subject">Welcome to SBW Co.</span>
+          <span class="email-trigger">On signup</span>
+          <span class="email-expand">▼</span>
+        </div>
+        <div class="email-body">
+          <div class="detail-label">Goal</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Set expectations and establish the brand voice. This is their first impression of SBW outside of Instagram. Make it feel personal — not corporate.</p>
+          <div class="detail-label">Key Elements</div>
+          <p style="font-size:13px;color:var(--black);line-height:1.7;">Wesley's photo + a short founder note. What SBW is and why it exists. What they can expect from these emails (drop announcements, behind-the-scenes, early access). Link to Instagram.</p>
+          <button class="email-copy" onclick="copyEmail(this, 'Welcome to SBW Co. — You\'re in.')">Copy Subject Line</button>
+        </div>
+      </div>
+
+      <div class="email-card" id="e2">
+        <div class="email-header" onclick="toggleEmail('e2')">
+          <span class="email-num">E2</span>
+          <span class="email-subject">The Story Behind the Brand</span>
+          <span class="email-trigger">Day 3</span>
+          <span class="email-expand">▼</span>
+        </div>
+        <div class="email-body">
+          <div class="detail-label">Goal</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Deepen the connection. People buy from people they believe in. This email is where Wesley's story does the selling.</p>
+          <div class="detail-label">Key Elements</div>
+          <p style="font-size:13px;color:var(--black);line-height:1.7;">The gap in the market SBW fills. What "premium graphic apparel" means at SBW vs. fast fashion. The design philosophy. A preview of the design process — sketch photo or in-progress shot.</p>
+          <button class="email-copy" onclick="copyEmail(this, 'Why I started SBW (and why it\'s different)')">Copy Subject Line</button>
+        </div>
+      </div>
+
+      <div class="email-card" id="e3">
+        <div class="email-header" onclick="toggleEmail('e3')">
+          <span class="email-num">E3</span>
+          <span class="email-subject">Drop 1 Is Coming — Here's a Preview</span>
+          <span class="email-trigger">1 week before drop</span>
+          <span class="email-expand">▼</span>
+        </div>
+        <div class="email-body">
+          <div class="detail-label">Goal</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Build anticipation. This is the teaser. Show enough to excite, hide enough to compel them to come back on drop day.</p>
+          <div class="detail-label">Key Elements</div>
+          <p style="font-size:13px;color:var(--black);line-height:1.7;">A cropped or partially revealed product image. The drop date and time. A note about limited availability (if true). "You're getting this first because you're on the list."</p>
+          <button class="email-copy" onclick="copyEmail(this, 'Drop 1 drops [DATE] — first look inside')">Copy Subject Line</button>
+        </div>
+      </div>
+
+      <div class="email-card" id="e4">
+        <div class="email-header" onclick="toggleEmail('e4')">
+          <span class="email-num">E4</span>
+          <span class="email-subject">Drop 1 Is LIVE — Shop Now</span>
+          <span class="email-trigger">Drop day, 9am</span>
+          <span class="email-expand">▼</span>
+        </div>
+        <div class="email-body">
+          <div class="detail-label">Goal</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Drive immediate traffic to the store. This email has one call to action: shop now. No distractions.</p>
+          <div class="detail-label">Key Elements</div>
+          <p style="font-size:13px;color:var(--black);line-height:1.7;">Full product reveal — hero image front and center. Product names, prices, and a direct Shop Now button. One sentence from Wesley about this drop. Urgency if applicable.</p>
+          <button class="email-copy" onclick="copyEmail(this, 'SBW Drop 1 is live. Shop now.')">Copy Subject Line</button>
+        </div>
+      </div>
+
+      <div class="email-card" id="e5">
+        <div class="email-header" onclick="toggleEmail('e5')">
+          <span class="email-num">E5</span>
+          <span class="email-subject">You Left Something Behind</span>
+          <span class="email-trigger">Abandoned cart, 2hr</span>
+          <span class="email-expand">▼</span>
+        </div>
+        <div class="email-body">
+          <div class="detail-label">Goal</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Recover the abandoned cart. This is automated in Klaviyo. It should feel personal — not like a system email.</p>
+          <div class="detail-label">Key Elements</div>
+          <p style="font-size:13px;color:var(--black);line-height:1.7;">Photo of the exact item left in cart. A short, friendly note: "Still thinking it over? No pressure." Direct checkout link. If stock is actually low: "Only X left in your size."</p>
+          <button class="email-copy" onclick="copyEmail(this, 'Your cart misses you (and so do we)')">Copy Subject Line</button>
+        </div>
+      </div>
+
+      <div class="email-card" id="e6">
+        <div class="email-header" onclick="toggleEmail('e6')">
+          <span class="email-num">E6</span>
+          <span class="email-subject">How Does It Feel?</span>
+          <span class="email-trigger">7 days post-delivery</span>
+          <span class="email-expand">▼</span>
+        </div>
+        <div class="email-body">
+          <div class="detail-label">Goal</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Collect a review and plant the seed for the next purchase. This email is low-pressure and builds relationship capital.</p>
+          <div class="detail-label">Key Elements</div>
+          <p style="font-size:13px;color:var(--black);line-height:1.7;">A warm check-in from Wesley. Direct review link (Judge.me or Google). An ask to tag @sbwco on Instagram with their photo. A brief tease: "Drop 2 is already in the works — stay tuned."</p>
+          <button class="email-copy" onclick="copyEmail(this, 'How does it feel? (+ a quick favor)')">Copy Subject Line</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="plan-section" id="funnel-tools">
+    <div class="tool-card">
+      <div class="tool-header"><div class="tool-icon">📸</div><div><div class="tool-name">Instagram</div><div class="tool-stage">Awareness + Interest</div></div><span class="tool-free">Free</span></div>
+      <div class="tool-desc">Primary awareness and interest channel. Reels for reach, Stories for warmth, Posts for brand building. @sbwco — post daily, engage authentically.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header"><div class="tool-icon">🛒</div><div><div class="tool-name">Shopify</div><div class="tool-stage">Consideration + Purchase</div></div><span class="tool-paid">$39/mo</span></div>
+      <div class="tool-desc">Your store and the bottom of the funnel. Every design decision here is a conversion decision. Treat each product page like a landing page.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header"><div class="tool-icon">📧</div><div><div class="tool-name">Klaviyo</div><div class="tool-stage">Intent + Loyalty</div></div><span class="tool-free">Free to 250</span></div>
+      <div class="tool-desc">Email automation for abandoned cart recovery, drop announcements, and post-purchase flows. Set up before launch — not after. Connect to Shopify on day one.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header"><div class="tool-icon">⭐</div><div><div class="tool-name">Judge.me</div><div class="tool-stage">Consideration + Loyalty</div></div><span class="tool-free">Free</span></div>
+      <div class="tool-desc">Shopify review app. Install before launch. Automates review request emails and displays reviews on product pages. Reviews are conversion multipliers.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header"><div class="tool-icon">🖨️</div><div><div class="tool-name">Printify</div><div class="tool-stage">Fulfillment (POD)</div></div><span class="tool-free">Free</span></div>
+      <div class="tool-desc">Print-on-demand until 10+ sales on a design, then switch to bulk. Connects directly to Shopify. Use until you have data to justify inventory risk.</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-header"><div class="tool-icon">📊</div><div><div class="tool-name">Shopify Analytics</div><div class="tool-stage">All Stages</div></div><span class="tool-free">Included</span></div>
+      <div class="tool-desc">Review every Monday. Track store visitors, conversion rate, top products, traffic sources. This data tells you where the funnel leaks — fix the biggest leak each week.</div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="plan-section" id="funnel-checklist">
+    <div class="card">
+      <div class="card-title">LAUNCH READINESS CHECKLIST</div>
+
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:4px;">Awareness</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Instagram professional account set up with SBW bio and Shopify link</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">First Reel posted — cinematic brand intro or design process</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Austin location tags added to every post</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Hashtag sets saved and rotating across posts</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">30-day content calendar live and in use</span></div>
+
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Interest</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Founder story post published with personal photo</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Design process content showing sketch to final product</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Daily stories posting — polls, questions, behind the scenes</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Colorway poll or audience vote run at least once</span></div>
+
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Consideration — Store</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shopify store fully built — all product pages complete</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Multiple product photos per item (front, back, detail, lifestyle)</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Story-driven product descriptions written for every item</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Judge.me reviews app installed and configured</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">About page written with Wesley's story and photo</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shipping policy and returns policy clearly visible</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Store tested on mobile — every page, every button</span></div>
+
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Intent — Cart Recovery</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Klaviyo connected to Shopify and collecting emails</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Abandoned cart email flow built and tested (E4 + E5)</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shop Pay and Apple Pay enabled in Shopify settings</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Free shipping threshold set (e.g. free over $85)</span></div>
+
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Purchase & Post-Purchase</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Order confirmation email customized with SBW voice</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shipping confirmation email personalized</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Review request email set up (7 days post-delivery)</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Packaging planned — tissue paper, sticker, thank-you card</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Tag request card included in every order</span></div>
+
+      <div style="font-family:var(--font-mono);font-size:9px;color:var(--amber);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;margin-top:16px;">Loyalty & Advocacy</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Customer photo repost process in place — repost every tag</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Personal DM sent to every first-time buyer</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Drop 2 early access email planned for past buyers</span></div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><span class="check-icon">✓</span></div><span class="check-text">Shopify Analytics reviewed every Monday</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-brand">SBW CO.</div>
+    <div class="footer-sub">Marketing Funnel Strategy · Austin, TX · Drop 1</div>
+  </div>
+</div>
+
+<!-- ═══ JAVASCRIPT ════════════════════════════════════════════ -->
+<script>
+// ── TOOL NAV ──────────────────────────────────────────────────
+function showTool(id) {
+  document.querySelectorAll('.tool-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.app-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tool-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── ROADMAP PLAN TABS ─────────────────────────────────────────
+function showPlan(id) {
+  document.querySelectorAll('#tool-roadmap .plan-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#tool-roadmap .plan-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('plan-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── FUNNEL TABS ───────────────────────────────────────────────
+function showFunnel(id) {
+  document.querySelectorAll('#tool-funnel .plan-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#tool-funnel .plan-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('funnel-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function scrollStage(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ── EMAIL TOGGLE ──────────────────────────────────────────────
+function toggleEmail(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function copyEmail(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Subject Line'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── CHECKLIST ─────────────────────────────────────────────────
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  saveChecks();
+}
+function saveChecks() {
+  const states = {};
+  document.querySelectorAll('.check-item').forEach((t, i) => {
+    states['c_' + i] = t.classList.contains('checked');
+  });
+  localStorage.setItem('sbw_unified_checks', JSON.stringify(states));
+}
+
+// ── TASKS (planner) ───────────────────────────────────────────
+function toggleTask(el) {
+  el.classList.toggle('checked');
+  updateProgress();
+  const states = {};
+  document.querySelectorAll('.task-item').forEach(t => {
+    states[t.dataset.id] = t.classList.contains('checked');
+  });
+  localStorage.setItem('sbw_unified_tasks', JSON.stringify(states));
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.task-item').length;
+  const done = document.querySelectorAll('.task-item.checked').length;
+  const pill = document.getElementById('progress-pill');
+  if (pill) {
+    pill.textContent = `${done}/${total} done`;
+    pill.classList.toggle('done', done === total && total > 0);
+  }
+}
+
+// ── DAYS ──────────────────────────────────────────────────────
+const DAYS = [
+  { day:'Monday', theme:'LAUNCH WEEK', blocks:[
+    { time:'9–12pm', label:'SBW MORNING', color:'var(--amber)', tasks:['Set up Shopify account & buy domain','Research blank suppliers (Bella+Canvas, etc.)'] },
+    { time:'1–4pm', label:'INCOME WORK', color:'var(--green)', tasks:['Build Rover profile — photos, bio, rates','List on Wag as backup'] },
+    { time:'4–7pm', label:'ADMIN & LEARN', color:'var(--blue)', tasks:['Post intro content on Instagram for SBW','Watch 1 Shopify setup tutorial'] },
+  ]},
+  { day:'Tuesday', theme:'DESIGN DAY', blocks:[
+    { time:'9–12pm', label:'SBW MORNING', color:'var(--amber)', tasks:['Sketch / digitize SBW design #1 & #2','Set up Adobe CC workspace'] },
+    { time:'1–4pm', label:'INCOME WORK', color:'var(--green)', tasks:['Build Fiverr profile — upload portfolio samples','DM 5 local businesses offering design services'] },
+    { time:'4–7pm', label:'ADMIN & LEARN', color:'var(--blue)', tasks:['Research competitors on Instagram','Set up business email'] },
+  ]},
+  { day:'Wednesday', theme:'STORE DAY', blocks:[
+    { time:'9–12pm', label:'SBW MORNING', color:'var(--amber)', tasks:['Build Shopify store skeleton (pages, nav)','Set up Printify account & connect to Shopify'] },
+    { time:'1–4pm', label:'INCOME WORK', color:'var(--green)', tasks:['Finalize Rover listing — respond to any inquiries','Pitch 2 more businesses on design work'] },
+    { time:'4–7pm', label:'ADMIN & LEARN', color:'var(--blue)', tasks:['Plan first SBW Instagram posts (5 content ideas)','Open Tax Fund savings account'] },
+  ]},
+  { day:'Thursday', theme:'PRODUCT DAY', blocks:[
+    { time:'9–12pm', label:'SBW MORNING', color:'var(--amber)', tasks:['Digitize SBW designs #3, #4, #5','Create mockups for tee, crewneck, hoodie'] },
+    { time:'1–4pm', label:'INCOME WORK', color:'var(--green)', tasks:['Follow up on any Fiverr / DM leads','Uber Eats: aim for $3/mile or better on every order'] },
+    { time:'4–7pm', label:'ADMIN & LEARN', color:'var(--blue)', tasks:['Upload first 2 products to Shopify draft','Post 1 piece of SBW content to Instagram'] },
+  ]},
+  { day:'Friday', theme:'REVIEW & PUSH', blocks:[
+    { time:'9–12pm', label:'SBW MORNING', color:'var(--amber)', tasks:['Review all 5 designs — refine as needed','Write product descriptions for store'] },
+    { time:'1–4pm', label:'INCOME WORK', color:'var(--green)', tasks:['Send 5 more design pitches','Confirm any weekend pet sitting bookings'] },
+    { time:'4–7pm', label:'ADMIN & LEARN', color:'var(--blue)', tasks:['Weekly review — what got done, what didn\'t?','Plan Week 2 priorities'] },
+  ]},
+  { day:'Saturday', theme:'EARN DAY', blocks:[
+    { time:'Flexible', label:'PET BOARDING', color:'var(--green)', tasks:['Primary earning day — accept pet clients','This is when most pet owners need boarding'] },
+    { time:'Evening', label:'SBW LIGHT', color:'var(--amber)', tasks:['Light creative work — mood boards, ideas','Engage with SBW Instagram audience'] },
+  ]},
+  { day:'Sunday', theme:'REST & PREP', blocks:[
+    { time:'Morning', label:'PET BOARDING', color:'var(--green)', tasks:['Handle any overnight pet guests','Wrap up weekend bookings'] },
+    { time:'Afternoon', label:'PREP & REST', color:'var(--blue)', tasks:['Prep for the week ahead — light planning only','REST. Burnout is real. Protect your energy.'] },
+  ]},
+];
+
+function renderDay(idx) {
+  const d = DAYS[idx];
+  let html = `
+    <div style="margin-bottom:14px;">
+      <div style="font-family:var(--font-display);font-size:32px;letter-spacing:0.03em;color:var(--black);">${d.day}</div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--amber);letter-spacing:0.1em;margin-top:2px;">${d.theme}</div>
+    </div>`;
+  d.blocks.forEach(b => {
+    html += `<div class="time-block">
+      <div class="time-block-header" style="background:${b.color};">
+        <span class="time-block-label">${b.label}</span>
+        <span class="time-block-time">${b.time}</span>
+      </div>
+      <div class="time-block-body">`;
+    b.tasks.forEach(t => {
+      html += `<div class="block-task">
+        <div class="block-dot" style="background:${b.color};"></div>
+        <div class="block-task-text">${t}</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  document.getElementById('day-detail').innerHTML = html;
+}
+
+function setDay(idx) {
+  document.querySelectorAll('.day-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  renderDay(idx);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  renderDay(0);
+  updateProgress();
+
+  // Restore tasks
+  const savedTasks = localStorage.getItem('sbw_unified_tasks');
+  if (savedTasks) {
+    const states = JSON.parse(savedTasks);
+    document.querySelectorAll('.task-item').forEach(t => {
+      if (states[t.dataset.id]) t.classList.add('checked');
+    });
+    updateProgress();
+  }
+
+  // Restore checks
+  const savedChecks = localStorage.getItem('sbw_unified_checks');
+  if (savedChecks) {
+    const states = JSON.parse(savedChecks);
+    document.querySelectorAll('.check-item').forEach((t, i) => {
+      if (states['c_' + i]) t.classList.add('checked');
+    });
+  }
+});
+</script>
+</body>
+</html>
