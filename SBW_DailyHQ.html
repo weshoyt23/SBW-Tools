@@ -165,6 +165,9 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
     <div class="nav-t" onclick="showPg('income')">Income</div>
     <div class="nav-t" onclick="showPg('bills')">Bills</div>
     <div class="nav-t" onclick="showPg('notes')">Notes</div>
+    <div class="nav-t" onclick="showPg('drop1')">Drop 1</div>
+    <div class="nav-t" onclick="showPg('rover')">Rover</div>
+    <div class="nav-t" onclick="showPg('uber')">Uber Eats</div>
   </div>
 </div>
 
@@ -605,6 +608,503 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
   <div class="footer" style="margin-top:14px"><div class="footer-b">SBW CO.</div><div class="footer-s">Notes · Wesley · Austin TX</div></div>
 </div>
 
+
+<!-- ── DROP 1 LAUNCH TRACKER ── -->
+<div class="pg" id="pg-drop1">
+  <div class="sec">Drop 1 — 90-Day Launch Tracker</div>
+
+  <!-- START DATE SETTER -->
+  <div style="background:var(--black);padding:16px;margin-bottom:16px;">
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">Set Your 90-Day Start Date</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="date" id="d1-start" style="font-family:var(--font-m);font-size:13px;border:1.5px solid var(--amber);background:var(--soft);color:var(--black);padding:7px 10px;flex:1;">
+      <button onclick="setD1Start()" style="background:var(--amber);color:var(--white);border:none;font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:9px 16px;cursor:pointer;white-space:nowrap;">Set Date</button>
+      <button onclick="resetD1Start()" style="background:transparent;color:var(--muted);border:1.5px solid var(--border);font-family:var(--font-m);font-size:9px;padding:9px 12px;cursor:pointer;">Reset</button>
+    </div>
+    <div id="d1-status" style="font-family:var(--font-m);font-size:11px;color:var(--amber);margin-top:10px;"></div>
+  </div>
+
+  <!-- PHASE TABS -->
+  <div style="display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="d1-phase-tab on" onclick="showD1Phase('p1',this)" id="d1tab-p1" style="flex:1;padding:9px 8px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--amber);background:var(--amber);color:var(--white);cursor:pointer;">Phase 1<br><span style="font-size:8px;opacity:.8">Wk 1–4</span></button>
+    <button class="d1-phase-tab" onclick="showD1Phase('p2',this)" id="d1tab-p2" style="flex:1;padding:9px 8px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;">Phase 2<br><span style="font-size:8px;opacity:.8">Wk 5–8</span></button>
+    <button class="d1-phase-tab" onclick="showD1Phase('p3',this)" id="d1tab-p3" style="flex:1;padding:9px 8px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;">Phase 3<br><span style="font-size:8px;opacity:.8">Wk 9–12</span></button>
+  </div>
+
+  <!-- PHASES -->
+  <div id="d1-p1" class="d1-phase">
+    <div style="background:var(--amber);padding:12px 14px;margin-bottom:8px;">
+      <div style="font-family:var(--font-d);font-size:22px;letter-spacing:.04em;color:var(--white)">PHASE 1 — FOUNDATION & AWARENESS</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:rgba(255,255,255,0.8);margin-top:3px;">Weeks 1–4 · Clarify identity, build consistency, grow first real followers</div>
+    </div>
+
+    <!-- WEEK 1 -->
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black);flex:1">WEEK 1 — Brand Story & Presence</div>
+        <div id="d1-wk1-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post 1: "Why I started SBW Co." — founder on camera or sketchbook carousel</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post 2: Mood/ethos board — textures, colors, typography, Austin street shots</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post 3: "What SBW stands for" — design over hype, slow vs fast fashion, Austin roots</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Optional Post 4: Teaser shot — crop or close-up that obscures design detail</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Stories 3–5 days: BTS clips — designing, color testing, printing</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Story polls: "Bold or minimal?" "Boxy fit or regular?" — train people to interact</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Bio clearly says "Premium graphic apparel. Austin TX. Drop 1 coming late 2026."</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Story Highlights set up: BTS, Process, Austin</div></div>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black);flex:1">WEEK 2 — Process & Taste</div>
+        <div id="d1-wk2-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: time-lapse of designing/cleaning a graphic with on-screen thought process text</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: "8-year archive" — evolution from earliest graphics to SBW's current direction</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post: "Design > fast fashion" mini-essay in caption with strong graphic image</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post: Austin street photo with subtle SBW branding overlay</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Stories daily: workspace clips, what you're working on</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Q&A sticker: "Ask me anything about starting a clothing brand / design"</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">3 posts/week and 3+ story days — build the habit</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Track which posts get the most saves — note it</div></div>
+      </div>
+    </div>
+
+    <!-- WEEK 3 -->
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black);flex:1">WEEK 3 — Soft Teasing</div>
+        <div id="d1-wk3-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Close-up detail shots — print textures, color palettes, neckline tags</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">"5 designs, 1 story" post — silhouettes/roughs of all 5, blurred, with unifying theme caption</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Founder Reel: philosophy on "premium graphic tees at $65" and why you chose that lane</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Community callout: "If you're in Austin, follow along — building this here first"</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Story polls: "Which color would you actually wear?" and "This or that" mockup votes</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">At least 1 Reel live on the grid</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Identified which visual style resonates most with your audience</div></div>
+      </div>
+    </div>
+
+    <!-- WEEK 4 -->
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;color:var(--black);flex:1">WEEK 4 — Drop 1 Language</div>
+        <div id="d1-wk4-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Text-based static: "DROP 1 // LATE 2026" graphic — pin to top of grid</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: "Day in the life of an indie streetwear founder in Austin"</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: same design in different iterations — sketch to semi-final</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post: "Who's this for?" — describe your target person clearly</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Story CTA: "Want early access? Hit ❤️ on this Story" — DM these people later</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Grid communicates: premium, thoughtful, Austin, design-first, drop model</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">List of IG usernames who repeatedly engage saved somewhere</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div id="d1-p2" class="d1-phase" style="display:none;">
+    <div style="background:var(--blue);padding:12px 14px;margin-bottom:8px;">
+      <div style="font-family:var(--font-d);font-size:22px;letter-spacing:.04em;color:var(--white)">PHASE 2 — COMMUNITY & EMAIL LIST</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:rgba(255,255,255,0.8);margin-top:3px;">Weeks 5–8 · Introduce email capture, deepen connection, build the waitlist</div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 5 — Email Capture Live</div>
+        <div id="d1-wk5-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Infrastructure</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Create pre-launch landing page in Shopify/Klaviyo with email capture</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Klaviyo Email 1 (instant): "Welcome to SBW Co. // why this brand exists" + process photos</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Klaviyo Email 2 (day 3–5): "A closer look at Drop 1's design language" — sketches + stories</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Announcement post: "Email list is live — early access for Drop 1" with link in bio</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel walking through the landing page — explain what people get when they sign up</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post about standards: print quality, blanks choice, fit philosophy</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: "5 things SBW isn't" — not fast fashion, not trend-chasing, not bargain basics</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">First 25–50 email subscribers</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Both welcome emails live and tested</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 6 — World Building</div>
+        <div id="d1-wk6-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: "8 years of design in 30 seconds" montage</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: POV — "you're the only one in the room wearing something not made for the algorithm"</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: 3 Austin locations that inspire SBW + your commentary</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Static post: quote or manifesto line from your brand story</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email broadcast 1: "How SBW Co. will drop collections" — explain drop model and timelines</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">50–100 email subscribers</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Minimum 1–2 Reels per week consistent</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 7 — Drop 1 Narrative</div>
+        <div id="d1-wk7-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Hero post: blurred grid of all 5 designs — "5 designs, 1 city, 1 story"</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: you on camera about what Drop 1 is about — theme and feeling, not product details</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: individual slides teasing motifs from each piece</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Austin post: "If you're in Austin, you're going to see SBW in the wild first"</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email 3: "Meet the city behind the collection" — Austin street photo essay</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Story polls: vibes check for each motif — "Too loud / just right"</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">"Drop 1" said explicitly and repeatedly — followers know something specific is coming</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">At least 10–20 people have replied to a story or DM'd about the brand</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 8 — Scarcity & Involvement</div>
+        <div id="d1-wk8-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: "What I'm obsessing over finalizing Drop 1" — print density, collar height details</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: "Help me finalize one detail" — two versions of a graphic or label design</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Static: "SBW Co. is not for everyone, and that's the point" — clarify who it IS for</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">BTS stories: sampling/production conversations if started</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email 4: "I'm deciding between two details — I want your take" — audience crowdsource</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">100+ email subscribers</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">300–500 Instagram followers of the right people</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div id="d1-p3" class="d1-phase" style="display:none;">
+    <div style="background:var(--green);padding:12px 14px;margin-bottom:8px;">
+      <div style="font-family:var(--font-d);font-size:22px;letter-spacing:.04em;color:var(--white)">PHASE 3 — LAUNCH RUNWAY</div>
+      <div style="font-family:var(--font-m);font-size:9px;color:rgba(255,255,255,0.8);margin-top:3px;">Weeks 9–12 · Move from "looks cool" to "I'm buying on launch day"</div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 9 — Product Reveal Begins</div>
+        <div id="d1-wk9-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: first partial try-on or mockup — outfit styling, close-ups</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: "SBW Drop 1: The 5 pieces" — still partially obscured but clearly garments</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Face-to-camera: "What makes a $65 tee worth it to me" — craftsmanship, design time, ethos</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Static: size/fit philosophy — boxy vs regular, what you're targeting</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email 5: "The 3 things that will define SBW's first drop" — theme, quality, fit</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">People in DMs/comments asking about specific release timing and pricing</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Price tier clearly communicated at least once on IG or email</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 10 — Lookbook Vibes</div>
+        <div id="d1-wk10-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: mood-board/lookbook style clip — filmed footage + mockups simulating the collection</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: stylized crop of each design with short copy hinting at its story</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post: exactly what drops — 5 designs, tee/crew/hoodie price points spelled out</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Early-bird CTA: "email list gets 24hr early access + launch-day pricing"</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email 6: "How early access will work" — launch day logistics, time window, possible sellouts</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">150–250 email subscribers</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email list clearly positioned as the guaranteed way in on Drop 1</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 11 — Lock In Hype</div>
+        <div id="d1-wk11-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: full reveal of 1–2 designs on body with styling</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: "Every piece in Drop 1 in 15 seconds" — quick cuts, detail shots</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: size chart and fit illustrations</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Pinned post: "Everything you need to know about Drop 1" — date, pieces, price, early access</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Story: invite people to DM "DROP1" — personally remind them on launch week</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email 7: "Drop 1: full reveal" — all pieces, names, short descriptions</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email 8: "Behind the price" — value, quality, time, fast fashion vs design that lasts</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Milestones</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Launch day and time locked in</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email list 250–500 highly primed subscribers</div></div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--border);margin-bottom:8px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="this.parentElement.classList.toggle('open')">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:.03em;flex:1">WEEK 12 — LAUNCH WEEK 🚀</div>
+        <div id="d1-wk12-dates" style="font-family:var(--font-m);font-size:9px;color:var(--muted);text-align:right;"></div>
+        <div style="font-family:var(--font-m);font-size:10px;color:var(--muted)">▼</div>
+      </div>
+      <div class="d1-wk-body" style="display:none;padding:14px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Content Tasks</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: "How to pick your piece" — which design is for which type of person</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reel: "What to expect on launch day" — how to navigate site, what might sell out first</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Static: logistics graphic — date, time, site URL, early access instructions</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carousel: all 5 designs in one swipeable overview</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Optional: "Letter from the founder" caption with photo of you in one of the pieces</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Stories: daily countdown + morning, few hours before, 15 mins before early access</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;">Email Launch Sequence</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">T-3 days: "3 days to go" email with top looks</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">T-1 day: "24 hours to go" with final CTA and sizing help</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">"We're live" email — goes out BEFORE public IG post to reward the list</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">DM every "DROP1" person and early engager personally on launch day</div></div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin:12px 0 8px;border-bottom:1px solid var(--green-border);padding-bottom:6px;">🚀 LAUNCH DAY CHECKLIST</div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Email goes out to list FIRST — before any public IG post</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">IG Reels and Stories live right at or just after early access opens</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Manually DM earlier engagers with personal note and link</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reply to every comment on every post — all day</div></div>
+        <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Repost every tag and story mention immediately</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer" style="margin-top:8px"><div class="footer-b">SBW CO.</div><div class="footer-s">Drop 1 · 90-Day Launch Tracker</div></div>
+</div>
+
+
+<!-- ── ROVER TRACKER ── -->
+<div class="pg" id="pg-rover">
+  <div class="sec">Rover Business Tracker</div>
+
+  <!-- REVIEW TIER -->
+  <div style="background:var(--black);padding:16px;margin-bottom:12px;">
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Current Review Tier</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <button onclick="setRoverTier(0,this)" class="rtier-btn" style="flex:1;padding:9px 6px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;">0 Reviews<br><span style="color:var(--amber)">Walk $14–18<br>Board $45</span></button>
+      <button onclick="setRoverTier(1,this)" class="rtier-btn" style="flex:1;padding:9px 6px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;">3–5 Reviews<br><span style="color:var(--amber)">Walk $20–22<br>Board $50</span></button>
+      <button onclick="setRoverTier(2,this)" class="rtier-btn" style="flex:1;padding:9px 6px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;">5–10 Reviews<br><span style="color:var(--amber)">Walk $25–28<br>Board $55–58</span></button>
+      <button onclick="setRoverTier(3,this)" class="rtier-btn" style="flex:1;padding:9px 6px;font-family:var(--font-m);font-size:9px;letter-spacing:.06em;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;">10+ Reviews<br><span style="color:var(--amber)">Walk $28–32<br>Board $60–65</span></button>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-family:var(--font-m);font-size:9px;color:#6b6b6b;letter-spacing:.06em;">Total reviews earned:</div>
+      <input type="number" id="rover-review-count" placeholder="0" min="0" oninput="saveRoverData()" style="width:60px;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:5px 8px;text-align:center;">
+      <div style="font-family:var(--font-m);font-size:10px;color:var(--green)" id="rover-next-tier"></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:12px 10px;text-align:center;">
+      <div style="font-family:var(--font-d);font-size:26px;color:var(--green)" id="rover-total-bookings">0</div>
+      <div style="font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Total Bookings</div>
+    </div>
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:12px 10px;text-align:center;">
+      <div style="font-family:var(--font-d);font-size:26px;color:var(--amber)" id="rover-week-earn">$0</div>
+      <div style="font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">This Week</div>
+    </div>
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:12px 10px;text-align:center;">
+      <div style="font-family:var(--font-d);font-size:26px;color:var(--blue)" id="rover-month-earn">$0</div>
+      <div style="font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">This Month</div>
+    </div>
+  </div>
+
+  <!-- LOG BOOKING -->
+  <div class="sec">Log a Booking</div>
+  <div style="background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Type</div>
+        <select id="rover-type" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-b);font-size:13px;color:var(--black);padding:8px 10px;">
+          <option value="walk">Walk</option>
+          <option value="boarding">Boarding</option>
+          <option value="daycare">Day Care</option>
+          <option value="dropin">Drop-In</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Gross ($)</div>
+        <input type="number" id="rover-gross" placeholder="0" step="0.01" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Dog Name</div>
+        <input type="text" id="rover-dog" placeholder="optional" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-b);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Date</div>
+        <input type="date" id="rover-date" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+    </div>
+    <div style="background:var(--green-bg);border:1px solid var(--green-border);padding:10px 12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:.08em;">Net after 20% Rover cut:</div>
+      <div style="font-family:var(--font-d);font-size:22px;color:var(--green)" id="rover-net-preview">$0.00</div>
+    </div>
+    <button onclick="logRoverBooking()" style="width:100%;background:var(--green);color:var(--white);border:none;font-family:var(--font-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px;cursor:pointer;">Log Booking</button>
+  </div>
+
+  <!-- BOOKING LOG -->
+  <div class="sec">Recent Bookings</div>
+  <div id="rover-log" style="margin-bottom:12px;"></div>
+  <button onclick="clearRoverLog()" style="background:transparent;color:var(--muted);border:1.5px solid var(--border);font-family:var(--font-m);font-size:9px;padding:8px 14px;cursor:pointer;letter-spacing:.06em;">↺ Clear All Bookings</button>
+
+  <!-- REMINDERS -->
+  <div class="sec" style="margin-top:20px;">Key Reminders</div>
+  <div style="background:var(--black);padding:16px;">
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #2a2a2a;"><div style="font-size:14px;flex-shrink:0">⭐</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;">Response time is your #1 ranking factor on Rover. Reply to every message immediately.</div></div>
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #2a2a2a;"><div style="font-size:14px;flex-shrink:0">📸</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;">Send 3+ photos mid-walk to every client. This is what drives 5-star reviews.</div></div>
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #2a2a2a;"><div style="font-size:14px;flex-shrink:0">🔗</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;">Promo code: WESLEM21506 — $20 off first booking for new clients, $10 referral to you.</div></div>
+    <div style="display:flex;gap:10px;padding:8px 0;"><div style="font-size:14px;flex-shrink:0">💰</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;">Raise prices as soon as you hit the next review tier. The ladder is there — use it.</div></div>
+  </div>
+  <div class="footer" style="margin-top:16px"><div class="footer-b">SBW CO.</div><div class="footer-s">Rover Tracker · @wesleyspawsatx · Austin TX</div></div>
+</div>
+
+<!-- ── UBER EATS TRACKER ── -->
+<div class="pg" id="pg-uber">
+  <div class="sec">Uber Eats Session Tracker</div>
+
+  <!-- PROMO PROGRESS -->
+  <div style="background:var(--black);padding:16px;margin-bottom:12px;">
+    <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;">$900 Promotion — 80 Deliveries by June 26</div>
+    <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:10px;">
+      <div>
+        <div style="font-family:var(--font-d);font-size:48px;color:var(--amber);line-height:1" id="ue-delivery-count">9</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:#6b6b6b;letter-spacing:.06em;">of 80 deliveries</div>
+      </div>
+      <div style="flex:1;padding-bottom:6px;">
+        <div style="background:#2a2a2a;height:10px;overflow:hidden;margin-bottom:5px;">
+          <div id="ue-promo-bar" style="background:var(--amber);height:10px;transition:width .4s;width:11.25%"></div>
+        </div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber)" id="ue-promo-pct">11% complete</div>
+      </div>
+    </div>
+    <!-- Tier markers -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;">
+      <div id="ue-tier-3" style="padding:6px 4px;text-align:center;border:1px solid #2a2a2a;background:#1a1a1a;">
+        <div style="font-family:var(--font-d);font-size:14px;color:var(--amber)">$34</div>
+        <div style="font-family:var(--font-m);font-size:8px;color:#6b6b6b;">3 del.</div>
+      </div>
+      <div id="ue-tier-6" style="padding:6px 4px;text-align:center;border:1px solid #2a2a2a;background:#1a1a1a;">
+        <div style="font-family:var(--font-d);font-size:14px;color:var(--amber)">$68</div>
+        <div style="font-family:var(--font-m);font-size:8px;color:#6b6b6b;">6 del.</div>
+      </div>
+      <div id="ue-tier-19" style="padding:6px 4px;text-align:center;border:1px solid #2a2a2a;background:#1a1a1a;">
+        <div style="font-family:var(--font-d);font-size:14px;color:var(--amber)">$215</div>
+        <div style="font-family:var(--font-m);font-size:8px;color:#6b6b6b;">19 del.</div>
+      </div>
+      <div id="ue-tier-80" style="padding:6px 4px;text-align:center;border:1px solid #2a2a2a;background:#1a1a1a;">
+        <div style="font-family:var(--font-d);font-size:14px;color:var(--amber)">$900</div>
+        <div style="font-family:var(--font-m);font-size:8px;color:#6b6b6b;">80 del.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SESSION STATS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:12px 10px;text-align:center;">
+      <div style="font-family:var(--font-d);font-size:26px;color:var(--amber)" id="ue-week-gross">$0</div>
+      <div style="font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Week Gross</div>
+    </div>
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:12px 10px;text-align:center;">
+      <div style="font-family:var(--font-d);font-size:26px;color:var(--green)" id="ue-avg-per-mile">$0</div>
+      <div style="font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Avg $/Mile</div>
+    </div>
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:12px 10px;text-align:center;">
+      <div style="font-family:var(--font-d);font-size:26px;color:var(--blue)" id="ue-sessions-week">0</div>
+      <div style="font-family:var(--font-m);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Sessions This Wk</div>
+    </div>
+  </div>
+
+  <!-- LOG SESSION -->
+  <div class="sec">Log a Session</div>
+  <div style="background:var(--white);border:1.5px solid var(--border);padding:14px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Gross Earned ($)</div>
+        <input type="number" id="ue-sess-gross" placeholder="0.00" step="0.01" oninput="calcUESession()" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Total Miles</div>
+        <input type="number" id="ue-sess-miles" placeholder="0.0" step="0.1" oninput="calcUESession()" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Deliveries</div>
+        <input type="number" id="ue-sess-deliveries" placeholder="0" min="0" oninput="calcUESession()" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;">Session (hrs)</div>
+        <input type="number" id="ue-sess-hours" placeholder="0.0" step="0.5" style="width:100%;background:var(--soft);border:1.5px solid var(--border);font-family:var(--font-m);font-size:13px;color:var(--black);padding:8px 10px;">
+      </div>
+    </div>
+    <!-- Live calculation -->
+    <div id="ue-calc-result" style="padding:10px 12px;margin-bottom:10px;border:1.5px solid var(--border);background:var(--soft);">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:4px;">Session Analysis</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--muted)">$/mile:</div>
+        <div style="font-family:var(--font-d);font-size:22px" id="ue-calc-ppm">—</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-family:var(--font-m);font-size:11px;color:var(--muted)">Verdict:</div>
+        <div style="font-family:var(--font-m);font-size:11px;font-weight:600" id="ue-calc-verdict">Enter data above</div>
+      </div>
+    </div>
+    <button onclick="logUESession()" style="width:100%;background:var(--amber);color:var(--white);border:none;font-family:var(--font-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px;cursor:pointer;">Log Session</button>
+  </div>
+
+  <!-- SESSION LOG -->
+  <div class="sec">Session History</div>
+  <div id="ue-log" style="margin-bottom:12px;"></div>
+  <button onclick="clearUELog()" style="background:transparent;color:var(--muted);border:1.5px solid var(--border);font-family:var(--font-m);font-size:9px;padding:8px 14px;cursor:pointer;letter-spacing:.06em;">↺ Clear Session History</button>
+
+  <!-- RULES -->
+  <div class="sec" style="margin-top:20px;">The Rules</div>
+  <div style="background:var(--black);padding:16px;">
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #2a2a2a;"><div style="font-size:14px;flex-shrink:0">⚡</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;"><strong style="color:var(--amber)">$3/mile rule</strong> — Accept if payout ÷ miles ≥ $3. Decline if under. No exceptions.</div></div>
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #2a2a2a;"><div style="font-size:14px;flex-shrink:0">📍</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;"><strong style="color:var(--amber)">Best position:</strong> 18th & Lavaca / University area. Bus 801 MetroRapid down Guadalupe.</div></div>
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #2a2a2a;"><div style="font-size:14px;flex-shrink:0">🔥</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;"><strong style="color:var(--amber)">Peak windows:</strong> Lunch 11am–2pm · Dinner 5:30–7:30pm. Both sessions = max earnings.</div></div>
+    <div style="display:flex;gap:10px;padding:8px 0;"><div style="font-size:14px;flex-shrink:0">🎯</div><div style="font-size:12px;color:#c4b9a8;line-height:1.5;"><strong style="color:var(--amber)">June 26 deadline</strong> — 80 deliveries = $900 guaranteed. Every session counts.</div></div>
+  </div>
+  <div class="footer" style="margin-top:16px"><div class="footer-b">SBW CO.</div><div class="footer-s">Uber Eats Tracker · Austin TX</div></div>
+</div>
+
 <script>
 function showPg(id){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
@@ -807,7 +1307,313 @@ function loadNotes(){const s=localStorage.getItem('hq_notes_'+new Date().toDateS
 window.addEventListener('DOMContentLoaded',()=>{
   loadTasks();loadNotes();updAllCounts();updStats();updBills();
   const w=JSON.parse(localStorage.getItem('hq_weekly')||'[]');if(w.length)buildWeek(w);
+  renderRoverLog();
+  renderUELog();
+  // Restore rover state
+  const rt=localStorage.getItem('rover_tier');if(rt){const b=document.querySelectorAll('.rtier-btn')[parseInt(rt)];if(b)setRoverTier(parseInt(rt),b);}
+  const rr=localStorage.getItem('rover_reviews');if(rr){const el=document.getElementById('rover-review-count');if(el){el.value=rr;updateNextTierHint();}}
 });
+
+// ── DROP 1 TRACKER ───────────────────────────────────────────
+function setD1Start(){
+  const v = document.getElementById('d1-start').value;
+  if(!v){showD1Status('Pick a date first','var(--red)');return;}
+  localStorage.setItem('d1_start', v);
+  renderD1Dates();
+  showD1Status('Start date saved — 90-day clock is running.','var(--green)');
+}
+function resetD1Start(){
+  localStorage.removeItem('d1_start');
+  document.getElementById('d1-start').value='';
+  clearD1Dates();
+  showD1Status('Reset. Set a new start date when ready.','var(--muted)');
+}
+function showD1Status(msg,color){
+  const el=document.getElementById('d1-status');
+  el.textContent=msg;el.style.color=color;
+}
+function addDays(dateStr,days){
+  const d=new Date(dateStr);d.setDate(d.getDate()+days);return d;
+}
+function fmtDate(d){
+  const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return mo[d.getMonth()]+' '+d.getDate();
+}
+function renderD1Dates(){
+  const start=localStorage.getItem('d1_start');
+  if(!start)return;
+  const s=new Date(start);
+  const today=new Date();today.setHours(0,0,0,0);
+  const dayNum=Math.floor((today-s)/(1000*60*60*24));
+  const weekNum=Math.floor(dayNum/7)+1;
+
+  // Week date ranges — week N starts at day (N-1)*7
+  for(let w=1;w<=12;w++){
+    const wStart=addDays(start,(w-1)*7);
+    const wEnd=addDays(start,w*7-1);
+    const el=document.getElementById('d1-wk'+w+'-dates');
+    if(!el)continue;
+    const label=fmtDate(wStart)+' – '+fmtDate(wEnd);
+    const isNow=weekNum===w;
+    el.textContent=isNow?'● THIS WEEK':label;
+    el.style.color=isNow?'var(--amber)':'var(--muted)';
+    el.style.fontWeight=isNow?'600':'400';
+    // Auto-open current week
+    if(isNow){
+      const card=el.closest('[style*="background:var(--white)"]');
+      if(card)card.classList.add('open');
+    }
+  }
+
+  // Overall status
+  const daysLeft=90-dayNum;
+  if(dayNum<0){
+    showD1Status('Starts in '+Math.abs(dayNum)+' days — '+fmtDate(s),'var(--blue)');
+  } else if(dayNum>=90){
+    showD1Status('90 days complete. Launch should have happened. How did it go?','var(--green)');
+  } else {
+    showD1Status('Day '+dayNum+' of 90 · Week '+(weekNum>12?12:weekNum)+' · '+daysLeft+' days to launch','var(--amber)');
+  }
+
+  // Auto-select correct phase tab
+  if(weekNum<=4) showD1Phase('p1',document.getElementById('d1tab-p1'));
+  else if(weekNum<=8) showD1Phase('p2',document.getElementById('d1tab-p2'));
+  else showD1Phase('p3',document.getElementById('d1tab-p3'));
+}
+function clearD1Dates(){
+  for(let w=1;w<=12;w++){
+    const el=document.getElementById('d1-wk'+w+'-dates');
+    if(el){el.textContent='';el.style.color='var(--muted)';}
+  }
+}
+function showD1Phase(id,btn){
+  document.querySelectorAll('.d1-phase').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.d1-phase-tab').forEach(b=>{
+    b.style.background='var(--white)';b.style.color='var(--muted)';b.style.borderColor='var(--border)';
+  });
+  document.getElementById('d1-'+id).style.display='block';
+  if(btn){btn.style.background='var(--amber)';btn.style.color='var(--white)';btn.style.borderColor='var(--amber)';}
+}
+// Toggle week cards
+document.querySelectorAll && document.addEventListener('click',function(e){
+  const hdr=e.target.closest('[onclick*="classList.toggle"]');
+  if(hdr){
+    const body=hdr.parentElement.querySelector('.d1-wk-body');
+    if(body)body.style.display=body.style.display==='none'?'block':'none';
+  }
+});
+// Init
+(function(){
+  const saved=localStorage.getItem('d1_start');
+  if(saved){document.getElementById('d1-start').value=saved;renderD1Dates();}
+})();
+
+
+// ── ROVER TRACKER ────────────────────────────────────────────
+const ROVER_TIERS = [
+  {label:'0 Reviews',walks:'$14–18',board:'$45',minReviews:0},
+  {label:'3–5 Reviews',walks:'$20–22',board:'$50',minReviews:3},
+  {label:'5–10 Reviews',walks:'$25–28',board:'$55–58',minReviews:5},
+  {label:'10+ Reviews',walks:'$28–32',board:'$60–65',minReviews:10}
+];
+
+function setRoverTier(idx, btn) {
+  document.querySelectorAll('.rtier-btn').forEach((b,i) => {
+    b.style.background = i===idx ? 'var(--green)' : 'var(--white)';
+    b.style.color = i===idx ? 'var(--white)' : 'var(--muted)';
+    b.style.borderColor = i===idx ? 'var(--green)' : 'var(--border)';
+  });
+  localStorage.setItem('rover_tier', idx);
+  updateNextTierHint();
+}
+
+function updateNextTierHint() {
+  const reviews = parseInt(document.getElementById('rover-review-count').value) || 0;
+  const next = document.getElementById('rover-next-tier');
+  if (!next) return;
+  if (reviews < 3) next.textContent = (3-reviews) + ' more for Tier 2';
+  else if (reviews < 5) next.textContent = (5-reviews) + ' more for Tier 3';
+  else if (reviews < 10) next.textContent = (10-reviews) + ' more for Tier 4';
+  else next.textContent = '✓ Max tier reached!';
+}
+
+function saveRoverData() {
+  localStorage.setItem('rover_reviews', document.getElementById('rover-review-count').value || '0');
+  updateNextTierHint();
+}
+
+function logRoverBooking() {
+  const type = document.getElementById('rover-type').value;
+  const gross = parseFloat(document.getElementById('rover-gross').value) || 0;
+  const dog = document.getElementById('rover-dog').value.trim();
+  const date = document.getElementById('rover-date').value || new Date().toISOString().split('T')[0];
+  if (!gross) { return; }
+  const net = gross * 0.8;
+  const bookings = JSON.parse(localStorage.getItem('rover_bookings') || '[]');
+  bookings.unshift({ type, gross, net, dog, date, id: Date.now() });
+  localStorage.setItem('rover_bookings', JSON.stringify(bookings));
+  document.getElementById('rover-gross').value = '';
+  document.getElementById('rover-dog').value = '';
+  document.getElementById('rover-net-preview').textContent = '$0.00';
+  renderRoverLog();
+  roverShowToast('Booking logged ✓ Net: $' + net.toFixed(2));
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'rover-gross') {
+    const v = parseFloat(e.target.value) || 0;
+    const el = document.getElementById('rover-net-preview');
+    if (el) el.textContent = '$' + (v * 0.8).toFixed(2);
+  }
+});
+
+function renderRoverLog() {
+  const bookings = JSON.parse(localStorage.getItem('rover_bookings') || '[]');
+  const el = document.getElementById('rover-log');
+  if (!el) return;
+  if (!bookings.length) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;font-family:var(--font-m);font-size:11px;color:var(--muted);border:1px dashed var(--border);">No bookings logged yet.</div>';
+    return;
+  }
+  // Stats
+  const now = new Date();
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  let weekEarn = 0, monthEarn = 0;
+  bookings.forEach(b => {
+    const d = new Date(b.date);
+    if (d >= weekStart) weekEarn += b.net;
+    if (d >= monthStart) monthEarn += b.net;
+  });
+  const wb = document.getElementById('rover-week-earn');
+  const mb = document.getElementById('rover-month-earn');
+  const tb = document.getElementById('rover-total-bookings');
+  if (wb) wb.textContent = '$' + weekEarn.toFixed(0);
+  if (mb) mb.textContent = '$' + monthEarn.toFixed(0);
+  if (tb) tb.textContent = bookings.length;
+
+  el.innerHTML = bookings.slice(0,10).map(b => `
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px;">
+      <div style="font-size:16px">${b.type==='walk'?'🐾':b.type==='boarding'?'🏠':b.type==='daycare'?'☀️':'📍'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;color:var(--black);text-transform:capitalize">${b.type}${b.dog?' — '+b.dog:''}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">${b.date}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-d);font-size:18px;color:var(--green)">$${b.net.toFixed(2)}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">gross $${b.gross.toFixed(2)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function clearRoverLog() {
+  if (!confirm('Clear all Rover bookings?')) return;
+  localStorage.removeItem('rover_bookings');
+  renderRoverLog();
+}
+
+function roverShowToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--green);color:white;font-family:var(--font-m);font-size:11px;padding:10px 18px;z-index:999;pointer-events:none;';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// ── UBER EATS TRACKER ────────────────────────────────────────
+function calcUESession() {
+  const gross = parseFloat(document.getElementById('ue-sess-gross').value) || 0;
+  const miles = parseFloat(document.getElementById('ue-sess-miles').value) || 0;
+  const ppm = miles > 0 ? gross / miles : 0;
+  const ppmEl = document.getElementById('ue-calc-ppm');
+  const verdEl = document.getElementById('ue-calc-verdict');
+  if (!ppmEl) return;
+  if (!gross && !miles) {
+    ppmEl.textContent = '—'; verdEl.textContent = 'Enter data above'; verdEl.style.color = 'var(--muted)'; return;
+  }
+  ppmEl.textContent = '$' + ppm.toFixed(2) + '/mi';
+  ppmEl.style.color = ppm >= 3 ? 'var(--green)' : 'var(--red)';
+  verdEl.textContent = ppm >= 3 ? '✓ Strong session' : ppm >= 2 ? '⚠ Marginal' : '✗ Below $3/mile';
+  verdEl.style.color = ppm >= 3 ? 'var(--green)' : ppm >= 2 ? 'var(--amber)' : 'var(--red)';
+}
+
+function logUESession() {
+  const gross = parseFloat(document.getElementById('ue-sess-gross').value) || 0;
+  const miles = parseFloat(document.getElementById('ue-sess-miles').value) || 0;
+  const deliveries = parseInt(document.getElementById('ue-sess-deliveries').value) || 0;
+  const hours = parseFloat(document.getElementById('ue-sess-hours').value) || 0;
+  if (!gross) return;
+  const ppm = miles > 0 ? gross / miles : 0;
+  const sessions = JSON.parse(localStorage.getItem('ue_sessions') || '[]');
+  sessions.unshift({ gross, miles, deliveries, hours, ppm, date: new Date().toISOString().split('T')[0], id: Date.now() });
+  localStorage.setItem('ue_sessions', JSON.stringify(sessions));
+  // Update total delivery count
+  const totalDel = sessions.reduce((s,x) => s + (x.deliveries||0), 0) + 9; // start from 9 (day 1)
+  localStorage.setItem('ue_total_deliveries', totalDel);
+  ['ue-sess-gross','ue-sess-miles','ue-sess-deliveries','ue-sess-hours'].forEach(id => { const el=document.getElementById(id); if(el)el.value=''; });
+  calcUESession();
+  renderUELog();
+  roverShowToast('Session logged ✓');
+}
+
+function renderUELog() {
+  const sessions = JSON.parse(localStorage.getItem('ue_sessions') || '[]');
+  const totalDel = parseInt(localStorage.getItem('ue_total_deliveries') || '9');
+  const el = document.getElementById('ue-log');
+  const countEl = document.getElementById('ue-delivery-count');
+  const barEl = document.getElementById('ue-promo-bar');
+  const pctEl = document.getElementById('ue-promo-pct');
+  if (countEl) countEl.textContent = totalDel;
+  if (barEl) barEl.style.width = Math.min(100, totalDel/80*100) + '%';
+  if (pctEl) pctEl.textContent = Math.round(totalDel/80*100) + '% complete · ' + (80-totalDel) + ' to go';
+
+  // Color tiers
+  [['ue-tier-3',3],['ue-tier-6',6],['ue-tier-19',19],['ue-tier-80',80]].forEach(([id,thresh]) => {
+    const t = document.getElementById(id);
+    if (t) { t.style.borderColor = totalDel>=thresh?'var(--green)':'#2a2a2a'; t.style.opacity = totalDel>=thresh?'1':'0.5'; }
+  });
+
+  // Week stats
+  const now = new Date();
+  const weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay());
+  let weekGross=0, weekSessions=0, totalPPM=0, ppmCount=0;
+  sessions.forEach(s => {
+    const d = new Date(s.date);
+    if(d>=weekStart){weekGross+=s.gross;weekSessions++;}
+    if(s.ppm>0){totalPPM+=s.ppm;ppmCount++;}
+  });
+  const avgEl=document.getElementById('ue-avg-per-mile');
+  const wgEl=document.getElementById('ue-week-gross');
+  const wsEl=document.getElementById('ue-sessions-week');
+  if(avgEl) avgEl.textContent = ppmCount ? '$'+( totalPPM/ppmCount).toFixed(2) : '$0';
+  if(wgEl) wgEl.textContent = '$'+weekGross.toFixed(0);
+  if(wsEl) wsEl.textContent = weekSessions;
+
+  if(!el)return;
+  if(!sessions.length){el.innerHTML='<div style="text-align:center;padding:20px;font-family:var(--font-m);font-size:11px;color:var(--muted);border:1px dashed var(--border);">No sessions logged yet.</div>';return;}
+  el.innerHTML = sessions.slice(0,8).map(s => `
+    <div style="background:var(--white);border:1.5px solid var(--border);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px;">
+      <div style="font-size:16px">🛵</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;color:var(--black)">${s.deliveries} deliveries${s.hours?' · '+s.hours+'hrs':''}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:var(--muted)">${s.date} · ${s.miles}mi</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--font-d);font-size:18px;color:var(--amber)">$${s.gross.toFixed(2)}</div>
+        <div style="font-family:var(--font-m);font-size:9px;color:${s.ppm>=3?'var(--green)':'var(--red)'}">$${s.ppm.toFixed(2)}/mi</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function clearUELog() {
+  if(!confirm('Clear all session history?'))return;
+  localStorage.removeItem('ue_sessions');
+  localStorage.setItem('ue_total_deliveries','9');
+  renderUELog();
+}
+
 </script>
 </body>
 </html>
