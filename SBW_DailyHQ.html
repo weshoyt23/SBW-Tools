@@ -175,6 +175,16 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
     <div class="now-label">Right Now</div>
     <div class="now-time" id="nowTime">—</div>
   </div>
+
+  <div id="ig-strip" style="margin-bottom:14px;border:1.5px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:12px;">
+    <div style="font-size:18px;flex-shrink:0">📱</div>
+    <div style="flex:1">
+      <div style="font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px" id="ig-day-label">Today on Instagram</div>
+      <div style="font-size:13px;font-weight:500;color:var(--black)" id="ig-day-task">Loading...</div>
+    </div>
+    <div style="font-family:var(--font-m);font-size:10px;text-align:right;flex-shrink:0;color:var(--muted)" id="ig-day-time"></div>
+  </div>
+
   <div class="stat-grid">
     <div class="stat" style="border-top:3px solid var(--amber)"><div class="stat-v" id="s-earned" style="color:var(--amber)">$0</div><div class="stat-l">Today's Income</div></div>
     <div class="stat" style="border-top:3px solid var(--green)"><div class="stat-v" id="s-pct" style="color:var(--green)">0%</div><div class="stat-l">Day Complete</div></div>
@@ -220,8 +230,8 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
     </div>
     <div class="block-body">
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Open Adobe — work on current design</div></div>
-      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post Instagram content before 9:30am</div></div>
-      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post daily story</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Thu: Post Reel at 9am CT — highest Thursday reach window</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post daily story — near Reel window to boost visibility</div></div>
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Work on Shopify store or product page</div></div>
       <div class="bnote">Peak creative window. Phone on do not disturb. This is where SBW gets built.</div>
     </div>
@@ -239,6 +249,22 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Take 3+ photos — send update to client mid-walk</div></div>
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">If no walk — freelance outreach or Fiverr work</div></div>
       <div class="earn">🐾 ~$16–$24 net per walk</div>
+    </div>
+  </div>
+
+  <div class="block" id="b3b">
+    <div class="block-hdr" onclick="tog('b3b')">
+      <div class="block-time">12:00 PM</div>
+      <div class="block-name">Instagram — Noon Post Window</div>
+      <div class="block-badge" style="background:var(--purple-bg);color:var(--purple)">📱 IG</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Wed: Post Reel at 12pm CT — strongest single weekly window</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Tue/Thu: Post feed content 11am–2pm CT</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reply to all comments from morning posts — first-hour engagement matters</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post a story if you haven't yet today</div></div>
+      <div class="bnote">Wednesday noon CT is the highest-performing Reels window per 2026 data. Protect this slot every week.</div>
     </div>
   </div>
 
@@ -343,10 +369,13 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
       <div class="block-chev">▼</div>
     </div>
     <div class="block-body">
-      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Light SBW — content ideas, mood boards</div></div>
-      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Instagram engagement — reply and interact</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Light SBW — content ideas, mood boards, caption writing</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Tue: Post Reel at 6pm CT — Tuesday evening peak window</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Mon/Wed/Fri: Post Reel or feed at 6–9pm CT if not posted today</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Instagram engagement — reply to comments, DMs, interact with community</div></div>
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Write tomorrow's top 3 priorities</div></div>
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Set Rover availability for tomorrow</div></div>
+      <div class="bnote">Evening engagement window — 6–9pm CT is the second peak for reach. Engage actively after posting to boost the algorithm signal.</div>
     </div>
   </div>
 
@@ -374,8 +403,10 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
     <div class="cat-hdr" onclick="togC('c-sbw')"><div class="cat-icon">🎨</div><div class="cat-name">SBW Co.</div><div class="cat-count" id="cnt-sbw"></div></div>
     <div class="cat-body">
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Work on active design in Adobe</div></div>
-      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post Instagram content before 9:30am</div></div>
-      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post daily Instagram story</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Wed: Reel at 12pm CT · Thu: Reel at 9am CT · Tue: Reel at 6pm CT</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Feed posts Tue–Thu between 11am–2pm CT</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Post daily story — every day, near Reel windows</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Reply to all comments within 1 hour of posting</div></div>
       <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Shopify store update</div></div>
       <div class="add-row"><input class="add-inp" id="inp-sbw" placeholder="Add SBW task..." onkeydown="if(event.key==='Enter')addT('c-sbw','inp-sbw')"><button class="add-btn" onclick="addT('c-sbw','inp-sbw')">+ Add</button></div>
     </div>
@@ -601,6 +632,85 @@ function tick(){
   });
 }
 tick();setInterval(tick,30000);
+
+// ── DAY-AWARE IG SCHEDULE ────────────────────────────────────
+const IG_SCHEDULE = {
+  0: { // Sunday
+    label: 'Sunday · Rest & Light Engagement',
+    task: 'No Reel required today. Post a story if inspired. Engage with comments and DMs.',
+    time: 'Story anytime',
+    color: 'var(--blue)',
+    bg: 'var(--blue-bg)',
+    border: 'var(--blue-border)'
+  },
+  1: { // Monday
+    label: 'Monday · Evening Window',
+    task: 'Reel or feed post at 6–9pm CT. Warm up the week with engagement content or a behind-the-scenes story.',
+    time: '6:00–9:00 PM CT',
+    color: 'var(--purple)',
+    bg: 'var(--purple-bg)',
+    border: 'var(--purple-border)'
+  },
+  2: { // Tuesday
+    label: 'Tuesday · REEL DAY 🔥',
+    task: 'Post Reel at 6pm CT — Tuesday evening is a top-performing window. Feed posts also strong 11am–2pm CT.',
+    time: '6:00 PM CT',
+    color: 'var(--amber)',
+    bg: 'var(--amber-bg)',
+    border: 'var(--amber-border)'
+  },
+  3: { // Wednesday
+    label: 'Wednesday · STRONGEST REEL DAY 🔥🔥',
+    task: 'Post Reel at 12pm CT — Wednesday noon is the #1 weekly window per 2026 data. Protect this slot every week.',
+    time: '12:00 PM CT',
+    color: 'var(--amber)',
+    bg: 'var(--amber-bg)',
+    border: 'var(--amber-border)'
+  },
+  4: { // Thursday
+    label: 'Thursday · REEL DAY 🔥',
+    task: 'Post Reel at 9am CT — Thursday morning is the second strongest Reels window. Feed posts also strong 12–2pm CT.',
+    time: '9:00 AM CT',
+    color: 'var(--amber)',
+    bg: 'var(--amber-bg)',
+    border: 'var(--amber-border)'
+  },
+  5: { // Friday
+    label: 'Friday · Afternoon Window',
+    task: 'Post Reel or feed at 3–5pm CT if content is ready. Friday is less consistent — only post if quality is there.',
+    time: '3:00–5:00 PM CT',
+    color: 'var(--green)',
+    bg: 'var(--green-bg)',
+    border: 'var(--green-border)'
+  },
+  6: { // Saturday
+    label: 'Saturday · Light Day',
+    task: 'No scheduled Reel. Post a story, check DMs, engage with community. Protect weekend energy for Rover.',
+    time: 'Story anytime',
+    color: 'var(--blue)',
+    bg: 'var(--blue-bg)',
+    border: 'var(--blue-border)'
+  }
+};
+
+function updateIGStrip() {
+  const day = new Date().getDay();
+  const s = IG_SCHEDULE[day];
+  const strip = document.getElementById('ig-strip');
+  const label = document.getElementById('ig-day-label');
+  const task = document.getElementById('ig-day-task');
+  const time = document.getElementById('ig-day-time');
+  if (!strip || !s) return;
+  strip.style.borderColor = s.border;
+  strip.style.background = s.bg;
+  label.textContent = s.label;
+  label.style.color = s.color;
+  task.textContent = s.task;
+  task.style.color = 'var(--black)';
+  time.textContent = s.time;
+  time.style.color = s.color;
+}
+updateIGStrip();
 function tog(id){document.getElementById(id).classList.toggle('open')}
 function togT(el,e){if(e)e.stopPropagation();el.classList.toggle('done');saveTasks();updAllCounts();updStats();}
 function togC(id){document.getElementById(id).classList.toggle('open')}
