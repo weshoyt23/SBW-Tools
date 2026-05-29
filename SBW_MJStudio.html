@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MJ Studio · SBW Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0d0b;
+  --surface:#161512;
+  --surface2:#1e1c18;
+  --border:#2a2824;
+  --border2:#3a3630;
+  --white:#faf8f4;
+  --muted:#6b6560;
+  --muted2:#4a4540;
+  --amber:#d97706;
+  --amber-dim:rgba(217,119,6,0.15);
+  --amber-border:rgba(217,119,6,0.3);
+  --green:#16a34a;
+  --green-dim:rgba(22,163,74,0.12);
+  --green-border:rgba(22,163,74,0.3);
+  --blue:#3b82f6;
+  --blue-dim:rgba(59,130,246,0.12);
+  --blue-border:rgba(59,130,246,0.3);
+  --purple:#a855f7;
+  --purple-dim:rgba(168,85,247,0.12);
+  --purple-border:rgba(168,85,247,0.3);
+  --pink:#ec4899;
+  --pink-dim:rgba(236,72,153,0.12);
+  --font-d:'Bebas Neue',sans-serif;
+  --font-b:'IBM Plex Sans',sans-serif;
+  --font-m:'IBM Plex Mono',monospace;
+}
+html{color-scheme:dark}
+body{font-family:var(--font-b);background:var(--bg);color:var(--white);overflow-x:hidden;padding-bottom:60px}
+
+/* ── HEADER ── */
+.hdr{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+  position:sticky;top:0;z-index:50;
+}
+.hdr-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0 10px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:0;
+}
+.hdr-logo{font-family:var(--font-d);font-size:20px;letter-spacing:.08em;color:var(--white)}
+.hdr-logo span{color:var(--amber)}
+.hdr-sub{font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.nav{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-t{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 16px;border:none;border-bottom:2px solid transparent;
+  background:none;color:var(--muted);cursor:pointer;white-space:nowrap;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;flex-shrink:0;
+}
+.nav-t.on{color:var(--amber);border-bottom-color:var(--amber)}
+.nav-t:hover:not(.on){color:var(--white)}
+
+/* ── PAGES ── */
+.pg{display:none;padding:20px 20px 0}
+.pg.on{display:block}
+
+/* ── SECTION LABELS ── */
+.sec{
+  font-family:var(--font-m);font-size:9px;color:var(--amber);
+  letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:12px;margin-top:0;padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);padding:16px;margin-bottom:10px}
+.card-title{font-family:var(--font-d);font-size:18px;letter-spacing:.04em;color:var(--white);margin-bottom:10px}
+
+/* ── BODY TEXT ── */
+.body-text{font-size:13px;line-height:1.85;color:rgba(255,255,255,0.65);font-weight:300}
+.body-text strong{color:var(--white);font-weight:500}
+.body-text em{color:var(--amber);font-style:italic}
+
+/* ── INLINE CODE ── */
+.code{
+  font-family:var(--font-m);font-size:11px;
+  background:var(--amber-dim);color:var(--amber);
+  border:1px solid var(--amber-border);
+  padding:2px 7px;display:inline-block;
+}
+
+/* ── PROMPT ANATOMY ── */
+.anatomy{display:flex;flex-direction:column;gap:3px;margin-top:14px}
+.anatomy-row{
+  display:flex;align-items:stretch;gap:0;overflow:hidden;
+  border:1px solid var(--border);
+}
+.anatomy-label{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  padding:10px 12px;min-width:100px;flex-shrink:0;
+  display:flex;align-items:center;border-right:1px solid var(--border);
+}
+.anatomy-val{
+  font-size:12px;padding:10px 14px;color:rgba(255,255,255,0.7);
+  line-height:1.5;flex:1;font-style:italic;
+  display:flex;align-items:center;
+}
+.anatomy-example{
+  font-family:var(--font-m);font-size:10px;
+  padding:10px 14px;color:var(--muted);
+  border-left:1px solid var(--border);
+  min-width:180px;display:flex;align-items:center;
+  line-height:1.5;
+}
+
+/* ── FULL PROMPT DISPLAY ── */
+.full-prompt{
+  background:var(--surface2);border:1px solid var(--amber-border);
+  border-left:3px solid var(--amber);
+  padding:14px 16px;margin:14px 0;
+  font-family:var(--font-m);font-size:11px;color:var(--white);
+  line-height:1.8;
+}
+.copy-btn{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:4px 10px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;
+}
+.copy-btn:hover{border-color:var(--amber);color:var(--amber)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+
+/* ── PARAMS ── */
+.params{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.param{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 14px;background:var(--surface2);border:1px solid var(--border);
+}
+.param-code{
+  font-family:var(--font-m);font-size:11px;color:var(--amber);
+  min-width:130px;flex-shrink:0;margin-top:1px;font-weight:500;
+}
+.param-desc{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6}
+.param-desc strong{color:var(--white)}
+
+/* ── TIP CARDS ── */
+.tip{
+  border-left:3px solid var(--amber);background:var(--amber-dim);
+  padding:12px 14px;margin-bottom:8px;
+}
+.tip-num{font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;margin-bottom:5px;text-transform:uppercase}
+.tip-text{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.7}
+.tip-text strong{color:var(--white)}
+
+/* ── INSPIRATION CAPTURE ── */
+.capture-form{background:var(--surface);border:1px solid var(--border);padding:16px;margin-bottom:12px}
+.field{margin-bottom:12px}
+.field label{
+  display:block;font-family:var(--font-m);font-size:9px;
+  color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;
+}
+.field input,.field textarea,.field select{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  color:var(--white);font-family:var(--font-b);font-size:13px;
+  padding:9px 12px;transition:border-color .15s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+  outline:none;border-color:var(--amber);
+}
+.field textarea{min-height:72px;resize:vertical}
+.field select option{background:var(--surface2)}
+
+/* TAG PILLS */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag-pill{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;
+}
+.tag-pill.active{border-color:var(--amber);color:var(--amber);background:var(--amber-dim)}
+
+/* URL PREVIEW */
+.url-preview{
+  font-family:var(--font-m);font-size:10px;color:var(--blue);
+  background:var(--blue-dim);border:1px solid var(--blue-border);
+  padding:8px 12px;margin-top:6px;word-break:break-all;
+  display:none;
+}
+
+/* INSPIRATION GRID */
+.inspo-grid{display:flex;flex-direction:column;gap:8px}
+.inspo-card{
+  background:var(--surface);border:1px solid var(--border);
+  overflow:hidden;transition:border-color .15s;
+}
+.inspo-card:hover{border-color:var(--amber-border)}
+.inspo-card-top{padding:12px 14px;display:flex;align-items:flex-start;gap:12px}
+.inspo-img-wrap{
+  width:56px;height:56px;flex-shrink:0;overflow:hidden;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.inspo-img-wrap img{width:100%;height:100%;object-fit:cover}
+.inspo-img-placeholder{font-size:20px;color:var(--muted2)}
+.inspo-content{flex:1;min-width:0}
+.inspo-title{font-family:var(--font-d);font-size:16px;letter-spacing:.03em;color:var(--white);margin-bottom:3px}
+.inspo-meta{font-family:var(--font-m);font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:5px}
+.inspo-desc{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5}
+.inspo-tags{display:flex;flex-wrap:wrap;gap:4px;padding:0 14px 12px}
+.inspo-tag{
+  font-family:var(--font-m);font-size:8px;padding:2px 8px;letter-spacing:.06em;
+  border:1px solid var(--border);color:var(--muted);
+}
+.inspo-actions{display:flex;border-top:1px solid var(--border)}
+.inspo-action{
+  flex:1;padding:9px;font-family:var(--font-m);font-size:9px;
+  letter-spacing:.06em;text-transform:uppercase;
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  border-right:1px solid var(--border);transition:all .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.inspo-action:last-child{border-right:none}
+.inspo-action:hover{color:var(--amber);background:var(--amber-dim)}
+.inspo-action.del:hover{color:#ef4444;background:rgba(239,68,68,0.1)}
+
+/* PROMPT LIBRARY */
+.lib-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.lib-f{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 12px;border:1px solid var(--border);background:none;color:var(--muted);
+  cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;
+}
+.lib-f.on{background:var(--amber);border-color:var(--amber);color:var(--bg)}
+.prompt-card{
+  background:var(--surface);border:1px solid var(--border);
+  overflow:hidden;margin-bottom:8px;transition:border-color .15s;
+}
+.prompt-card:hover{border-color:var(--amber-border)}
+.prompt-card-hdr{
+  padding:12px 14px;display:flex;align-items:center;gap:10px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.prompt-card-hdr .cat-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+}
+.prompt-card-name{font-family:var(--font-d);font-size:16px;letter-spacing:.03em;flex:1}
+.prompt-card-cat{font-family:var(--font-m);font-size:8px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.prompt-card-chev{font-size:10px;color:var(--muted);transition:transform .2s;font-family:var(--font-m)}
+.prompt-card.open .prompt-card-chev{transform:rotate(180deg)}
+.prompt-card-body{display:none;border-top:1px solid var(--border);padding:14px}
+.prompt-card.open .prompt-card-body{display:block}
+.prompt-text{
+  font-family:var(--font-m);font-size:11px;color:var(--white);
+  background:var(--surface2);border:1px solid var(--border);
+  border-left:3px solid var(--amber);padding:12px 14px;
+  line-height:1.8;margin-bottom:10px;
+}
+.prompt-notes{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;margin-bottom:10px;font-style:italic}
+
+/* PROMPT BUILDER */
+.builder{background:var(--surface);border:1px solid var(--border);padding:16px;margin-bottom:12px}
+.builder-row{
+  display:flex;align-items:stretch;gap:0;margin-bottom:4px;
+  border:1px solid var(--border);overflow:hidden;
+}
+.builder-label{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--amber);background:var(--surface2);
+  padding:10px 12px;min-width:100px;flex-shrink:0;
+  display:flex;align-items:center;border-right:1px solid var(--border);
+}
+.builder-input{
+  flex:1;background:transparent;border:none;
+  color:var(--white);font-family:var(--font-b);font-size:13px;
+  padding:10px 12px;
+}
+.builder-input:focus{outline:none;background:var(--amber-dim)}
+.builder-input::placeholder{color:var(--muted2);font-style:italic}
+.builder-output{
+  background:var(--surface2);border:1px solid var(--amber-border);
+  border-left:3px solid var(--amber);
+  padding:14px 16px;margin-top:12px;
+  font-family:var(--font-m);font-size:11px;color:var(--white);
+  line-height:1.8;min-height:48px;
+}
+.builder-output.empty{color:var(--muted2);font-style:italic}
+
+/* BTN */
+.btn{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--border);background:var(--white);color:var(--bg);
+  padding:9px 16px;cursor:pointer;transition:all .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:hover{background:var(--amber);border-color:var(--amber);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--muted);border-color:var(--border)}
+.btn.ghost:hover{color:var(--amber);border-color:var(--amber);background:var(--amber-dim)}
+.btn.danger{background:transparent;color:#ef4444;border-color:rgba(239,68,68,0.3)}
+.btn.danger:hover{background:rgba(239,68,68,0.1)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:24px;right:20px;
+  background:var(--amber);color:var(--bg);
+  font-family:var(--font-m);font-size:11px;font-weight:500;
+  padding:10px 18px;opacity:0;transition:opacity .2s;
+  pointer-events:none;z-index:200;letter-spacing:.06em;
+}
+#toast.show{opacity:1}
+
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;padding:40px 20px;
+  font-family:var(--font-m);font-size:11px;color:var(--muted);
+  letter-spacing:.06em;border:1px dashed var(--border);
+}
+.empty-icon{font-size:32px;margin-bottom:12px}
+
+/* MODAL */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);
+  z-index:100;overflow-y:auto;padding:20px;
+}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  width:100%;max-width:600px;padding:20px;margin-top:20px;
+}
+.modal-title{font-family:var(--font-d);font-size:24px;letter-spacing:.04em;margin-bottom:16px;color:var(--white)}
+
+/* LEARN PAGE SPECIFICS */
+.step-block{background:var(--surface);border:1px solid var(--border);overflow:hidden;margin-bottom:8px}
+.step-hdr{
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  border-bottom:1px solid transparent;transition:all .15s;
+}
+.step-block.open .step-hdr{border-bottom-color:var(--border)}
+.step-hdr:hover{background:var(--surface2)}
+.step-num{font-family:var(--font-d);font-size:28px;color:var(--amber);line-height:1;min-width:32px}
+.step-title{font-family:var(--font-d);font-size:18px;letter-spacing:.03em;color:var(--white);flex:1}
+.step-chev{font-size:10px;color:var(--muted);transition:transform .2s;font-family:var(--font-m)}
+.step-block.open .step-chev{transform:rotate(180deg)}
+.step-body{display:none;padding:14px}
+.step-block.open .step-body{display:block}
+
+/* WORKFLOW ARROWS */
+.workflow{display:flex;flex-direction:column;gap:3px;margin:14px 0}
+.wf-step{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:12px 14px;display:flex;align-items:center;gap:12px;
+}
+.wf-n{font-family:var(--font-d);font-size:22px;color:var(--amber);line-height:1;min-width:24px}
+.wf-text{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5}
+.wf-text strong{color:var(--white)}
+.wf-arrow{text-align:center;font-family:var(--font-m);font-size:10px;color:var(--muted2)}
+
+@media(min-width:640px){
+  .anatomy-row{flex-direction:row}
+  .builder-row{flex-direction:row}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-logo">SBW<span>.</span> MJ STUDIO</div>
+    </div>
+    <div class="hdr-sub">Midjourney Workspace</div>
+  </div>
+  <div class="nav">
+    <div class="nav-t on" onclick="sp('learn')">Learn</div>
+    <div class="nav-t" onclick="sp('builder')">Builder</div>
+    <div class="nav-t" onclick="sp('library')">Library</div>
+    <div class="nav-t" onclick="sp('inspo')">Inspiration</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     LEARN
+═══════════════════════════════════════════════════════ -->
+<div class="pg on" id="pg-learn">
+
+  <div style="padding:20px 0 4px">
+    <div style="font-family:var(--font-d);font-size:clamp(36px,9vw,60px);line-height:.95;letter-spacing:.02em;margin-bottom:8px">
+      MIDJOURNEY<br><span style="color:var(--amber)">FIELD GUIDE</span>
+    </div>
+    <p class="body-text" style="max-width:500px">Everything you need to go from zero to building SBW's visual identity with AI. Read this once, reference it forever.</p>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="sec">How It Works</div>
+    <div class="step-block open" id="step0">
+      <div class="step-hdr" onclick="togStep('step0')">
+        <div class="step-num">01</div>
+        <div class="step-title">The Basics</div>
+        <div class="step-chev">▼</div>
+      </div>
+      <div class="step-body">
+        <p class="body-text" style="margin-bottom:12px">Midjourney is a text-to-image AI. You type a description — called a <strong>prompt</strong> — and it generates four image variations. You then upscale the ones you like, generate new variations, or refine with follow-up prompts.</p>
+        <p class="body-text" style="margin-bottom:12px">It runs inside <strong>Discord</strong>. You type your prompts in a channel, the bot responds with your images right there in the chat. It feels awkward at first and second nature by week two.</p>
+        <p class="body-text">The command to generate is always <span class="code">/imagine</span> followed by your prompt. Everything else is refinement.</p>
+      </div>
+    </div>
+
+    <div class="step-block" id="step1">
+      <div class="step-hdr" onclick="togStep('step1')">
+        <div class="step-num">02</div>
+        <div class="step-title">The Workflow</div>
+        <div class="step-chev">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="workflow">
+          <div class="wf-step"><div class="wf-n">1</div><div class="wf-text">Type <span style="color:var(--amber);font-family:var(--font-m);font-size:11px">/imagine</span> + your prompt in Discord</div></div>
+          <div class="wf-arrow">↓</div>
+          <div class="wf-step"><div class="wf-n">2</div><div class="wf-text">MJ generates <strong>4 variations</strong> — labeled U1–U4 (upscale) and V1–V4 (variation)</div></div>
+          <div class="wf-arrow">↓</div>
+          <div class="wf-step"><div class="wf-n">3</div><div class="wf-text">Hit <strong>U</strong> on the best one to upscale to full resolution</div></div>
+          <div class="wf-arrow">↓</div>
+          <div class="wf-step"><div class="wf-n">4</div><div class="wf-text">Hit <strong>V</strong> to generate 4 more variations of that specific image</div></div>
+          <div class="wf-arrow">↓</div>
+          <div class="wf-step"><div class="wf-n">5</div><div class="wf-text">Refine prompt and repeat until you get what you need</div></div>
+        </div>
+        <p class="body-text" style="margin-top:12px"><em>Pro move:</em> Add <span class="code">--seed [number]</span> to lock in a composition you love, then tweak the prompt around it.</p>
+      </div>
+    </div>
+
+    <div class="step-block" id="step2">
+      <div class="step-hdr" onclick="togStep('step2')">
+        <div class="step-num">03</div>
+        <div class="step-title">Prompt Anatomy</div>
+        <div class="step-chev">▼</div>
+      </div>
+      <div class="step-body">
+        <p class="body-text" style="margin-bottom:14px">A well-structured prompt layers information in a specific order. Each layer narrows the output toward your vision. Missing layers = unpredictable results.</p>
+        <div class="anatomy">
+          <div class="anatomy-row">
+            <div class="anatomy-label" style="color:var(--amber)">Subject</div>
+            <div class="anatomy-val">What is in the image</div>
+            <div class="anatomy-example">editorial product photograph of an oversized black hoodie</div>
+          </div>
+          <div class="anatomy-row">
+            <div class="anatomy-label" style="color:var(--blue)">Style</div>
+            <div class="anatomy-val">The visual language</div>
+            <div class="anatomy-example">flat lay on raw concrete</div>
+          </div>
+          <div class="anatomy-row">
+            <div class="anatomy-label" style="color:var(--purple)">Medium</div>
+            <div class="anatomy-val">How it was "made"</div>
+            <div class="anatomy-example">shot on medium format</div>
+          </div>
+          <div class="anatomy-row">
+            <div class="anatomy-label" style="color:var(--green)">Lighting</div>
+            <div class="anatomy-val">The light source + quality</div>
+            <div class="anatomy-example">dramatic side lighting, high contrast</div>
+          </div>
+          <div class="anatomy-row">
+            <div class="anatomy-label" style="color:var(--pink)">Mood</div>
+            <div class="anatomy-val">The feeling</div>
+            <div class="anatomy-example">muted tones, minimal composition</div>
+          </div>
+          <div class="anatomy-row">
+            <div class="anatomy-label" style="color:var(--muted)">Tech Specs</div>
+            <div class="anatomy-val">Parameters and flags</div>
+            <div class="anatomy-example">--ar 4:5 --style raw --v 7</div>
+          </div>
+        </div>
+        <div class="full-prompt" style="margin-top:16px">
+          <span style="color:var(--muted);font-size:9px;display:block;margin-bottom:6px;letter-spacing:.1em;text-transform:uppercase">Full example prompt</span>
+          editorial product photograph of an oversized black hoodie, flat lay on raw concrete, dramatic side lighting, desaturated film grain, high contrast, shot on medium format, muted tones, minimal composition --ar 4:5 --style raw --v 7 --no text, watermarks, logos
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="copy-btn" onclick="copyText(this,'editorial product photograph of an oversized black hoodie, flat lay on raw concrete, dramatic side lighting, desaturated film grain, high contrast, shot on medium format, muted tones, minimal composition --ar 4:5 --style raw --v 7 --no text, watermarks, logos')">Copy Prompt</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-block" id="step3">
+      <div class="step-hdr" onclick="togStep('step3')">
+        <div class="step-num">04</div>
+        <div class="step-title">Key Parameters</div>
+        <div class="step-chev">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="params">
+          <div class="param"><div class="param-code">--ar 9:16</div><div class="param-desc"><strong>Aspect ratio.</strong> 9:16 for Reels, 1:1 for feed posts, 4:5 for portrait feed, 16:9 for banners. Always set this.</div></div>
+          <div class="param"><div class="param-code">--style raw</div><div class="param-desc"><strong>Turns off MJ beautification.</strong> Use when you want gritty, photorealistic, or unpolished results. Essential for SBW's aesthetic.</div></div>
+          <div class="param"><div class="param-code">--v 7</div><div class="param-desc"><strong>Model version.</strong> Always use the latest. V7 is current as of 2026. Better detail, lighting, and coherence.</div></div>
+          <div class="param"><div class="param-code">--no [thing]</div><div class="param-desc"><strong>Exclusion.</strong> <span style="color:var(--amber);font-family:var(--font-m);font-size:10px">--no text, watermarks, logos, people</span> is almost always worth adding to product shots.</div></div>
+          <div class="param"><div class="param-code">--sref [URL]</div><div class="param-desc"><strong>Style reference.</strong> Drop in an image URL and MJ matches its visual style. This is where your inspiration folder becomes a superpower.</div></div>
+          <div class="param"><div class="param-code">--cref [URL]</div><div class="param-desc"><strong>Character reference.</strong> Keeps a face or figure consistent across multiple generations. Useful for a recurring model or character.</div></div>
+          <div class="param"><div class="param-code">--seed [number]</div><div class="param-desc"><strong>Locks composition.</strong> Find a layout you love, get the seed number, then iterate the prompt around that fixed composition.</div></div>
+          <div class="param"><div class="param-code">--chaos [0–100]</div><div class="param-desc"><strong>Variation range.</strong> Higher = more unpredictable and experimental results. Lower = more consistent and predictable.</div></div>
+          <div class="param"><div class="param-code">--stylize [0–1000]</div><div class="param-desc"><strong>MJ's artistic influence.</strong> Lower = closer to your prompt. Higher = MJ adds more of its own aesthetic. Default is 100.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-block" id="step4">
+      <div class="step-hdr" onclick="togStep('step4')">
+        <div class="step-num">05</div>
+        <div class="step-title">Pro Tips</div>
+        <div class="step-chev">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="tip">
+          <div class="tip-num">Tip 01 — Don't accept generation 1</div>
+          <div class="tip-text">A professional treats MJ as a <strong>conversation, not a vending machine.</strong> Generate, identify what's almost right, isolate the specific element that isn't working, fix just that thing in the prompt. Generation 8 of the same prompt is often the keeper.</div>
+        </div>
+        <div class="tip">
+          <div class="tip-num">Tip 02 — Build a prompt library</div>
+          <div class="tip-text">Every prompt that produces something great gets saved with notes on what worked. Over time you build a <strong>personal dictionary</strong> of language that reliably produces the SBW aesthetic. That's what the Library tab is for.</div>
+        </div>
+        <div class="tip">
+          <div class="tip-num">Tip 03 — Use your inspiration folder as sref</div>
+          <div class="tip-text">When you save an image to your Inspiration tab, you're building <strong>style reference material.</strong> Upload those images anywhere publicly accessible and use the URL with <span class="code">--sref</span> for dramatically more targeted results.</div>
+        </div>
+        <div class="tip">
+          <div class="tip-num">Tip 04 — Describe visuals in words</div>
+          <div class="tip-text">When you see a photo you love, stop and articulate it. Is it the <strong>lighting? The grain? The color temperature? The composition?</strong> Training yourself to describe visuals in words is the core skill MJ rewards. This is what you're doing when you log inspiration.</div>
+        </div>
+        <div class="tip">
+          <div class="tip-num">Tip 05 — Develop SBW base prompts</div>
+          <div class="tip-text">Build a set of base prompts for each SBW content type — product shots, lifestyle imagery, brand mood pieces — and swap out specific details while keeping the core style language constant. <strong>That's how you build a visually coherent brand across hundreds of images.</strong></div>
+        </div>
+        <div class="tip">
+          <div class="tip-num">Tip 06 — Browse the community showcase first</div>
+          <div class="tip-text">Before you ever subscribe, go to Midjourney's website and browse the public showcase. When you see an image you love, <strong>click it and read the prompt.</strong> 20 minutes a day and you'll absorb prompt language faster than any tutorial.</div>
+        </div>
+        <div class="tip">
+          <div class="tip-num">Tip 07 — Relax Mode for volume</div>
+          <div class="tip-text">Standard plan and above includes <strong>unlimited Relax Mode generations</strong> — slower but free. Use Fast Mode for when you're iterating in real time, Relax Mode for batch exploration when you're not in a hurry.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-block" id="step5">
+      <div class="step-hdr" onclick="togStep('step5')">
+        <div class="step-num">06</div>
+        <div class="step-title">SBW-Specific Strategy</div>
+        <div class="step-chev">▼</div>
+      </div>
+      <div class="step-body">
+        <p class="body-text" style="margin-bottom:12px">Your unfair advantage is that you already know what SBW looks and feels like. MJ can't define that — you define it. MJ executes it at scale.</p>
+        <div class="card" style="margin-bottom:10px">
+          <div class="card-title" style="font-size:15px;margin-bottom:8px">Content Types to Build Base Prompts For</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--font-m);font-size:10px;color:var(--amber);min-width:100px">Product Shots</div><div style="font-size:12px;color:var(--muted)">Flat lay, hanging, worn — consistent lighting, consistent surface</div></div>
+            <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--font-m);font-size:10px;color:var(--amber);min-width:100px">Lifestyle</div><div style="font-size:12px;color:var(--muted)">Worn in Austin — streets, architecture, natural light, real context</div></div>
+            <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--font-m);font-size:10px;color:var(--amber);min-width:100px">Mood Boards</div><div style="font-size:12px;color:var(--muted)">Textures, color palettes, abstract reference material for drops</div></div>
+            <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:var(--font-m);font-size:10px;color:var(--amber);min-width:100px">Design Reference</div><div style="font-size:12px;color:var(--muted)">Graphic motifs, typography directions, pattern research</div></div>
+            <div style="display:flex;gap:10px;padding:8px 0"><div style="font-family:var(--font-m);font-size:10px;color:var(--amber);min-width:100px">Drop Teasers</div><div style="font-size:12px;color:var(--muted)">Atmospheric, partially obscured, cinematic — build anticipation</div></div>
+          </div>
+        </div>
+        <p class="body-text"><em>The learning curve is real but short.</em> The first week feels frustrating. Most designers get genuinely good within two to three weeks of daily use. Start before you have MJ access. The preparation work — building your inspiration library and learning to describe visuals — is the actual skill.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PROMPT BUILDER
+═══════════════════════════════════════════════════════ -->
+<div class="pg" id="pg-builder">
+  <div style="padding:20px 0 4px">
+    <div style="font-family:var(--font-d);font-size:clamp(32px,8vw,52px);line-height:.95;letter-spacing:.02em;margin-bottom:8px">
+      PROMPT<br><span style="color:var(--amber)">BUILDER</span>
+    </div>
+    <p class="body-text">Fill in each layer. The complete prompt assembles below in real time. Copy it straight to Discord.</p>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="sec">Build Your Prompt</div>
+    <div class="builder">
+      <div class="builder-row">
+        <div class="builder-label" style="color:var(--amber)">Subject</div>
+        <input class="builder-input" id="b-subject" placeholder="e.g. oversized black hoodie, flat lay on raw concrete" oninput="buildPrompt()">
+      </div>
+      <div class="builder-row">
+        <div class="builder-label" style="color:var(--blue)">Style</div>
+        <input class="builder-input" id="b-style" placeholder="e.g. editorial product photograph, Bauhaus-inspired" oninput="buildPrompt()">
+      </div>
+      <div class="builder-row">
+        <div class="builder-label" style="color:var(--purple)">Medium</div>
+        <input class="builder-input" id="b-medium" placeholder="e.g. shot on medium format, 35mm film" oninput="buildPrompt()">
+      </div>
+      <div class="builder-row">
+        <div class="builder-label" style="color:var(--green)">Lighting</div>
+        <input class="builder-input" id="b-lighting" placeholder="e.g. dramatic side lighting, high contrast, golden hour" oninput="buildPrompt()">
+      </div>
+      <div class="builder-row">
+        <div class="builder-label" style="color:var(--pink)">Mood</div>
+        <input class="builder-input" id="b-mood" placeholder="e.g. muted tones, minimal, cinematic, raw" oninput="buildPrompt()">
+      </div>
+      <div class="builder-row">
+        <div class="builder-label" style="color:var(--muted)">Exclude</div>
+        <input class="builder-input" id="b-no" placeholder="e.g. text, watermarks, logos, people" oninput="buildPrompt()">
+      </div>
+    </div>
+
+    <div class="sec">Parameters</div>
+    <div class="builder" style="margin-bottom:12px">
+      <div class="builder-row">
+        <div class="builder-label">Aspect Ratio</div>
+        <select class="builder-input" id="b-ar" onchange="buildPrompt()" style="padding:10px 12px;font-size:13px">
+          <option value="--ar 1:1">1:1 — Square feed post</option>
+          <option value="--ar 4:5">4:5 — Portrait feed post</option>
+          <option value="--ar 9:16" selected>9:16 — Reels / Stories</option>
+          <option value="--ar 16:9">16:9 — Banner / Desktop</option>
+          <option value="--ar 3:2">3:2 — Landscape photo</option>
+          <option value="--ar 2:3">2:3 — Portrait photo</option>
+        </select>
+      </div>
+      <div class="builder-row">
+        <div class="builder-label">Style Mode</div>
+        <select class="builder-input" id="b-stylemode" onchange="buildPrompt()" style="padding:10px 12px;font-size:13px">
+          <option value="--style raw">Raw — photorealistic / gritty</option>
+          <option value="">Default — MJ's aesthetic applied</option>
+        </select>
+      </div>
+      <div class="builder-row">
+        <div class="builder-label">Version</div>
+        <select class="builder-input" id="b-version" onchange="buildPrompt()" style="padding:10px 12px;font-size:13px">
+          <option value="--v 7">v7 — Latest (recommended)</option>
+          <option value="--v 6.1">v6.1 — Previous</option>
+        </select>
+      </div>
+      <div class="builder-row">
+        <div class="builder-label">Stylize</div>
+        <select class="builder-input" id="b-stylize" onchange="buildPrompt()" style="padding:10px 12px;font-size:13px">
+          <option value="">Default (100)</option>
+          <option value="--stylize 0">0 — Pure prompt, no MJ flair</option>
+          <option value="--stylize 50">50 — Minimal MJ influence</option>
+          <option value="--stylize 250">250 — More artistic</option>
+          <option value="--stylize 500">500 — Very artistic</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sec">Complete Prompt</div>
+    <div class="builder-output empty" id="builder-output">Your prompt will appear here as you type...</div>
+    <div class="btn-row">
+      <button class="btn" onclick="copyBuilderPrompt()">Copy to Clipboard</button>
+      <button class="btn ghost" onclick="saveBuilderPrompt()">Save to Library</button>
+      <button class="btn ghost" onclick="clearBuilder()">Clear</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PROMPT LIBRARY
+═══════════════════════════════════════════════════════ -->
+<div class="pg" id="pg-library">
+  <div style="padding:20px 0 4px">
+    <div style="font-family:var(--font-d);font-size:clamp(32px,8vw,52px);line-height:.95;letter-spacing:.02em;margin-bottom:8px">
+      PROMPT<br><span style="color:var(--amber)">LIBRARY</span>
+    </div>
+    <p class="body-text">Your growing collection of prompts that work. Starter prompts included — add your own as you discover what creates the SBW aesthetic.</p>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="lib-filter">
+      <button class="lib-f on" onclick="filterLib('all',this)">All</button>
+      <button class="lib-f" onclick="filterLib('product',this)">Product</button>
+      <button class="lib-f" onclick="filterLib('lifestyle',this)">Lifestyle</button>
+      <button class="lib-f" onclick="filterLib('mood',this)">Mood</button>
+      <button class="lib-f" onclick="filterLib('design',this)">Design</button>
+      <button class="lib-f" onclick="filterLib('teaser',this)">Teaser</button>
+      <button class="lib-f" onclick="filterLib('custom',this)">My Saves</button>
+    </div>
+
+    <div id="lib-list"></div>
+
+    <div style="margin-top:16px">
+      <button class="btn" onclick="openAddPrompt()">+ Add Prompt to Library</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     INSPIRATION
+═══════════════════════════════════════════════════════ -->
+<div class="pg" id="pg-inspo">
+  <div style="padding:20px 0 4px">
+    <div style="font-family:var(--font-d);font-size:clamp(32px,8vw,52px);line-height:.95;letter-spacing:.02em;margin-bottom:8px">
+      INSPIRATION<br><span style="color:var(--amber)">VAULT</span>
+    </div>
+    <p class="body-text">When you're out in the wild and see something that speaks to SBW — a texture, a mood, a photo, a moment — log it here. This becomes your style reference library for Midjourney <span class="code">--sref</span> use.</p>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="sec">Log New Inspiration</div>
+    <div class="capture-form">
+      <div class="field">
+        <label>Title / What is it</label>
+        <input type="text" id="inspo-title" placeholder="e.g. Raw concrete texture at 2nd & Congress">
+      </div>
+      <div class="field">
+        <label>Image URL (optional — paste a link to the image)</label>
+        <input type="url" id="inspo-url" placeholder="https://..." oninput="previewUrl()">
+        <div class="url-preview" id="url-preview"></div>
+      </div>
+      <div class="field">
+        <label>What speaks to SBW about this</label>
+        <textarea id="inspo-desc" placeholder="Describe what you see — the lighting, texture, mood, color temperature, composition. Train yourself to put visuals into words."></textarea>
+      </div>
+      <div class="field">
+        <label>MJ Keywords (what language does this suggest)</label>
+        <input type="text" id="inspo-keywords" placeholder="e.g. brutalist, muted tones, industrial grain, high contrast">
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <div class="tag-wrap">
+          <div class="tag-pill active" data-cat="texture" onclick="toggleCat(this)">Texture</div>
+          <div class="tag-pill" data-cat="lighting" onclick="toggleCat(this)">Lighting</div>
+          <div class="tag-pill" data-cat="color" onclick="toggleCat(this)">Color</div>
+          <div class="tag-pill" data-cat="composition" onclick="toggleCat(this)">Composition</div>
+          <div class="tag-pill" data-cat="mood" onclick="toggleCat(this)">Mood</div>
+          <div class="tag-pill" data-cat="architecture" onclick="toggleCat(this)">Architecture</div>
+          <div class="tag-pill" data-cat="fashion" onclick="toggleCat(this)">Fashion</div>
+          <div class="tag-pill" data-cat="nature" onclick="toggleCat(this)">Nature</div>
+          <div class="tag-pill" data-cat="typography" onclick="toggleCat(this)">Typography</div>
+          <div class="tag-pill" data-cat="other" onclick="toggleCat(this)">Other</div>
+        </div>
+      </div>
+      <button class="btn" onclick="saveInspo()">Save to Vault</button>
+    </div>
+
+    <div class="sec" style="margin-top:4px">Saved Inspiration</div>
+    <div id="inspo-grid" class="inspo-grid"></div>
+  </div>
+</div>
+
+<!-- ── ADD PROMPT MODAL ── -->
+<div class="modal-overlay" id="add-prompt-modal">
+  <div class="modal">
+    <div class="modal-title">Add to Library</div>
+    <div class="field"><label>Prompt Name</label><input type="text" id="ap-name" placeholder="e.g. Hoodie product shot - dark"></div>
+    <div class="field">
+      <label>Category</label>
+      <select id="ap-cat">
+        <option value="product">Product</option>
+        <option value="lifestyle">Lifestyle</option>
+        <option value="mood">Mood</option>
+        <option value="design">Design</option>
+        <option value="teaser">Teaser</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+    <div class="field"><label>Full Prompt</label><textarea id="ap-prompt" placeholder="Paste your full prompt including parameters..."></textarea></div>
+    <div class="field"><label>Notes (what worked, what to adjust)</label><textarea id="ap-notes" placeholder="e.g. Best for dark product shots. Adjust --ar for feed vs stories."></textarea></div>
+    <div class="btn-row">
+      <button class="btn" onclick="savePromptToLib()">Save to Library</button>
+      <button class="btn ghost" onclick="closeAddPrompt()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── VIEW INSPO MODAL ── -->
+<div class="modal-overlay" id="view-inspo-modal">
+  <div class="modal">
+    <div id="view-inspo-content"></div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn ghost" onclick="closeViewInspo()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── STARTER PROMPTS ──────────────────────────────────────────
+const STARTER_PROMPTS = [
+  {
+    id: 'sp1', name: 'Product Shot — Dark Flat Lay', cat: 'product', custom: false,
+    prompt: 'editorial product photograph of an oversized black hoodie, flat lay on raw concrete, dramatic side lighting, desaturated film grain, high contrast, shot on medium format, muted tones, minimal composition --ar 4:5 --style raw --v 7 --no text, watermarks, logos, people',
+    notes: 'Core SBW product shot. Swap "black hoodie" for any product. Adjust --ar 1:1 for square feed.'
+  },
+  {
+    id: 'sp2', name: 'Product Shot — White Studio', cat: 'product', custom: false,
+    prompt: 'clean studio product photography, SBW graphic tee hanging on minimal white wall, soft diffused lighting, slight shadow, Scandinavian minimal aesthetic, high resolution, no background clutter --ar 4:5 --v 7 --no text, logos, watermarks',
+    notes: 'Clean alternative for lighter content days. Good for Instagram carousel variety.'
+  },
+  {
+    id: 'sp3', name: 'Lifestyle — Austin Streets', cat: 'lifestyle', custom: false,
+    prompt: 'candid street photography, young man wearing oversized graphic crewneck, Austin Texas urban environment, late afternoon golden light, film grain, documentary style, muted earth tones, authentic not staged --ar 9:16 --style raw --v 7 --no logos, text',
+    notes: 'Lifestyle anchor prompt. The "authentic not staged" instruction is key — removes the AI polish.'
+  },
+  {
+    id: 'sp4', name: 'Lifestyle — Creative Space', cat: 'lifestyle', custom: false,
+    prompt: 'editorial lifestyle photograph, creative working in minimal apartment, wearing premium streetwear hoodie, warm low light, moody shadows, coffee table books, plants, film photography aesthetic, lived-in luxury --ar 9:16 --style raw --v 7',
+    notes: 'Indoor lifestyle. Works for the "designer building a brand" narrative content.'
+  },
+  {
+    id: 'sp5', name: 'Mood — Brand Atmosphere', cat: 'mood', custom: false,
+    prompt: 'atmospheric abstract mood board, raw concrete textures, deep shadows, amber light rays, brutalist architecture details, minimal graphic elements, SBW streetwear brand aesthetic, editorial magazine feel --ar 1:1 --style raw --v 7 --stylize 200',
+    notes: 'Use for brand building content, not product posts. Higher stylize = more atmospheric.'
+  },
+  {
+    id: 'sp6', name: 'Mood — Textural Detail', cat: 'mood', custom: false,
+    prompt: 'extreme close up macro photography, woven fabric texture, premium heavyweight cotton, dramatic raking light revealing texture detail, muted warm tones, shallow depth of field --ar 1:1 --style raw --v 7',
+    notes: 'Quality story content. Swap fabric type as needed. Shows material premium without showing the product.'
+  },
+  {
+    id: 'sp7', name: 'Design Reference — Graphic Motifs', cat: 'design', custom: false,
+    prompt: 'flat graphic design reference, bold geometric abstract motifs, Swiss International Style influence, black and white with amber accent, clean vector aesthetic, Bauhaus grid principles, minimal typography --ar 1:1 --v 7 --no gradients, photos, realistic',
+    notes: 'Design inspiration, not final product. Use as reference for actual design work in Adobe.'
+  },
+  {
+    id: 'sp8', name: 'Drop Teaser — Obscured Product', cat: 'teaser', custom: false,
+    prompt: 'cinematic product tease photograph, partially visible hoodie in deep shadow, only graphic partially illuminated, moody dramatic lighting, heavy grain, anticipation, mystery, high fashion editorial, black background --ar 9:16 --style raw --v 7 --stylize 150',
+    notes: 'Pre-drop hype content. The mystery is intentional — never fully reveal until drop day.'
+  },
+  {
+    id: 'sp9', name: 'Drop Teaser — Abstract Launch', cat: 'teaser', custom: false,
+    prompt: 'dramatic abstract cinematic still, motion blur, amber light streak against dark background, energy and momentum, anticipation, luxury streetwear brand launch atmosphere, no recognizable objects --ar 9:16 --v 7 --stylize 400 --chaos 20',
+    notes: 'More abstract teaser. Higher chaos and stylize = more experimental. Good for building mystery before drop.'
+  },
+];
+
+// ── STATE ───────────────────────────────────────────────────
+let customPrompts = [];
+let inspoItems = [];
+let currentFilter = 'all';
+
+// ── INIT ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  customPrompts = JSON.parse(localStorage.getItem('mj_prompts') || '[]');
+  inspoItems = JSON.parse(localStorage.getItem('mj_inspo') || '[]');
+  renderLib('all');
+  renderInspo();
+});
+
+// ── TAB NAV ─────────────────────────────────────────────────
+function sp(id) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-t').forEach(t => t.classList.remove('on'));
+  document.getElementById('pg-' + id).classList.add('on');
+  event.target.classList.add('on');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (id === 'library') renderLib(currentFilter);
+  if (id === 'inspo') renderInspo();
+}
+
+// ── STEP TOGGLE ─────────────────────────────────────────────
+function togStep(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── PROMPT BUILDER ───────────────────────────────────────────
+function buildPrompt() {
+  const subject = document.getElementById('b-subject').value.trim();
+  const style = document.getElementById('b-style').value.trim();
+  const medium = document.getElementById('b-medium').value.trim();
+  const lighting = document.getElementById('b-lighting').value.trim();
+  const mood = document.getElementById('b-mood').value.trim();
+  const no = document.getElementById('b-no').value.trim();
+  const ar = document.getElementById('b-ar').value;
+  const stylemode = document.getElementById('b-stylemode').value;
+  const version = document.getElementById('b-version').value;
+  const stylize = document.getElementById('b-stylize').value;
+
+  const parts = [subject, style, medium, lighting, mood].filter(Boolean);
+  const params = [ar, stylemode, version, stylize].filter(Boolean);
+  const noStr = no ? `--no ${no}` : '';
+
+  const out = document.getElementById('builder-output');
+  if (!parts.length) {
+    out.textContent = 'Your prompt will appear here as you type...';
+    out.classList.add('empty');
+    return;
+  }
+
+  const prompt = [...parts, ...params, noStr].filter(Boolean).join(', ').replace(', --', ' --');
+  out.textContent = prompt;
+  out.classList.remove('empty');
+}
+
+function copyBuilderPrompt() {
+  const out = document.getElementById('builder-output');
+  if (out.classList.contains('empty')) { toast('Nothing to copy yet'); return; }
+  navigator.clipboard.writeText(out.textContent).then(() => toast('Copied to clipboard ✓'));
+}
+
+function saveBuilderPrompt() {
+  const out = document.getElementById('builder-output');
+  if (out.classList.contains('empty')) { toast('Build a prompt first'); return; }
+  document.getElementById('ap-prompt').value = out.textContent;
+  openAddPrompt();
+}
+
+function clearBuilder() {
+  ['b-subject','b-style','b-medium','b-lighting','b-mood','b-no'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('b-ar').value = '--ar 9:16';
+  document.getElementById('b-stylemode').value = '--style raw';
+  document.getElementById('b-version').value = '--v 7';
+  document.getElementById('b-stylize').value = '';
+  buildPrompt();
+}
+
+// ── PROMPT LIBRARY ───────────────────────────────────────────
+const CAT_COLORS = {
+  product: 'var(--amber)', lifestyle: 'var(--green)',
+  mood: 'var(--purple)', design: 'var(--blue)',
+  teaser: 'var(--pink)', custom: '#6b6560'
+};
+
+function renderLib(filter) {
+  currentFilter = filter;
+  const all = [...STARTER_PROMPTS, ...customPrompts];
+  const filtered = filter === 'all' ? all
+    : filter === 'custom' ? customPrompts
+    : all.filter(p => p.cat === filter);
+
+  const el = document.getElementById('lib-list');
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>No prompts in this category yet.</div>';
+    return;
+  }
+
+  el.innerHTML = filtered.map(p => `
+    <div class="prompt-card" id="pc-${p.id}">
+      <div class="prompt-card-hdr" onclick="togPC('pc-${p.id}')">
+        <div class="cat-dot" style="background:${CAT_COLORS[p.cat]||'var(--muted)'}"></div>
+        <div>
+          <div class="prompt-card-name">${p.name}</div>
+          <div class="prompt-card-cat">${p.cat}</div>
+        </div>
+        <div class="prompt-card-chev">▼</div>
+      </div>
+      <div class="prompt-card-body">
+        <div class="prompt-text">${p.prompt}</div>
+        ${p.notes ? `<div class="prompt-notes">${p.notes}</div>` : ''}
+        <div class="btn-row">
+          <button class="copy-btn" onclick="copyText(this,'${p.prompt.replace(/'/g,"\\'")}')">Copy Prompt</button>
+          ${p.custom ? `<button class="copy-btn" style="color:var(--pink);border-color:rgba(236,72,153,0.3)" onclick="deletePrompt('${p.id}')">Delete</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function togPC(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function filterLib(cat, btn) {
+  document.querySelectorAll('.lib-f').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderLib(cat);
+}
+
+function openAddPrompt() {
+  document.getElementById('add-prompt-modal').classList.add('open');
+}
+function closeAddPrompt() {
+  document.getElementById('add-prompt-modal').classList.remove('open');
+  ['ap-name','ap-prompt','ap-notes'].forEach(id => document.getElementById(id).value = '');
+}
+
+function savePromptToLib() {
+  const name = document.getElementById('ap-name').value.trim();
+  const prompt = document.getElementById('ap-prompt').value.trim();
+  const cat = document.getElementById('ap-cat').value;
+  const notes = document.getElementById('ap-notes').value.trim();
+  if (!name || !prompt) { toast('Name and prompt required'); return; }
+
+  const p = { id: 'cp' + Date.now(), name, cat, prompt, notes, custom: true };
+  customPrompts.push(p);
+  localStorage.setItem('mj_prompts', JSON.stringify(customPrompts));
+  closeAddPrompt();
+  renderLib(currentFilter);
+  toast('Saved to library ✓');
+}
+
+function deletePrompt(id) {
+  if (!confirm('Delete this prompt?')) return;
+  customPrompts = customPrompts.filter(p => p.id !== id);
+  localStorage.setItem('mj_prompts', JSON.stringify(customPrompts));
+  renderLib(currentFilter);
+  toast('Deleted');
+}
+
+// ── INSPIRATION ──────────────────────────────────────────────
+function toggleCat(el) {
+  el.classList.toggle('active');
+}
+
+function previewUrl() {
+  const url = document.getElementById('inspo-url').value.trim();
+  const preview = document.getElementById('url-preview');
+  if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+    preview.textContent = 'URL saved: ' + url;
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function saveInspo() {
+  const title = document.getElementById('inspo-title').value.trim();
+  const url = document.getElementById('inspo-url').value.trim();
+  const desc = document.getElementById('inspo-desc').value.trim();
+  const keywords = document.getElementById('inspo-keywords').value.trim();
+  const cats = [...document.querySelectorAll('.tag-pill.active')].map(el => el.dataset.cat);
+
+  if (!title) { toast('Add a title first'); return; }
+
+  const item = {
+    id: 'in' + Date.now(),
+    title, url, desc, keywords,
+    cats, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  };
+  inspoItems.unshift(item);
+  localStorage.setItem('mj_inspo', JSON.stringify(inspoItems));
+
+  // Clear form
+  document.getElementById('inspo-title').value = '';
+  document.getElementById('inspo-url').value = '';
+  document.getElementById('inspo-desc').value = '';
+  document.getElementById('inspo-keywords').value = '';
+  document.getElementById('url-preview').style.display = 'none';
+  document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-cat="texture"]').classList.add('active');
+
+  renderInspo();
+  toast('Saved to vault ✓');
+}
+
+function renderInspo() {
+  const el = document.getElementById('inspo-grid');
+  if (!inspoItems.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📸</div>No inspiration logged yet.<br>When you\'re out in the wild and see something that speaks to SBW, log it here.</div>';
+    return;
+  }
+
+  el.innerHTML = inspoItems.map(item => `
+    <div class="inspo-card">
+      <div class="inspo-card-top">
+        <div class="inspo-img-wrap">
+          ${item.url ? `<img src="${item.url}" onerror="this.parentElement.innerHTML='<div class=inspo-img-placeholder>🖼</div>'">` : '<div class="inspo-img-placeholder">📸</div>'}
+        </div>
+        <div class="inspo-content">
+          <div class="inspo-title">${item.title}</div>
+          <div class="inspo-meta">${item.date}${item.cats.length ? ' · ' + item.cats.join(', ') : ''}</div>
+          ${item.desc ? `<div class="inspo-desc">${item.desc.substring(0,100)}${item.desc.length > 100 ? '...' : ''}</div>` : ''}
+        </div>
+      </div>
+      ${item.keywords ? `<div class="inspo-tags">${item.keywords.split(',').map(k => `<div class="inspo-tag">${k.trim()}</div>`).join('')}</div>` : ''}
+      <div class="inspo-actions">
+        <button class="inspo-action" onclick="viewInspo('${item.id}')">View Full</button>
+        ${item.url ? `<button class="inspo-action" onclick="copyText(this,'${item.url}')">Copy URL (sref)</button>` : ''}
+        <button class="inspo-action del" onclick="deleteInspo('${item.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function viewInspo(id) {
+  const item = inspoItems.find(i => i.id === id);
+  if (!item) return;
+  document.getElementById('view-inspo-content').innerHTML = `
+    <div class="modal-title">${item.title}</div>
+    ${item.url ? `<img src="${item.url}" style="width:100%;margin-bottom:14px;border:1px solid var(--border)" onerror="this.style.display='none'">` : ''}
+    ${item.desc ? `<p class="body-text" style="margin-bottom:12px">${item.desc}</p>` : ''}
+    ${item.keywords ? `
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--amber);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">MJ Keywords</div>
+      <div class="full-prompt" style="margin-bottom:14px">${item.keywords}</div>
+    ` : ''}
+    ${item.url ? `<button class="copy-btn" onclick="copyText(this,'${item.url}')">Copy URL for --sref</button>` : ''}
+  `;
+  document.getElementById('view-inspo-modal').classList.add('open');
+}
+function closeViewInspo() { document.getElementById('view-inspo-modal').classList.remove('open'); }
+
+function deleteInspo(id) {
+  if (!confirm('Remove this from the vault?')) return;
+  inspoItems = inspoItems.filter(i => i.id !== id);
+  localStorage.setItem('mj_inspo', JSON.stringify(inspoItems));
+  renderInspo();
+  toast('Removed');
+}
+
+// ── UTILS ───────────────────────────────────────────────────
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = btn.textContent.includes('URL') ? 'Copy URL (sref)' : 'Copy Prompt'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
