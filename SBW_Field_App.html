@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#ffffff">
+<title>FIELD — SBW Collective</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --black:#0a0a0a;
+  --white:#fafafa;
+  --grey:#e8e8e8;
+  --mid:#999;
+  --soft:#f2f2f2;
+  --font-d:'DM Serif Display',Georgia,serif;
+  --font-m:'DM Mono',monospace;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+html,body{
+  height:100%;
+  background:var(--white);
+  color:var(--black);
+  font-family:var(--font-m);
+  overflow:hidden;
+  position:fixed;
+  width:100%;
+}
+
+/* ── VIEWS ── */
+.view{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  background:var(--white);
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.view.active{transform:translateX(0)}
+.view.prev{transform:translateX(-40%)}
+
+/* ── HOME ── */
+#v-home{
+  padding:calc(var(--safe-top) + 20px) 0 0;
+}
+
+.home-hdr{
+  padding:0 24px 20px;
+  border-bottom:1px solid var(--grey);
+  display:flex;align-items:baseline;justify-content:space-between;
+}
+.home-logo{
+  font-family:var(--font-d);
+  font-size:28px;letter-spacing:-.01em;
+  color:var(--black);
+}
+.home-sub{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--mid);
+}
+
+/* CAPTURE BUTTON — the hero */
+.capture-zone{
+  flex:1;display:flex;flex-direction:column;
+  padding:0 24px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+.cap-btn-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--grey);
+  margin:24px 0 1px;
+  border:1px solid var(--grey);
+}
+.cap-btn{
+  background:var(--white);
+  padding:24px 20px;
+  display:flex;flex-direction:column;align-items:flex-start;
+  cursor:pointer;gap:8px;
+  transition:background .12s;
+  border:none;text-align:left;
+}
+.cap-btn:active{background:var(--black)}
+.cap-btn:active .cap-btn-icon,
+.cap-btn:active .cap-btn-label{color:var(--white)}
+.cap-btn-full{
+  grid-column:1/-1;
+  background:var(--black);
+  padding:22px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;border:none;width:100%;
+  transition:opacity .12s;
+}
+.cap-btn-full:active{opacity:.7}
+.cap-btn-icon{
+  font-size:22px;
+  transition:color .12s;
+}
+.cap-btn-label{
+  font-family:var(--font-m);font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--black);transition:color .12s;
+}
+.cap-btn-label-white{
+  font-family:var(--font-m);font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--white);
+}
+
+/* FEED */
+.feed-label{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--mid);padding:20px 0 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.feed-label::after{content:'';flex:1;height:1px;background:var(--grey)}
+
+.entry{
+  border-bottom:1px solid var(--grey);
+  padding:16px 0;
+  cursor:pointer;
+  transition:background .1s;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.entry:active{background:var(--soft);margin:0 -24px;padding:16px 24px}
+.entry-type{
+  font-size:16px;flex-shrink:0;margin-top:2px;
+}
+.entry-body{flex:1;min-width:0}
+.entry-text{
+  font-family:var(--font-m);font-size:13px;
+  color:var(--black);line-height:1.65;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-bottom:4px;
+}
+.entry-meta{
+  font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);
+  display:flex;gap:10px;
+}
+.entry-img{
+  width:48px;height:48px;object-fit:cover;flex-shrink:0;
+  filter:grayscale(100%);
+}
+.entry-img-placeholder{
+  width:48px;height:48px;background:var(--grey);flex-shrink:0;
+}
+.empty-feed{
+  padding:48px 0;text-align:center;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);
+  line-height:2;
+}
+
+/* ── CAPTURE VIEWS ── */
+.cap-hdr{
+  padding:calc(var(--safe-top) + 16px) 24px 16px;
+  border-bottom:1px solid var(--grey);
+  display:flex;align-items:center;gap:16px;
+}
+.back-btn{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--black);background:none;border:none;cursor:pointer;
+  padding:6px 0;
+}
+.cap-hdr-title{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--mid);
+}
+
+.cap-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px}
+
+/* TEXT CAPTURE */
+.text-area{
+  width:100%;background:none;border:none;outline:none;
+  font-family:var(--font-d);font-size:22px;
+  line-height:1.5;color:var(--black);
+  resize:none;min-height:180px;
+  caret-color:var(--black);
+}
+.text-area::placeholder{color:var(--grey)}
+
+.text-tags{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;
+  padding-top:16px;border-top:1px solid var(--grey);
+}
+.tag-opt{
+  font-family:var(--font-m);font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 10px;border:1px solid var(--grey);color:var(--mid);
+  cursor:pointer;transition:all .12s;background:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.tag-opt.sel{border-color:var(--black);color:var(--black);background:var(--black);color:var(--white)}
+
+.save-bar{
+  padding:16px 24px calc(var(--safe-bottom) + 16px);
+  border-top:1px solid var(--grey);
+  display:flex;gap:10px;
+}
+.save-btn{
+  flex:1;background:var(--black);color:var(--white);border:none;
+  font-family:var(--font-m);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  padding:14px;cursor:pointer;transition:opacity .12s;
+}
+.save-btn:active{opacity:.7}
+.discard-btn{
+  background:none;border:1px solid var(--grey);color:var(--mid);
+  font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:14px 16px;cursor:pointer;
+}
+
+/* VOICE VIEW */
+.voice-body{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 24px;gap:32px;
+}
+.voice-ring{
+  width:120px;height:120px;border-radius:50%;
+  border:1px solid var(--grey);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;cursor:pointer;
+  transition:all .15s;
+}
+.voice-ring.listening{
+  border-color:var(--black);
+  box-shadow:0 0 0 8px rgba(0,0,0,0.06), 0 0 0 16px rgba(0,0,0,0.03);
+  animation:pulse-ring 1.5s ease-in-out infinite;
+}
+@keyframes pulse-ring{
+  0%,100%{box-shadow:0 0 0 8px rgba(0,0,0,0.06),0 0 0 16px rgba(0,0,0,0.03)}
+  50%{box-shadow:0 0 0 14px rgba(0,0,0,0.08),0 0 0 28px rgba(0,0,0,0.04)}
+}
+.voice-icon{font-size:40px;user-select:none}
+.voice-status{
+  font-family:var(--font-m);font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mid);text-align:center;
+}
+.voice-transcript{
+  width:100%;font-family:var(--font-d);font-size:20px;
+  line-height:1.55;color:var(--black);
+  min-height:80px;text-align:center;
+  font-style:italic;
+}
+
+/* PHOTO VIEW */
+.photo-body{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:32px 24px;gap:24px;
+}
+.photo-input{display:none}
+.photo-preview{
+  width:100%;max-height:320px;object-fit:contain;
+  filter:grayscale(100%);display:none;
+}
+.photo-placeholder{
+  width:100%;height:220px;background:var(--soft);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;cursor:pointer;border:1px solid var(--grey);
+}
+.photo-placeholder-icon{font-size:40px;opacity:.3}
+.photo-placeholder-label{
+  font-family:var(--font-m);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--mid);
+}
+.photo-caption{
+  width:100%;background:none;border:none;outline:none;
+  border-bottom:1px solid var(--grey);padding:10px 0;
+  font-family:var(--font-m);font-size:13px;color:var(--black);
+}
+.photo-caption::placeholder{color:var(--grey)}
+.photo-action-row{
+  display:flex;gap:1px;width:100%;background:var(--grey);
+}
+.photo-action{
+  flex:1;background:var(--white);padding:16px;
+  font-family:var(--font-m);font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--black);
+  border:none;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;gap:6px;transition:background .1s;
+}
+.photo-action:active{background:var(--black);color:var(--white)}
+.photo-action-icon{font-size:20px}
+
+/* DETAIL VIEW */
+.detail-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px}
+.detail-img{width:100%;filter:grayscale(100%);display:block;margin-bottom:20px}
+.detail-text{
+  font-family:var(--font-d);font-size:22px;
+  line-height:1.55;color:var(--black);margin-bottom:16px;
+}
+.detail-meta{
+  font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--mid);margin-bottom:20px;
+  display:flex;gap:14px;flex-wrap:wrap;
+}
+.detail-tag{
+  display:inline-block;font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 8px;border:1px solid var(--black);color:var(--black);margin-right:4px;
+}
+.detail-actions{
+  display:flex;gap:1px;background:var(--grey);margin:20px -24px 0;
+}
+.detail-action{
+  flex:1;background:var(--white);padding:14px 10px;
+  font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--black);border:none;cursor:pointer;transition:all .1s;
+}
+.detail-action:active{background:var(--black);color:var(--white)}
+.detail-action.del{color:#999}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  padding:0 0 calc(var(--safe-bottom) + 8px);
+  border-top:1px solid var(--grey);
+  display:flex;
+  background:var(--white);
+  position:absolute;bottom:0;left:0;right:0;
+}
+.nav-item{
+  flex:1;padding:12px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;background:none;border:none;
+  transition:opacity .12s;
+}
+.nav-item:active{opacity:.5}
+.nav-icon{font-size:18px}
+.nav-label{
+  font-family:var(--font-m);font-size:7px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mid);
+}
+.nav-item.on .nav-label{color:var(--black)}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:calc(var(--safe-bottom) + 80px);left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--black);color:var(--white);
+  font-family:var(--font-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 20px;opacity:0;transition:all .2s;pointer-events:none;z-index:999;
+  white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* SETTINGS VIEW */
+.settings-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.settings-section{padding:24px 24px 0}
+.settings-label{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);
+  margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--grey);
+}
+.settings-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--grey);
+}
+.settings-row-label{font-family:var(--font-m);font-size:12px;color:var(--black)}
+.settings-row-sub{font-family:var(--font-m);font-size:9px;color:var(--mid);margin-top:2px}
+.settings-stat{
+  font-family:var(--font-d);font-size:20px;color:var(--black);
+}
+.about-block{
+  padding:32px 24px;border-top:1px solid var(--grey);margin-top:24px;
+}
+.about-logo{
+  font-family:var(--font-d);font-size:32px;color:var(--black);
+  margin-bottom:8px;
+}
+.about-text{
+  font-family:var(--font-m);font-size:10px;color:var(--mid);
+  letter-spacing:.06em;line-height:1.8;
+}
+
+/* SEARCH VIEW */
+.search-input-wrap{
+  padding:16px 24px;border-bottom:1px solid var(--grey);
+}
+.search-input{
+  width:100%;background:var(--soft);border:none;outline:none;
+  font-family:var(--font-m);font-size:14px;color:var(--black);
+  padding:10px 14px;
+}
+.search-input::placeholder{color:var(--grey)}
+.search-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 24px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HOME
+══════════════════════════════════════ -->
+<div class="view active" id="v-home">
+  <div class="home-hdr">
+    <div class="home-logo">FIELD</div>
+    <div class="home-sub">SBW Collective</div>
+  </div>
+
+  <div class="capture-zone" id="home-scroll">
+
+    <div class="cap-btn-row">
+      <button class="cap-btn" onclick="go('v-text')">
+        <div class="cap-btn-icon">✍</div>
+        <div class="cap-btn-label">Write</div>
+      </button>
+      <button class="cap-btn" onclick="go('v-voice')">
+        <div class="cap-btn-icon">◉</div>
+        <div class="cap-btn-label">Speak</div>
+      </button>
+      <button class="cap-btn" onclick="go('v-photo')">
+        <div class="cap-btn-icon">⬡</div>
+        <div class="cap-btn-label">Photo</div>
+      </button>
+      <button class="cap-btn" onclick="triggerCamera()">
+        <div class="cap-btn-icon">◎</div>
+        <div class="cap-btn-label">Camera</div>
+      </button>
+      <button class="cap-btn-full" onclick="go('v-text');quickCapture()">
+        <div class="cap-btn-label-white">+ Quick Capture</div>
+        <div style="color:var(--white);font-size:20px;">→</div>
+      </button>
+    </div>
+
+    <div class="feed-label">Recent</div>
+    <div id="feed"></div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item on" onclick="showTab('home')">
+      <div class="nav-icon">◈</div>
+      <div class="nav-label">Capture</div>
+    </button>
+    <button class="nav-item" onclick="showTab('search')">
+      <div class="nav-icon">◻</div>
+      <div class="nav-label">Search</div>
+    </button>
+    <button class="nav-item" onclick="showTab('settings')">
+      <div class="nav-icon">◉</div>
+      <div class="nav-label">Field</div>
+    </button>
+  </div>
+</div>
+
+<!-- Hidden camera input -->
+<input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleCameraCapture(event)">
+<input type="file" id="photo-file-input" accept="image/*" style="display:none" onchange="handlePhotoFile(event)">
+
+<!-- ══════════════════════════════════════
+     TEXT CAPTURE
+══════════════════════════════════════ -->
+<div class="view" id="v-text">
+  <div class="cap-hdr">
+    <button class="back-btn" onclick="back()">← Back</button>
+    <div class="cap-hdr-title">Write</div>
+  </div>
+  <div class="cap-body">
+    <textarea class="text-area" id="text-input" placeholder="What are you thinking..." autofocus></textarea>
+    <div class="text-tags">
+      <button class="tag-opt" onclick="toggleTag(this,'idea')">Idea</button>
+      <button class="tag-opt" onclick="toggleTag(this,'visual')">Visual</button>
+      <button class="tag-opt" onclick="toggleTag(this,'feeling')">Feeling</button>
+      <button class="tag-opt" onclick="toggleTag(this,'question')">Question</button>
+      <button class="tag-opt" onclick="toggleTag(this,'colour')">Colour</button>
+      <button class="tag-opt" onclick="toggleTag(this,'sound')">Sound</button>
+      <button class="tag-opt" onclick="toggleTag(this,'person')">Person</button>
+      <button class="tag-opt" onclick="toggleTag(this,'place')">Place</button>
+      <button class="tag-opt" onclick="toggleTag(this,'lyric')">Lyric</button>
+      <button class="tag-opt" onclick="toggleTag(this,'design')">Design</button>
+    </div>
+  </div>
+  <div class="save-bar">
+    <button class="discard-btn" onclick="clearAndBack()">Discard</button>
+    <button class="save-btn" onclick="saveText()">Save →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VOICE CAPTURE
+══════════════════════════════════════ -->
+<div class="view" id="v-voice">
+  <div class="cap-hdr">
+    <button class="back-btn" onclick="back()">← Back</button>
+    <div class="cap-hdr-title">Speak</div>
+  </div>
+  <div class="voice-body">
+    <div class="voice-ring" id="voice-ring" onclick="toggleVoice()">
+      <div class="voice-icon" id="voice-icon">◉</div>
+    </div>
+    <div class="voice-status" id="voice-status">Tap to speak</div>
+    <div class="voice-transcript" id="voice-transcript">Your words appear here...</div>
+  </div>
+  <div class="save-bar">
+    <button class="discard-btn" onclick="cancelVoice()">Discard</button>
+    <button class="save-btn" onclick="saveVoice()">Save →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHOTO CAPTURE
+══════════════════════════════════════ -->
+<div class="view" id="v-photo">
+  <div class="cap-hdr">
+    <button class="back-btn" onclick="back()">← Back</button>
+    <div class="cap-hdr-title">Photo</div>
+  </div>
+  <div class="photo-body">
+    <div class="photo-action-row">
+      <button class="photo-action" onclick="document.getElementById('photo-file-input').click()">
+        <div class="photo-action-icon">⬡</div>
+        <div>Library</div>
+      </button>
+      <button class="photo-action" onclick="triggerCamera()">
+        <div class="photo-action-icon">◎</div>
+        <div>Camera</div>
+      </button>
+    </div>
+    <div class="photo-placeholder" id="photo-placeholder" onclick="document.getElementById('photo-file-input').click()">
+      <div class="photo-placeholder-icon">⬡</div>
+      <div class="photo-placeholder-label">Tap to select or shoot</div>
+    </div>
+    <img id="photo-preview" class="photo-preview" src="" alt="">
+    <input class="photo-caption" id="photo-caption" placeholder="Describe what you see..." type="text">
+  </div>
+  <div class="save-bar">
+    <button class="discard-btn" onclick="clearPhotoAndBack()">Discard</button>
+    <button class="save-btn" onclick="savePhoto()">Save →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SEARCH
+══════════════════════════════════════ -->
+<div class="view" id="v-search">
+  <div class="cap-hdr" style="padding-top:calc(var(--safe-top) + 16px)">
+    <div class="cap-hdr-title" style="flex:1">Search</div>
+    <button class="back-btn" onclick="showTab('home')">Done</button>
+  </div>
+  <div class="search-input-wrap">
+    <input class="search-input" id="search-input" placeholder="Search your field..." oninput="doSearch(this.value)" type="search" autocomplete="off">
+  </div>
+  <div class="search-results" id="search-results">
+    <div class="empty-feed">Type to search<br>your captured moments</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SETTINGS / ABOUT
+══════════════════════════════════════ -->
+<div class="view" id="v-settings">
+  <div class="cap-hdr" style="padding-top:calc(var(--safe-top) + 16px)">
+    <div class="cap-hdr-title" style="flex:1">Field</div>
+    <button class="back-btn" onclick="showTab('home')">Done</button>
+  </div>
+  <div class="settings-body">
+    <div class="settings-section">
+      <div class="settings-label">Your Field</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Total captures</div>
+        </div>
+        <div class="settings-stat" id="stat-total">0</div>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">This week</div>
+        </div>
+        <div class="settings-stat" id="stat-week">0</div>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Photos</div>
+        </div>
+        <div class="settings-stat" id="stat-photos">0</div>
+      </div>
+    </div>
+
+    <div class="settings-section" style="margin-top:24px">
+      <div class="settings-label">Data</div>
+      <div class="settings-row" style="cursor:pointer" onclick="exportData()">
+        <div>
+          <div class="settings-row-label">Export all captures</div>
+          <div class="settings-row-sub">Download as JSON</div>
+        </div>
+        <div style="font-size:16px;color:var(--mid)">→</div>
+      </div>
+      <div class="settings-row" style="cursor:pointer" onclick="clearAll()">
+        <div>
+          <div class="settings-row-label" style="color:#999">Clear all data</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-logo">FIELD</div>
+      <div class="about-text">
+        A capture tool for the SBW Collective.<br>
+        Built for creatives who don't want to lose an idea.<br><br>
+        When you're in it — a walk, a conversation, a moment<br>
+        where something clicks — FIELD is there.<br><br>
+        Made with SBW Co. · Austin, TX · 2026
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     DETAIL VIEW
+══════════════════════════════════════ -->
+<div class="view" id="v-detail">
+  <div class="cap-hdr">
+    <button class="back-btn" onclick="back()">← Back</button>
+    <div class="cap-hdr-title" id="detail-type-label">Capture</div>
+  </div>
+  <div class="detail-body" id="detail-body"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── STATE ────────────────────────────────────────────────────
+let entries = JSON.parse(localStorage.getItem('field_entries') || '[]');
+let selectedTags = [];
+let voiceRecognition = null;
+let isListening = false;
+let currentPhoto = null;
+let viewStack = ['v-home'];
+
+// ── NAVIGATION ───────────────────────────────────────────────
+function go(viewId) {
+  const current = document.querySelector('.view.active');
+  if (current) { current.classList.remove('active'); current.classList.add('prev'); }
+  const next = document.getElementById(viewId);
+  if (next) { next.classList.add('active'); next.classList.remove('prev'); }
+  viewStack.push(viewId);
+
+  // Auto-focus text input
+  if (viewId === 'v-text') {
+    setTimeout(() => { const ta = document.getElementById('text-input'); if(ta) ta.focus(); }, 300);
+  }
+}
+
+function back() {
+  viewStack.pop();
+  const prev = viewStack[viewStack.length - 1] || 'v-home';
+  const current = document.querySelector('.view.active');
+  if (current) { current.classList.remove('active'); }
+  const prevView = document.getElementById(prev);
+  if (prevView) { prevView.classList.add('active'); prevView.classList.remove('prev'); }
+
+  // Remove prev state from others
+  document.querySelectorAll('.view.prev').forEach(v => v.classList.remove('prev'));
+}
+
+function showTab(tab) {
+  // Reset to home first, then switch
+  document.querySelectorAll('.view').forEach(v => { v.classList.remove('active','prev'); });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('on'));
+
+  if (tab === 'home') {
+    document.getElementById('v-home').classList.add('active');
+    document.querySelectorAll('.nav-item')[0].classList.add('on');
+    viewStack = ['v-home'];
+  } else if (tab === 'search') {
+    document.getElementById('v-search').classList.add('active');
+    document.querySelectorAll('.nav-item')[1].classList.add('on');
+    viewStack = ['v-search'];
+    setTimeout(() => document.getElementById('search-input').focus(), 300);
+  } else if (tab === 'settings') {
+    document.getElementById('v-settings').classList.add('active');
+    document.querySelectorAll('.nav-item')[2].classList.add('on');
+    updateStats();
+    viewStack = ['v-settings'];
+  }
+}
+
+// ── TAGS ─────────────────────────────────────────────────────
+function toggleTag(el, tag) {
+  el.classList.toggle('sel');
+  if (selectedTags.includes(tag)) {
+    selectedTags = selectedTags.filter(t => t !== tag);
+  } else {
+    selectedTags.push(tag);
+  }
+}
+
+function resetTags() {
+  selectedTags = [];
+  document.querySelectorAll('.tag-opt').forEach(t => t.classList.remove('sel'));
+}
+
+// ── SAVE ─────────────────────────────────────────────────────
+function saveEntry(entry) {
+  entries.unshift(entry);
+  localStorage.setItem('field_entries', JSON.stringify(entries));
+  renderFeed();
+  toast('Captured ✓');
+}
+
+function saveText() {
+  const text = document.getElementById('text-input').value.trim();
+  if (!text) return;
+  saveEntry({
+    id: Date.now(), type: 'text', text,
+    tags: [...selectedTags],
+    date: new Date().toISOString()
+  });
+  document.getElementById('text-input').value = '';
+  resetTags();
+  back();
+}
+
+function saveVoice() {
+  const text = document.getElementById('voice-transcript').textContent.trim();
+  if (!text || text === 'Your words appear here...') return;
+  saveEntry({
+    id: Date.now(), type: 'voice', text,
+    tags: [],
+    date: new Date().toISOString()
+  });
+  document.getElementById('voice-transcript').textContent = 'Your words appear here...';
+  stopVoice();
+  back();
+}
+
+function savePhoto() {
+  const caption = document.getElementById('photo-caption').value.trim();
+  if (!currentPhoto && !caption) return;
+  saveEntry({
+    id: Date.now(), type: 'photo',
+    text: caption || 'Photo capture',
+    img: currentPhoto,
+    tags: [],
+    date: new Date().toISOString()
+  });
+  clearPhotoAndBack();
+}
+
+// ── QUICK CAPTURE ────────────────────────────────────────────
+function quickCapture() {
+  // Focus text area immediately
+  setTimeout(() => {
+    const ta = document.getElementById('text-input');
+    if (ta) ta.focus();
+  }, 350);
+}
+
+// ── CLEAR ────────────────────────────────────────────────────
+function clearAndBack() {
+  document.getElementById('text-input').value = '';
+  resetTags();
+  back();
+}
+
+function clearPhotoAndBack() {
+  currentPhoto = null;
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-preview').src = '';
+  document.getElementById('photo-placeholder').style.display = 'flex';
+  document.getElementById('photo-caption').value = '';
+  back();
+}
+
+// ── CAMERA / PHOTO ────────────────────────────────────────────
+function triggerCamera() {
+  document.getElementById('camera-input').click();
+}
+
+function handleCameraCapture(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  processImageFile(file);
+  // Auto-navigate to photo view to add caption
+  if (!document.getElementById('v-photo').classList.contains('active')) {
+    go('v-photo');
+  }
+  e.target.value = '';
+}
+
+function handlePhotoFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  processImageFile(file);
+  e.target.value = '';
+}
+
+function processImageFile(file) {
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    currentPhoto = ev.target.result;
+    const preview = document.getElementById('photo-preview');
+    const placeholder = document.getElementById('photo-placeholder');
+    preview.src = currentPhoto;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── VOICE ────────────────────────────────────────────────────
+function toggleVoice() {
+  if (isListening) {
+    stopVoice();
+  } else {
+    startVoice();
+  }
+}
+
+function startVoice() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    document.getElementById('voice-status').textContent = 'Voice not supported on this browser';
+    return;
+  }
+  voiceRecognition = new SpeechRec();
+  voiceRecognition.continuous = true;
+  voiceRecognition.interimResults = true;
+  voiceRecognition.lang = 'en-US';
+
+  voiceRecognition.onstart = () => {
+    isListening = true;
+    document.getElementById('voice-ring').classList.add('listening');
+    document.getElementById('voice-status').textContent = 'Listening...';
+    document.getElementById('voice-icon').textContent = '■';
+  };
+
+  voiceRecognition.onresult = (e) => {
+    let transcript = '';
+    for (let i = 0; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript;
+    }
+    document.getElementById('voice-transcript').textContent = transcript;
+  };
+
+  voiceRecognition.onerror = (e) => {
+    document.getElementById('voice-status').textContent = 'Tap to try again';
+    stopVoice();
+  };
+
+  voiceRecognition.onend = () => {
+    if (isListening) stopVoice();
+  };
+
+  voiceRecognition.start();
+}
+
+function stopVoice() {
+  isListening = false;
+  if (voiceRecognition) { voiceRecognition.stop(); voiceRecognition = null; }
+  document.getElementById('voice-ring').classList.remove('listening');
+  document.getElementById('voice-status').textContent = 'Tap to speak';
+  document.getElementById('voice-icon').textContent = '◉';
+}
+
+function cancelVoice() {
+  stopVoice();
+  document.getElementById('voice-transcript').textContent = 'Your words appear here...';
+  back();
+}
+
+// ── RENDER FEED ──────────────────────────────────────────────
+const TYPE_ICONS = { text:'✍', voice:'◉', photo:'⬡' };
+const TYPE_LABELS = { text:'Write', voice:'Voice', photo:'Photo' };
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 60000) return 'Just now';
+  if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+  if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+  if (diff < 604800000) return Math.floor(diff/86400000) + 'd ago';
+  return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+}
+
+function renderFeed() {
+  const el = document.getElementById('feed');
+  if (!el) return;
+  if (!entries.length) {
+    el.innerHTML = '<div class="empty-feed">Nothing captured yet.<br>Start with a thought, a voice note,<br>or something you see.</div>';
+    return;
+  }
+  el.innerHTML = entries.slice(0,30).map(e => `
+    <div class="entry" onclick="showDetail(${e.id})">
+      <div class="entry-type">${TYPE_ICONS[e.type]||'✦'}</div>
+      <div class="entry-body">
+        <div class="entry-text">${e.text}</div>
+        <div class="entry-meta">
+          <span>${formatDate(e.date)}</span>
+          ${e.tags && e.tags.length ? `<span>${e.tags.slice(0,2).join(' · ')}</span>` : ''}
+        </div>
+      </div>
+      ${e.img ? `<img class="entry-img" src="${e.img}" alt="">` : '<div class="entry-img-placeholder" style="display:none"></div>'}
+    </div>
+  `).join('');
+}
+
+// ── DETAIL ───────────────────────────────────────────────────
+function showDetail(id) {
+  const e = entries.find(e => e.id === id);
+  if (!e) return;
+  const body = document.getElementById('detail-body');
+  document.getElementById('detail-type-label').textContent = TYPE_LABELS[e.type] || 'Capture';
+
+  body.innerHTML = `
+    ${e.img ? `<img class="detail-img" src="${e.img}" alt="">` : ''}
+    <div class="detail-text">${e.text}</div>
+    <div class="detail-meta">
+      <span>${new Date(e.date).toLocaleString('en-US',{month:'long',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})}</span>
+    </div>
+    ${e.tags && e.tags.length ? `<div>${e.tags.map(t=>`<span class="detail-tag">${t}</span>`).join('')}</div>` : ''}
+    <div class="detail-actions">
+      <button class="detail-action" onclick="copyEntry(${e.id})">Copy</button>
+      <button class="detail-action del" onclick="deleteEntry(${e.id})">Delete</button>
+    </div>
+  `;
+  go('v-detail');
+}
+
+function copyEntry(id) {
+  const e = entries.find(e => e.id === id);
+  if (!e) return;
+  navigator.clipboard.writeText(e.text).then(() => toast('Copied ✓'));
+}
+
+function deleteEntry(id) {
+  entries = entries.filter(e => e.id !== id);
+  localStorage.setItem('field_entries', JSON.stringify(entries));
+  renderFeed();
+  toast('Deleted');
+  back();
+}
+
+// ── SEARCH ───────────────────────────────────────────────────
+function doSearch(q) {
+  const el = document.getElementById('search-results');
+  if (!q.trim()) {
+    el.innerHTML = '<div class="empty-feed">Type to search<br>your captured moments</div>';
+    return;
+  }
+  const results = entries.filter(e =>
+    e.text.toLowerCase().includes(q.toLowerCase()) ||
+    (e.tags && e.tags.some(t => t.toLowerCase().includes(q.toLowerCase())))
+  );
+  if (!results.length) {
+    el.innerHTML = '<div class="empty-feed">Nothing found</div>';
+    return;
+  }
+  el.innerHTML = results.map(e => `
+    <div class="entry" onclick="showDetail(${e.id})">
+      <div class="entry-type">${TYPE_ICONS[e.type]||'✦'}</div>
+      <div class="entry-body">
+        <div class="entry-text">${e.text}</div>
+        <div class="entry-meta"><span>${formatDate(e.date)}</span></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── STATS ────────────────────────────────────────────────────
+function updateStats() {
+  const total = entries.length;
+  const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
+  const week = entries.filter(e => new Date(e.date) > weekAgo).length;
+  const photos = entries.filter(e => e.type === 'photo').length;
+  const ts = document.getElementById('stat-total');
+  const ws = document.getElementById('stat-week');
+  const ps = document.getElementById('stat-photos');
+  if (ts) ts.textContent = total;
+  if (ws) ws.textContent = week;
+  if (ps) ps.textContent = photos;
+}
+
+// ── EXPORT ───────────────────────────────────────────────────
+function exportData() {
+  const blob = new Blob([JSON.stringify(entries, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'field-captures.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function clearAll() {
+  if (!confirm('Clear all captures? This cannot be undone.')) return;
+  entries = [];
+  localStorage.removeItem('field_entries');
+  renderFeed();
+  toast('Cleared');
+}
+
+// ── TOAST ────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+renderFeed();
+</script>
+</body>
+</html>
