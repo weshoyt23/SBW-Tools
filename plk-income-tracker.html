@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLK / Income Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F2EDE4;
+    --charcoal: #1C1C1A;
+    --mustard: #C89B3C;
+    --warm-gray: #8C8880;
+    --light-line: #DDD8CF;
+    --danger: #C0392B;
+    --safe: #4A7C59;
+    --expense-red: #8B2020;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--charcoal);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .container { max-width: 480px; margin: 0 auto; }
+
+  header { margin-bottom: 40px; }
+
+  .brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--charcoal);
+  }
+
+  h1 span { color: var(--mustard); }
+
+  .month-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .month-selector select {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--charcoal);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--charcoal);
+    padding: 4px 0;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--light-line);
+    margin: 32px 0;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 20px;
+  }
+
+  .section-label.expense-label { color: var(--expense-red); }
+
+  .income-source { margin-bottom: 24px; }
+
+  .source-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .source-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  .source-total {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--mustard);
+  }
+
+  .source-total.expense { color: var(--expense-red); }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .input-row input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--light-line);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--charcoal);
+    padding: 6px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-row input:focus { border-bottom-color: var(--mustard); }
+  .input-row input.expense-input:focus { border-bottom-color: var(--expense-red); }
+  .input-row input::placeholder { color: var(--light-line); }
+
+  .add-entry {
+    background: none;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--warm-gray);
+    cursor: pointer;
+    padding: 4px 0;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .add-entry:hover { color: var(--mustard); }
+  .add-entry.expense-add:hover { color: var(--expense-red); }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    color: var(--light-line);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.2s;
+  }
+
+  .remove-btn:hover { color: var(--danger); }
+
+  /* Expense block */
+  .expense-block {
+    background: #2A1A1A;
+    padding: 24px;
+    margin-bottom: 8px;
+  }
+
+  .expense-block .source-name { color: #F2EDE4; }
+  .expense-block .input-row input {
+    border-bottom-color: #4A2A2A;
+    color: #F2EDE4;
+  }
+  .expense-block .input-row input::placeholder { color: #4A2A2A; }
+  .expense-block .add-entry { color: #8B5A5A; }
+  .expense-block .add-entry:hover { color: var(--expense-red); }
+  .expense-block .remove-btn { color: #4A2A2A; }
+  .expense-block .source-header { margin-bottom: 12px; }
+
+  /* Summary */
+  .summary {
+    background: var(--charcoal);
+    padding: 28px;
+    margin-top: 8px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .summary-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .summary-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--cream);
+  }
+
+  .summary-value.red { color: #E57373; }
+
+  .summary-divider {
+    height: 1px;
+    background: #333330;
+    margin: 16px 0;
+  }
+
+  .net-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .net-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .net-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--cream);
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 12px;
+  }
+
+  .total-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .total-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 24px;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+
+  .total-value.safe { color: var(--mustard); }
+  .total-value.danger { color: var(--danger); }
+
+  .gap-indicator {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #333330;
+  }
+
+  .gap-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 6px;
+  }
+
+  .gap-bar-track {
+    height: 3px;
+    background: #333330;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gap-bar-fill {
+    height: 100%;
+    background: var(--mustard);
+    transition: width 0.4s ease;
+    max-width: 100%;
+  }
+
+  .gap-bar-fill.danger { background: var(--danger); }
+
+  .gap-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--cream);
+    margin-top: 8px;
+  }
+
+  .gap-text.danger { color: var(--danger); }
+  .gap-text.safe { color: var(--mustard); }
+
+  .history-section { margin-top: 40px; }
+
+  .history-month {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-line);
+  }
+
+  .history-month-name { font-size: 13px; color: var(--charcoal); }
+
+  .history-month-total {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  .history-month-total.safe { color: var(--safe); }
+  .history-month-total.danger { color: var(--danger); }
+
+  .save-btn {
+    width: 100%;
+    background: var(--mustard);
+    color: var(--charcoal);
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: opacity 0.2s;
+  }
+
+  .save-btn:hover { opacity: 0.85; }
+
+  .target-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--warm-gray);
+    text-align: center;
+    margin-top: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  .entries-list { margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">Past Last Known</div>
+    <h1>Income<br><span>Tracker</span></h1>
+    <div class="month-selector">
+      <select id="monthSelect"></select>
+      <select id="yearSelect"></select>
+    </div>
+  </header>
+
+  <div class="section-label">Income Sources</div>
+
+  <div class="income-source">
+    <div class="source-header">
+      <span class="source-name">Bar Fino</span>
+      <span class="source-total" id="bistroTotal">$0</span>
+    </div>
+    <div class="entries-list" id="bistroEntries"></div>
+    <button class="add-entry" onclick="addEntry('bistro')">+ add shift</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="income-source">
+    <div class="source-header">
+      <span class="source-name">Uber Eats</span>
+      <span class="source-total" id="uberTotal">$0</span>
+    </div>
+    <div class="entries-list" id="uberEntries"></div>
+    <button class="add-entry" onclick="addEntry('uber')">+ add delivery session</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="income-source">
+    <div class="source-header">
+      <span class="source-name">Freelance</span>
+      <span class="source-total" id="freelanceTotal">$0</span>
+    </div>
+    <div class="entries-list" id="freelanceEntries"></div>
+    <button class="add-entry" onclick="addEntry('freelance')">+ add payment</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Expenses -->
+  <div class="section-label expense-label">Expenses</div>
+
+  <div class="expense-block">
+    <div class="source-header">
+      <span class="source-name">Purchases & Bills</span>
+      <span class="source-total expense" id="expenseTotal">−$0</span>
+    </div>
+    <div class="entries-list" id="expenseEntries"></div>
+    <button class="add-entry expense-add" onclick="addExpense()">+ add expense</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="summary-row">
+      <span class="summary-label">Bar Fino</span>
+      <span class="summary-value" id="summBistro">$0</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Uber Eats</span>
+      <span class="summary-value" id="summUber">$0</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">Freelance</span>
+      <span class="summary-value" id="summFreelance">$0</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="net-row">
+      <span class="net-label">Gross Income</span>
+      <span class="net-value" id="grossIncome">$0</span>
+    </div>
+    <div class="net-row">
+      <span class="net-label">Expenses</span>
+      <span class="net-value red" id="summExpenses">−$0</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="total-row">
+      <span class="total-label">Net Left</span>
+      <span class="total-value safe" id="grandTotal">$0</span>
+    </div>
+    <div class="gap-indicator">
+      <div class="gap-label">Progress to $2,300 rent</div>
+      <div class="gap-bar-track">
+        <div class="gap-bar-fill" id="gapBar" style="width:0%"></div>
+      </div>
+      <div class="gap-text" id="gapText">$2,300 needed</div>
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveMonth()">Save This Month</button>
+  <div class="target-note">Target: $2,300 rent / month after expenses</div>
+
+  <div class="history-section">
+    <div class="section-label" style="margin-top:0">Monthly History</div>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<script>
+  const RENT = 2300;
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  const sources = {
+    bistro: { entries: [], containerId: 'bistroEntries', totalId: 'bistroTotal' },
+    uber: { entries: [], containerId: 'uberEntries', totalId: 'uberTotal' },
+    freelance: { entries: [], containerId: 'freelanceEntries', totalId: 'freelanceTotal' }
+  };
+
+  let expenses = [];
+
+  const now = new Date();
+  const monthSel = document.getElementById('monthSelect');
+  const yearSel = document.getElementById('yearSelect');
+
+  months.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = m;
+    if (i === now.getMonth()) opt.selected = true;
+    monthSel.appendChild(opt);
+  });
+
+  for (let y = now.getFullYear() - 1; y <= now.getFullYear() + 1; y++) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    if (y === now.getFullYear()) opt.selected = true;
+    yearSel.appendChild(opt);
+  }
+
+  function getKey() {
+    return `plk_income_${yearSel.value}_${monthSel.value}`;
+  }
+
+  function addEntry(source, amount = '', note = '') {
+    const id = Date.now() + Math.random();
+    sources[source].entries.push({ id, amount, note });
+    renderEntries(source);
+    updateTotals();
+  }
+
+  function removeEntry(source, id) {
+    sources[source].entries = sources[source].entries.filter(e => e.id !== id);
+    renderEntries(source);
+    updateTotals();
+  }
+
+  function renderEntries(source) {
+    const container = document.getElementById(sources[source].containerId);
+    container.innerHTML = '';
+    sources[source].entries.forEach(entry => {
+      const row = document.createElement('div');
+      row.className = 'input-row';
+      row.innerHTML = `
+        <input type="text" placeholder="note (optional)" value="${entry.note}"
+          oninput="updateEntry('${source}', ${entry.id}, 'note', this.value)" />
+        <input type="number" placeholder="$0" value="${entry.amount}" style="width:80px;flex:none;text-align:right"
+          oninput="updateEntry('${source}', ${entry.id}, 'amount', this.value)" />
+        <button class="remove-btn" onclick="removeEntry('${source}', ${entry.id})">×</button>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function updateEntry(source, id, field, value) {
+    const entry = sources[source].entries.find(e => e.id === id);
+    if (entry) entry[field] = value;
+    updateTotals();
+  }
+
+  function addExpense(amount = '', note = '') {
+    const id = Date.now() + Math.random();
+    expenses.push({ id, amount, note });
+    renderExpenses();
+    updateTotals();
+  }
+
+  function removeExpense(id) {
+    expenses = expenses.filter(e => e.id !== id);
+    renderExpenses();
+    updateTotals();
+  }
+
+  function updateExpense(id, field, value) {
+    const entry = expenses.find(e => e.id === id);
+    if (entry) entry[field] = value;
+    updateTotals();
+  }
+
+  function renderExpenses() {
+    const container = document.getElementById('expenseEntries');
+    container.innerHTML = '';
+    expenses.forEach(entry => {
+      const row = document.createElement('div');
+      row.className = 'input-row';
+      row.innerHTML = `
+        <input type="text" class="expense-input" placeholder="what did you buy?" value="${entry.note}"
+          oninput="updateExpense(${entry.id}, 'note', this.value)" />
+        <input type="number" class="expense-input" placeholder="$0" value="${entry.amount}" style="width:80px;flex:none;text-align:right"
+          oninput="updateExpense(${entry.id}, 'amount', this.value)" />
+        <button class="remove-btn" onclick="removeExpense(${entry.id})">×</button>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function getSourceTotal(source) {
+    return sources[source].entries.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+  }
+
+  function getExpenseTotal() {
+    return expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+  }
+
+  function updateTotals() {
+    const bistro = getSourceTotal('bistro');
+    const uber = getSourceTotal('uber');
+    const freelance = getSourceTotal('freelance');
+    const gross = bistro + uber + freelance;
+    const expTotal = getExpenseTotal();
+    const net = gross - expTotal;
+
+    document.getElementById('bistroTotal').textContent = `$${bistro.toFixed(0)}`;
+    document.getElementById('uberTotal').textContent = `$${uber.toFixed(0)}`;
+    document.getElementById('freelanceTotal').textContent = `$${freelance.toFixed(0)}`;
+    document.getElementById('expenseTotal').textContent = `−$${expTotal.toFixed(0)}`;
+    document.getElementById('summBistro').textContent = `$${bistro.toFixed(0)}`;
+    document.getElementById('summUber').textContent = `$${uber.toFixed(0)}`;
+    document.getElementById('summFreelance').textContent = `$${freelance.toFixed(0)}`;
+    document.getElementById('grossIncome').textContent = `$${gross.toFixed(0)}`;
+    document.getElementById('summExpenses').textContent = `−$${expTotal.toFixed(0)}`;
+
+    const totalEl = document.getElementById('grandTotal');
+    totalEl.textContent = `$${net.toFixed(0)}`;
+    totalEl.className = `total-value ${net >= RENT ? 'safe' : 'danger'}`;
+
+    const pct = Math.min((net / RENT) * 100, 100);
+    const bar = document.getElementById('gapBar');
+    bar.style.width = `${pct}%`;
+    bar.className = `gap-bar-fill ${net >= RENT ? '' : 'danger'}`;
+
+    const gapText = document.getElementById('gapText');
+    if (net >= RENT) {
+      gapText.textContent = `+$${(net - RENT).toFixed(0)} above rent after expenses`;
+      gapText.className = 'gap-text safe';
+    } else {
+      gapText.textContent = `$${(RENT - net).toFixed(0)} still needed after expenses`;
+      gapText.className = 'gap-text danger';
+    }
+  }
+
+  function saveMonth() {
+    const data = {
+      bistro: sources.bistro.entries,
+      uber: sources.uber.entries,
+      freelance: sources.freelance.entries,
+      expenses: expenses,
+      total: getSourceTotal('bistro') + getSourceTotal('uber') + getSourceTotal('freelance') - getExpenseTotal()
+    };
+    localStorage.setItem(getKey(), JSON.stringify(data));
+    renderHistory();
+    alert(`${months[monthSel.value]} ${yearSel.value} saved.`);
+  }
+
+  function loadMonth() {
+    const saved = localStorage.getItem(getKey());
+    sources.bistro.entries = [];
+    sources.uber.entries = [];
+    sources.freelance.entries = [];
+    expenses = [];
+
+    if (saved) {
+      const data = JSON.parse(saved);
+      sources.bistro.entries = data.bistro || [];
+      sources.uber.entries = data.uber || [];
+      sources.freelance.entries = data.freelance || [];
+      expenses = data.expenses || [];
+    }
+
+    renderEntries('bistro');
+    renderEntries('uber');
+    renderEntries('freelance');
+    renderExpenses();
+    updateTotals();
+  }
+
+  function renderHistory() {
+    const container = document.getElementById('historyList');
+    container.innerHTML = '';
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('plk_income_')).sort().reverse();
+
+    if (keys.length === 0) {
+      container.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:11px;color:var(--warm-gray);padding:16px 0">No saved months yet</div>';
+      return;
+    }
+
+    keys.forEach(key => {
+      const parts = key.replace('plk_income_', '').split('_');
+      const year = parts[0];
+      const month = months[parseInt(parts[1])];
+      const data = JSON.parse(localStorage.getItem(key));
+      const total = data.total || 0;
+
+      const row = document.createElement('div');
+      row.className = 'history-month';
+      row.innerHTML = `
+        <span class="history-month-name">${month} ${year}</span>
+        <span class="history-month-total ${total >= RENT ? 'safe' : 'danger'}">$${total.toFixed(0)}</span>
+      `;
+      row.style.cursor = 'pointer';
+      row.onclick = () => {
+        const m = months.indexOf(month);
+        monthSel.value = m;
+        yearSel.value = year;
+        loadMonth();
+      };
+      container.appendChild(row);
+    });
+  }
+
+  monthSel.addEventListener('change', loadMonth);
+  yearSel.addEventListener('change', loadMonth);
+
+  loadMonth();
+  renderHistory();
+
+  if (sources.bistro.entries.length === 0) addEntry('bistro', '', 'Shift');
+  if (sources.uber.entries.length === 0) addEntry('uber', '', 'Deliveries');
+  if (sources.freelance.entries.length === 0) addEntry('freelance', '', 'C3 Presents');
+  if (expenses.length === 0) addExpense('', 'Rent');
+</script>
+</body>
+</html>
