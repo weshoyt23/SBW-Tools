@@ -168,7 +168,8 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
     <div class="nav-t" onclick="showPg('drop1')">Drop 1</div>
     <div class="nav-t" onclick="showPg('rover')">Rover</div>
     <div class="nav-t" onclick="showPg('uber')">Uber Eats</div>
-  </div>
+
+    <div class="nav-t" onclick="showPg('apparel')">Apparel</div>  </div>
 </div>
 
 <!-- ── SCHEDULE ── -->
@@ -1105,6 +1106,139 @@ body{font-family:var(--font-b);background:var(--bg);color:var(--black);padding-b
   <div class="footer" style="margin-top:16px"><div class="footer-b">SBW CO.</div><div class="footer-s">Uber Eats Tracker · Austin TX</div></div>
 </div>
 
+<div class="pg" id="pg-apparel">
+  <div class="sec">SBW Co. — Apparel Infrastructure</div>
+
+  <div class="block open" id="b-strategy">
+    <div class="block-hdr" onclick="togB('b-strategy')">
+      <div class="block-time" style="background:var(--amber)">STRATEGY</div>
+      <div class="block-name">Two-Track Product Model</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">SBW</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bnote">Track 1 — POD via Printify/Printful: Low-risk, no inventory, ships on demand. Entry-level ($45–65). Lane Seven LST001 boxy tee as primary blank.</div>
+      <div class="bnote">Track 2 — Sourced &amp; In-House: LA Apparel 1801/1801GD, AS Colour 5069, ITC IND5000C crewneck. Limited runs, printed in Austin. Premium tier ($65–95+). More physical craft, more exclusivity.</div>
+      <div class="bnote" style="color:var(--amber)">POD builds the audience. In-house builds the brand equity.</div>
+    </div>
+  </div>
+
+  <div class="block" id="b-pod">
+    <div class="block-hdr" onclick="togB('b-pod')">
+      <div class="block-time" style="background:var(--blue)">POD</div>
+      <div class="block-name">Print on Demand Platforms</div>
+      <div class="block-badge" style="background:var(--blue-bg);color:var(--blue)">PRINTIFY + PRINTFUL</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="sec" style="margin-top:10px">Printify — PRIMARY</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Carries ITC IND5000C Legend Crewneck — Printful does NOT. Major advantage.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Lane Seven LST001 Oversized Boxy Tee — primary Drop 1 blank. $10–13 base.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">ITC IND4000 Hoodie — all colorways incl. dusty rose. Base ~$27–32.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Native Shopify app — 1-click install, auto fulfillment. Free base plan.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Printify Premium ($29/mo) = 20% off all products — worth it at volume.</div></div>
+      <div class="bnote">Sourced blanks via: The Park Wholesale (Faire), ApparelBus, GrahamSG, Joe's USA</div>
+      <div class="sec" style="margin-top:14px">Printful — SECONDARY</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">ITC IND4000 in Storm Blue + Sandstone — verified available. $29.95 base.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">AS Colour 5082 Oversized Faded Tee ($23.92) — Printful exclusive.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">No monthly fee — pay per order only. Use for backup SKUs.</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b-garments">
+    <div class="block-hdr" onclick="togB('b-garments')">
+      <div class="block-time" style="background:var(--green)">BLANKS</div>
+      <div class="block-name">Garment Roster</div>
+      <div class="block-badge" style="background:var(--green-bg);color:var(--green)">6 STYLES</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="sec" style="margin-top:10px">POD Blanks</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Lane Seven LST001 — Oversized boxy tee. Primary POD blank. $10–13. Colorways: bone, black, storm blue, sandstone.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">ITC IND4000 — Heavyweight hoodie 10oz. Both Printify + Printful. ~$29–32. Storm Blue ✓ Sandstone ✓ Dusty Pink (Printify only).</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">ITC IND5000C — Legend crewneck 10oz. Printify only. Best POD crewneck available.</div></div>
+      <div class="sec" style="margin-top:14px">Sourced Blanks (In-House Drops)</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">LA Apparel 1801 — Fine jersey classic tee. Sourced only.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">LA Apparel 1801GD — Garment-dyed version. Sourced only.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">AS Colour 5069 — Boxy tee. Sourced only. Not on any POD platform.</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b-colors">
+    <div class="block-hdr" onclick="togB('b-colors')">
+      <div class="block-time" style="background:var(--purple)">COLORS</div>
+      <div class="block-name">SBW Colorway Palette</div>
+      <div class="block-badge" style="background:var(--purple-bg);color:var(--purple)">DROP 1</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Bone / Off-White — Primary. Warm palette designs pop hardest here.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Washed Black — Best with loud neon palette designs.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Sandstone — Warm tan. IND4000 via Printful. Desert-coded.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Storm Blue — Muted slate. IND4000 via Printful. Cool contrast for warm graphics.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Dusty Pink — In-house sourced only. Printify IND4000 may carry it.</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b-designs">
+    <div class="block-hdr" onclick="togB('b-designs')">
+      <div class="block-time" style="background:var(--amber)">DESIGNS</div>
+      <div class="block-name">Drop 1 Design Assets &amp; Characters</div>
+      <div class="block-badge" style="background:var(--amber-bg);color:var(--amber)">MJ → ADOBE</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bnote">Style: Jamie Hewlett (Gorillaz) comic art. Loud full-color palette. Sci-fi space western. Comic panel frames with characters BREACHING borders. --v 7 only.</div>
+      <div class="sec" style="margin-top:10px">Workflow</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Midjourney V7 → Vectorizer.ai → Adobe (Illustrator/Photoshop). Type always from Adobe, never MJ.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Mockups via Placeit or Printify built-in. NOT Midjourney — it remixes, won't hold design fidelity.</div></div>
+      <div class="sec" style="margin-top:14px">Character Roster</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">The Instigator — Wiry, chaotic, neon lasso. Still needs strong action panel shot.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">The Anchor — Orange duster, goggles up. Strongest of four — nearly locked.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">The Witness — Galaxy cosmos face under wide hat. No visible face ever. Tattered purple duster. Refining toward more western/tattered.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">The Tether — Feminine, tactical, orange bandana. Running. Green skin variant also strong.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Robot Cowboy — Amber eyes, chrome fist, western hat. Great panel character.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Alien — Elongated skull, spindly fingers, glowing eyes. Reaching-through-panel energy.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Green Girl — Green skin, orange curly hair, freckles, sunglasses. Fan favorite. Running/leaping.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Purple Girl — Purple skin, white dreadlocks, orange bandana, hoop earrings. Strong portrait.</div></div>
+      <div class="sec" style="margin-top:14px">Selected Designs for Drop 1</div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Green Girl Running — frame-breach panel layout → BONE tee.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Purple Girl Portrait — panel breach top/bottom → BLACK tee.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Action Comic Page (blue-skin girl gunfighter) — 5-panel, hot magenta/orange → BLACK tee.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Multi-panel page (alien + green girl + landscape + muscle car) → SANDSTONE or STORM BLUE tee.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">4-panel horizontal strip (cowboy / twin suns / green girl / truck) → BONE tee. Strong lifestyle shot.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Robot + Purple Guy + Landscape triptych — wide horizontal chest graphic → BLACK tee.</div></div>
+      <div class="bt"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Full crew ensemble panel breach (5 characters breaking out toward center) — best shirt graphic of session.</div></div>
+    </div>
+  </div>
+
+  <div class="block" id="b-shopify">
+    <div class="block-hdr" onclick="togB('b-shopify')">
+      <div class="block-time" style="background:var(--green)">TECH</div>
+      <div class="block-name">Shopify + Printify Setup Checklist</div>
+      <div class="block-badge" style="background:var(--green-bg);color:var(--green)">INFRASTRUCTURE</div>
+      <div class="block-chev">▼</div>
+    </div>
+    <div class="block-body">
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Create Shopify store — Basic plan ~$39/mo</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Install Printify app from Shopify App Store — free, 1-click</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Connect Printify account to Shopify store in Printify dashboard</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Install Printful app as secondary — connect same Shopify store</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Set up Klaviyo — connect to Shopify via Klaviyo app for email capture</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Build pre-launch landing page with email popup (Klaviyo) — early access waitlist</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Add Lane Seven LST001 as first Printify product — link to Shopify</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Add ITC IND5000C crewneck in Printify — link to Shopify</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Add ITC IND4000 hoodie — Storm Blue, Sandstone, Dusty Pink colorways</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Upload finalized PNG designs to each product — large front placement</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Set pricing: Tee $55–65 · Crewneck $75–85 · Hoodie $85–95</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Keep all products on DRAFT until Drop 1 launch date</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Generate mockups via Placeit or Printify mockup generator (PNG → done)</div></div>
+      <div class="bt" onclick="togT(this,event)"><div class="bcheck"><span class="bcheck-i">✓</span></div><div class="bt-text">Order samples before launch — wear, check quality, shoot in Austin</div></div>
+    </div>
+  </div>
+
+  <div class="footer" style="margin-top:16px"><div class="footer-b">SBW CO.</div><div class="footer-s">Apparel · Drop 1 Infrastructure · Austin TX</div></div>
+</div>
 <script>
 function showPg(id){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
