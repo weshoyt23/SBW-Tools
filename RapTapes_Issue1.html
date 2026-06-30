@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Rap Tapes — Issue 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f0ead8;
+    --paper2: #e8e0c8;
+    --red: #c41c1c;
+    --orange: #d4620a;
+    --grey: #5a5a5a;
+    --light: #c8bfa8;
+    --rule: #0a0a0a;
+  }
+
+  html { background: #2a2a2a; }
+
+  body {
+    font-family: 'Barlow Condensed', sans-serif;
+    background: #2a2a2a;
+    color: var(--ink);
+    padding: 40px 20px;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  .page {
+    width: 860px;
+    min-height: 1100px;
+    margin: 0 auto 60px;
+    background: var(--paper);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+  }
+
+  /* NEWSPRINT TEXTURE */
+  .page::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 22px,
+      rgba(0,0,0,0.03) 22px,
+      rgba(0,0,0,0.03) 23px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-inner {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    background: var(--ink);
+    padding: 18px 30px 14px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 5px solid var(--red);
+  }
+
+  .masthead-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    color: var(--paper);
+    letter-spacing: 4px;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+
+  .masthead-title span {
+    color: var(--red);
+  }
+
+  .masthead-sub {
+    text-align: right;
+  }
+
+  .masthead-sub .issue {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+  }
+
+  .masthead-sub .tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--paper);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ── RED TICKER BAND ── */
+  .ticker {
+    background: var(--red);
+    padding: 5px 30px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ── PAGE BODY ── */
+  .page-body {
+    padding: 24px 30px 30px;
+  }
+
+  /* ── HERO SECTION TITLE ── */
+  .section-banner {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    padding: 4px 12px;
+    display: inline-block;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-banner.red { background: var(--red); }
+  .section-banner.orange { background: var(--orange); }
+
+  /* ── STORY HEADLINE ── */
+  .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 0.88;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .headline .accent { color: var(--red); }
+
+  .deck {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--grey);
+    margin-bottom: 16px;
+    border-left: 4px solid var(--red);
+    padding-left: 10px;
+  }
+
+  /* ── 3-COLUMN GRID ── */
+  .cols-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .cols-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .col-span-2 { grid-column: span 2; }
+
+  /* ── BODY TEXT ── */
+  .body-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .body-text p { margin-bottom: 10px; }
+
+  /* ── BYLINE ── */
+  .byline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 14px;
+  }
+
+  /* ── PULL QUOTE ── */
+  .pull-quote {
+    border-top: 4px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+    padding: 14px 0;
+    margin: 18px 0;
+  }
+
+  .pull-quote p {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    line-height: 1.0;
+    letter-spacing: 1px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+
+  .pull-quote .attribution {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* ── CALLOUT BOX ── */
+  .callout {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .callout .callout-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .callout p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ── IMAGE PLACEHOLDER ── */
+  .img-block {
+    background: var(--paper2);
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px;
+    text-align: center;
+    min-height: 140px;
+  }
+
+  .img-block .img-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  .img-block .img-caption {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: var(--grey);
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  /* ── RULE ── */
+  .rule {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 20px 0;
+  }
+
+  .rule.thin {
+    border-top: 1px solid var(--light);
+  }
+
+  .rule.red {
+    border-top: 3px solid var(--red);
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    background: var(--ink);
+    height: 4px;
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .section-divider::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--red);
+  }
+
+  /* ── CAPTION ── */
+  .caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--grey);
+    line-height: 1.4;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── PAGE NUMBER ── */
+  .page-footer {
+    background: var(--ink);
+    padding: 8px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+  }
+
+  .page-footer span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .page-footer .pgnum {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--red);
+  }
+
+  /* ── KICKER TAG ── */
+  .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: var(--red);
+    padding: 3px 8px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  /* ── STACKED LABEL ── */
+  .stacked-label {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+
+  /* ── PHOTO CREDIT ── */
+  .photo-credit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px;
+    color: var(--grey);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* ── MINI HEADER ── */
+  .mini-head {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink);
+    line-height: 1.0;
+    margin-bottom: 8px;
+  }
+
+  .mini-head.red { color: var(--red); }
+
+  /* DISTRESS CORNER MARKS */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 38px 38px 0;
+    border-color: transparent #2a2a2a transparent transparent;
+    z-index: 2;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ================================================================ -->
+<!--  PAGE 1                                                          -->
+<!-- ================================================================ -->
+<div class="page">
+  <div class="page-inner">
+
+    <!-- MASTHEAD -->
+    <div class="masthead">
+      <div class="masthead-title">The <span>Rap</span><br>Tapes</div>
+      <div class="masthead-sub">
+        <span class="issue">Issue 01 &nbsp;·&nbsp; Sept 2025</span>
+        <span class="tagline">Preservation Of<br>Underground Culture</span>
+      </div>
+    </div>
+    <div class="ticker">
+      UNDERGROUND RAP &nbsp;·&nbsp; TAPE CULTURE &nbsp;·&nbsp; MICHIGAN &nbsp;·&nbsp; MEMPHIS &nbsp;·&nbsp; AUSTRALIA &nbsp;·&nbsp; HIP HOP PRESERVATION
+    </div>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+      <!-- STORY 1: SOUTH SIDE ASYLUM -->
+      <div style="margin-bottom:24px">
+        <span class="kicker">Feature</span>
+        <div class="headline">South Side<br><span class="accent">Asylum</span></div>
+        <div class="deck">Michigan Underground — Downriver's Most Notorious Label</div>
+        <div class="byline">Words: Skandal</div>
+
+        <div class="cols-3">
+          <!-- COL 1 -->
+          <div class="body-text">
+            <p>Throughout my years of collecting there have only been a few times that I've discovered a label with such a diverse catalogue of music that has stayed relatively unknown to collectors and underground music enthusiasts, such as the South Side Asylum.</p>
+            <p>Founded by Dr Capone after moving from NY to Michigan in the early 90s and holding down the streets of Ecorse, River Rouge, Delray and S/W Detroit, this collective of Downriver emcees included: Dr Capone, Hallow Point aka Lil Weto, Dirty Weto, 24K, Live-1, Da Marshall, UGA, YG's, Reformed Illusionz, Illcawshun Tribe, C4N, ADB, Neromancaz &amp; 6 Point Raiderz.</p>
+          </div>
+
+          <!-- COL 2 -->
+          <div class="body-text">
+            <p>With limited resources the SSA had minimal networks for distribution and were only available at limited locations around the Downriver area, made in quantities sometimes as low as 20 units.</p>
+            <p>The SSA were notorious for their gang affiliation which ultimately led to the label being blacklisted by local community groups and councils.</p>
+            <p>A true testament to an underground culture synonymous with the 90s — a golden era of inspirational and foundational rap for local artists and a movement that has shaped a genre as we know it today.</p>
+          </div>
+
+          <!-- COL 3 -->
+          <div>
+            <div class="img-block" style="min-height:190px">
+              <span class="img-label">[ Image ]</span>
+              <span class="img-caption">Dr Capone's archive of MASTER TAPES — a time capsule of music from an underground MI rap legend</span>
+            </div>
+            <p class="photo-credit">Archive: Dr Capone / SSA</p>
+
+            <div class="callout" style="margin-top:14px">
+              <span class="callout-label">Excerpts from SSA Flyer Catalogue</span>
+              <p>Appreciation flyer given to ORIGIX of Reformed Illuzions. Few images known to exist of the infamous Dr Capone.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- STORY 2: MEMPHIS CONNECTION -->
+      <div>
+        <span class="kicker" style="background:var(--ink)">Field Report</span>
+        <div class="headline" style="font-size:54px">The <span class="accent">Memphis</span><br>Connection</div>
+        <div class="deck">Recounting buying tapes at Royal City Sounds, TN</div>
+        <div class="byline">Words: Skandal &amp; Wild Bill</div>
+
+        <div class="cols-2">
+          <!-- LEFT -->
+          <div class="body-text">
+            <p>I met Bill over a decade ago through collecting and noticed he had some old Memphis tapes and sent him a message. I could tell the guy loved his tapes after we spoke for a while — he recounted the whereabouts of the stores he had bought them from and said they had sentimental value and wasn't sure about selling them, but I was persistent.</p>
+            <p>I made a significant offer on one specific tape that caught my eye — Lil Gin's <em>The Serpent's Step Son</em>. I had never seen this particular variation at the time. The cover was an early version with a young picture of him posing in what looks like a condemned building. I'd only ever seen the version that MVP had released, which Derrick (Skinny Pimp) told me was a fan-made bootleg.</p>
+            <p>We came to agreement on the tape and it's been in my collection since. I recently caught up with Bill again when he let me back into his Memphis time capsule.</p>
+
+            <div class="pull-quote">
+              <p>"It was only side 1! I became obsessed.."</p>
+              <span class="attribution">— Wild Bill</span>
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+          <div>
+            <div class="body-text">
+              <p>"The first thing I ever heard as far as the underground stuff was a kid had a dub of a dub of a dub of side one of <em>Smoked Out, Loced Out</em> on the school bus. I borrowed it and made my own dub."</p>
+              <p>"I found another kid that had only one half of side 1 of DJ Paul's Greatest Hits. I made a dub of that too. Eventually this older dude I knew traded me his Criminal Manne tape for a MC Breed tape! I begged him to tell me where he got it from. He would only tell me he got it in Jackson."</p>
+            </div>
+
+            <div class="pull-quote">
+              <p>"A janitor at Burger King told us where Royal City Sounds was — a blessed day for sure"</p>
+              <span class="attribution">— Wild Bill</span>
+            </div>
+
+            <div class="body-text">
+              <p>"It was about an hour from my hometown. The shop was in an old ass house across the street from the Oman Arena. It wasn't a place young white kids usually hung out. My friends were into punk and alternative. They were scared of that area of town. I was obsessed with the music, so I didn't give a damn."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-body -->
+
+    <div class="page-footer">
+      <span>The Rap Tapes &nbsp;·&nbsp; Issue 01</span>
+      <span>Preservation of Underground Culture</span>
+      <span class="pgnum">01</span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================================================================ -->
+<!--  PAGE 2                                                          -->
+<!-- ================================================================ -->
+<div class="page">
+  <div class="page-inner">
+
+    <!-- MASTHEAD P2 -->
+    <div class="masthead">
+      <div class="masthead-title" style="font-size:44px;line-height:1">The <span>Rap</span> Tapes</div>
+      <div class="masthead-sub">
+        <span class="issue">Issue 01 &nbsp;·&nbsp; October 2025</span>
+        <span class="tagline">Preservation Of Underground Culture</span>
+      </div>
+    </div>
+    <div class="ticker">
+      UNDERGROUND RAP &nbsp;·&nbsp; TAPE CULTURE &nbsp;·&nbsp; MICHIGAN &nbsp;·&nbsp; MEMPHIS &nbsp;·&nbsp; AUSTRALIA &nbsp;·&nbsp; HIP HOP PRESERVATION
+    </div>
+
+    <div class="page-body">
+
+      <!-- STORY 3: AUSTRALIA -->
+      <div style="margin-bottom:24px">
+        <span class="kicker" style="background:var(--orange)">International</span>
+        <div class="headline" style="font-size:58px">Australian Rap's<br><span class="accent">Generational Growth</span></div>
+        <div class="deck">Brad Strut &amp; the Archive that Built a Culture</div>
+        <div class="byline">Words: Skandal &amp; Brad Strut</div>
+
+        <div class="cols-3">
+          <!-- COL 1 -->
+          <div class="body-text">
+            <p>For as long as I can remember I've been a person that likes to understand things thoroughly when I'm passionate about a subject, and the history behind the origins of hip hop in Australia was an education that took some time to piece together.</p>
+            <p>Being born generations past the loosely documented birth of the culture, so far from its origins in the US.</p>
+            <p>I recently reached out to Brad Strut discussing his extensive tape archive. I was staying in St Kilda for the weekend and met Brad at the Balaclava train station where we reminisced about the local graffiti history.</p>
+          </div>
+
+          <!-- COL 2 -->
+          <div class="body-text">
+            <p>The wall adorned a SINCH dedication piece — Brad recalling the day Sinch died while surfing a train just meters from where we stood, and the crew gatherings that once took place here.</p>
+            <p>As the rain started we moved onto the footpath and grabbed a coffee. With a boot full of tapes we took cover in an underground car park and started sorting through large plastic tubs containing years of audio: radio dubs, sound desk recordings, demos and freestyle sessions.</p>
+            <p>I would return to ADL with around 30 tapes to digitize, arrange and catalogue.</p>
+          </div>
+
+          <!-- COL 3 -->
+          <div class="body-text">
+            <p>Since first hearing Australian rap the thing that appealed to me most was what defined us — the accent, the Aussie content, and especially the locations mentioned in the lyrics.</p>
+            <p>As I listened to Brad's tapes and chronologically put them in order, it occurred to me that not only was I listening to the history of one of Australia's most relevant emcees — but I was following the footsteps of the earliest pioneers as the music evolved.</p>
+            <p>From early sessions as JAHD with FRENZIE, drunk freestyle nights with SHAZLEK ONE at OB's Records, to live shows and the music that would lead to the formation of <strong>OBESE Records</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- BOTTOM COLS: SWIGZ + FUNKY FRESH -->
+      <div class="cols-2">
+
+        <!-- SWIGZ / INKTOWN -->
+        <div>
+          <span class="kicker" style="background:var(--red)">Inktown's Finest</span>
+          <div class="mini-head red" style="font-size:32px;margin-top:6px">SWIGZ<br>aka Slim Koroma</div>
+          <div class="byline">Detroit / Inkster, MI</div>
+
+          <div class="body-text">
+            <p>In late 1999 Slim Koroma of the group Grim Reality released his solo independent tape <em>Poems Of Life</em> — featuring local Michigan artists Mr Rain, Blue Eyed Devil, Cue Ball &amp; J Bone. The start of Slim's independent career, two and a half decades later it remains a local Inkster classic.</p>
+            <p>It's 2025 and SLIM KOROMA aka SWIGZ is back with a slammin' new single called <strong>"THE GLOVE"</strong> — filmed by Envysion Entertainment, recorded at Sound Smith Studios and engineered by Tone Rizzo.</p>
+          </div>
+
+          <div class="pull-quote" style="margin:14px 0">
+            <p>"The Glove" — a pun on Michigan's nickname, The Murder Mitten</p>
+          </div>
+
+          <div class="body-text">
+            <p>SWIGZ takes you on an audio and visual journey through a day in his life cruising the streets of S/W Detroit. You can't help but feel transported — capturing the local vibe perfectly.</p>
+          </div>
+
+          <div class="img-block" style="min-height:100px;margin-top:14px">
+            <span class="img-label">[ Film Still / Promo Image ]</span>
+            <span class="img-caption">"THE GLOVE" — new single by SWIGZ, Inktown legend</span>
+          </div>
+        </div>
+
+        <!-- FUNKY FRESH / 313 MIXTAPE -->
+        <div>
+          <span class="kicker" style="background:var(--ink)">Michigan Rap Tape Preservation</span>
+          <div class="mini-head" style="font-size:28px;margin-top:6px;line-height:1">Funky Fresh<br>In Tha Flesh</div>
+          <div class="byline">Skandal &nbsp;·&nbsp; DJ Butter &nbsp;·&nbsp; B-Boy Reg</div>
+
+          <div class="body-text">
+            <p>Every year Detroit celebrates Dilla Month — the month of Jay Dee's birth and death. To mark the occasion, I reached out to DJ Butter and suggested creating a mixtape comprised from selected local Michigan Underground tapes from my archive.</p>
+            <p>We created the mix together, paired with original artwork by DJ Butter of the late emcee <strong>PROOF</strong> (D-12, 5 Ela). The host of <em>Funky Fresh In Tha Flesh</em> w/ B-Boy Reg, DJ Butter interviewed me about the project on his magazine-turned-podcast, where we further discussed tapes and Michigan hip hop.</p>
+          </div>
+
+          <div class="callout" style="margin:14px 0">
+            <span class="callout-label">Dedication</span>
+            <p>"This project was dedicated to JAY DEE, PROOF, BUGZ &amp; all the ones that aren't here — that forged the foundation of hip hop as we know it today."</p>
+          </div>
+
+          <div class="img-block" style="min-height:90px">
+            <span class="img-label">[ 313 Mixtape Cover Art ]</span>
+            <span class="img-caption">Detroit Rap Tapes — local tapes from the 313 mixtape by The Rap Tapes &amp; DJ Butter. Available via Rare Find Records / Crazy Noisze Productions.</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /page-body -->
+
+    <div class="page-footer">
+      <span>The Rap Tapes &nbsp;·&nbsp; Issue 01</span>
+      <span>Preservation of Underground Culture</span>
+      <span class="pgnum">02</span>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
